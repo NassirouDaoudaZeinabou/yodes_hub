@@ -1,0 +1,857 @@
+<!-- ============================================
+     NAVIGATION AMÉLIORÉE - SARKI EXCELLENCE
+     Améliorations: Performance, Accessibilité, UX
+============================================ -->
+
+<style>
+/* ============================================
+           VARIABLES CSS
+============================================ */
+:root {
+    /* Transitions */
+    --transition-fast: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-slow: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    
+    /* Shadows */
+    --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.08);
+    --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.12);
+    --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.16);
+    --shadow-gold: 0 4px 24px rgba(255, 215, 0, 0.35);
+    --shadow-gold-hover: 0 8px 32px rgba(255, 215, 0, 0.45);
+    
+    /* Colors - Gold Palette */
+    --gold: #FFD700;
+    --gold-dark: #e6c200;
+    --gold-light: #FFE55C;
+    --yellow: #FFEE6A;
+    
+    /* Colors - Grayscale */
+    --gray-50: #fafafa;
+    --gray-100: #f5f5f5;
+    --gray-200: #e5e5e5;
+    --gray-300: #d4d4d4;
+    --gray-700: #444;
+    --gray-800: #333;
+    --gray-900: #111;
+    --white: #ffffff;
+    --black: #000000;
+    
+    /* Spacing */
+    --nav-padding-y: 24px;
+    --nav-padding-x: 48px;
+    --nav-padding-y-scrolled: 16px;
+    
+    /* Z-index layers */
+    --z-overlay: 999;
+    --z-nav: 1000;
+    --z-menu-toggle: 1001;
+}
+
+/* ============================================
+           BASE STYLES
+============================================ */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* ============================================
+           NAVIGATION WRAPPER
+============================================ */
+.nav-wrapper {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: var(--z-nav);
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    transition: var(--transition-slow);
+    border-bottom: 1px solid transparent;
+    will-change: transform, background-color, box-shadow;
+}
+
+.nav-wrapper.scrolled {
+    background: rgba(255, 255, 255, 0.96);
+    box-shadow: var(--shadow-md);
+    border-bottom: 1px solid var(--gray-200);
+}
+
+nav {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: var(--nav-padding-y) var(--nav-padding-x);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: padding var(--transition);
+    position: relative;
+}
+
+.nav-wrapper.scrolled nav {
+    padding: var(--nav-padding-y-scrolled) var(--nav-padding-x);
+}
+
+/* ============================================
+           LOGO
+============================================ */
+.logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    font-weight: 900;
+    background: linear-gradient(135deg, var(--gold) 0%, var(--gold-dark) 50%, var(--gold) 100%);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-decoration: none;
+    letter-spacing: -0.5px;
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    transition: var(--transition);
+    animation: shimmer 3s linear infinite;
+    cursor: pointer;
+}
+
+.logo:focus-visible {
+    outline: 3px solid var(--gold);
+    outline-offset: 4px;
+    border-radius: 4px;
+}
+
+@keyframes shimmer {
+    0% { background-position: 0% center; }
+    100% { background-position: 200% center; }
+}
+
+.logo:hover {
+    transform: scale(1.05);
+    filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.4));
+}
+
+.logo img {
+    max-height: 40px;
+    width: auto;
+    display: block;
+    transition: var(--transition);
+}
+
+.logo::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 0;
+    width: 60px;
+    height: 3px;
+    background: linear-gradient(90deg, var(--gold), var(--gold-light), transparent);
+    border-radius: 2px;
+    animation: underlineGrow 2s ease-in-out infinite;
+}
+
+@keyframes underlineGrow {
+    0%, 100% {
+        width: 60px;
+        opacity: 1;
+    }
+    50% {
+        width: 40px;
+        opacity: 0.7;
+    }
+}
+
+/* ============================================
+           NAV LINKS
+============================================ */
+.nav-links {
+    display: flex;
+    gap: 48px;
+    list-style: none;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+}
+
+.nav-links li {
+    position: relative;
+}
+
+.nav-links a {
+    color: var(--gray-800);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 15px;
+    letter-spacing: 0.3px;
+    position: relative;
+    transition: var(--transition);
+    padding: 8px 4px;
+    display: inline-block;
+    cursor: pointer;
+}
+
+/* Focus visible for accessibility */
+.nav-links a:focus-visible {
+    outline: 2px solid var(--gold);
+    outline-offset: 4px;
+    border-radius: 4px;
+}
+
+/* Hover underline effect */
+.nav-links a::before {
+    content: '';
+    position: absolute;
+    bottom: 2px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--gold-light), var(--gold), var(--gold-dark));
+    transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    border-radius: 2px;
+}
+
+/* Hover glow effect */
+.nav-links a::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 0;
+    height: 0;
+    background: radial-gradient(circle, rgba(255, 215, 0, 0.15) 0%, transparent 70%);
+    transition: all 0.5s ease;
+    border-radius: 50%;
+    z-index: -1;
+    pointer-events: none;
+}
+
+.nav-links a:hover {
+    color: var(--gold-dark);
+    transform: translateY(-2px);
+}
+
+.nav-links a:hover::before {
+    width: 100%;
+}
+
+.nav-links a:hover::after {
+    width: 120px;
+    height: 120px;
+}
+
+.nav-links a:active {
+    transform: translateY(0);
+}
+
+/* Active state */
+.nav-links a.active {
+    color: var(--gold-dark);
+}
+
+.nav-links a.active::before {
+    width: 100%;
+    height: 3px;
+    bottom: 0;
+}
+
+/* ============================================
+           CTA BUTTON
+============================================ */
+.nav-cta {
+    background: linear-gradient(135deg, var(--gold) 0%, var(--yellow) 100%);
+    color: var(--gray-900) !important;
+    padding: 14px 32px;
+    border-radius: 50px;
+    font-weight: 700;
+    box-shadow: var(--shadow-gold);
+    transition: var(--transition);
+    position: relative;
+    overflow: hidden;
+    border: 2px solid transparent;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.nav-cta:focus-visible {
+    outline: 3px solid var(--gray-900);
+    outline-offset: 2px;
+}
+
+/* Shine effect */
+.nav-cta::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+    transition: left 0.6s ease;
+}
+
+.nav-cta:hover {
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: var(--shadow-gold-hover);
+    border-color: var(--gold-light);
+}
+
+.nav-cta:hover::before {
+    left: 100%;
+}
+
+.nav-cta:active {
+    transform: translateY(-1px) scale(1.02);
+}
+
+/* Button as form submit */
+.inline {
+    display: inline;
+}
+
+.inline button {
+    background: none;
+    border: none;
+    font: inherit;
+}
+
+/* ============================================
+           NOTIFICATION DOT
+============================================ */
+.has-notification::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: -8px;
+    width: 8px;
+    height: 8px;
+    background: #ff4444;
+    border-radius: 50%;
+    border: 2px solid var(--white);
+    animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(1.2);
+        opacity: 0.8;
+    }
+}
+
+/* ============================================
+           MENU TOGGLE (HAMBURGER)
+============================================ */
+.menu-toggle {
+    display: none;
+    flex-direction: column;
+    gap: 6px;
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 8px;
+    transition: var(--transition);
+    background: transparent;
+    position: relative;
+    z-index: var(--z-menu-toggle);
+    border: 2px solid transparent;
+}
+
+.menu-toggle:hover {
+    background: var(--gray-100);
+}
+
+.menu-toggle:focus-visible {
+    outline: 2px solid var(--gold);
+    outline-offset: 2px;
+    border-radius: 8px;
+}
+
+.menu-toggle span {
+    width: 28px;
+    height: 3px;
+    background: var(--gray-900);
+    transition: var(--transition);
+    border-radius: 2px;
+}
+
+.menu-toggle.active span:nth-child(1) {
+    transform: rotate(45deg) translate(8px, 8px);
+}
+
+.menu-toggle.active span:nth-child(2) {
+    opacity: 0;
+    transform: translateX(-20px);
+}
+
+.menu-toggle.active span:nth-child(3) {
+    transform: rotate(-45deg) translate(8px, -8px);
+}
+
+/* ============================================
+           MOBILE OVERLAY
+============================================ */
+.nav-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px);
+    z-index: var(--z-overlay);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.nav-overlay.show {
+    display: block;
+    opacity: 1;
+}
+
+/* ============================================
+           RESPONSIVE - TABLET & MOBILE
+============================================ */
+@media screen and (max-width: 992px) {
+    :root {
+        --nav-padding-x: 24px;
+        --nav-padding-y: 18px;
+        --nav-padding-y-scrolled: 12px;
+    }
+
+    .logo {
+        font-size: 24px;
+    }
+
+    .logo img {
+        max-height: 36px;
+    }
+
+    .nav-links {
+        position: fixed;
+        top: 0;
+        right: -100%;
+        height: 100vh;
+        width: 280px;
+        background: linear-gradient(180deg, var(--white) 0%, var(--gray-50) 100%);
+        flex-direction: column;
+        gap: 0;
+        padding: 100px 0 40px 0;
+        transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: -4px 0 24px rgba(0, 0, 0, 0.15);
+        overflow-y: auto;
+        z-index: var(--z-nav);
+    }
+
+    .nav-links.show {
+        right: 0;
+    }
+
+    .nav-links li {
+        width: 100%;
+        border-bottom: 1px solid var(--gray-200);
+    }
+
+    .nav-links a {
+        font-size: 17px;
+        padding: 20px 32px;
+        width: 100%;
+        display: block;
+        text-align: left;
+    }
+
+    .nav-links a::before {
+        left: 32px;
+        transform: translateX(0);
+        bottom: 18px;
+    }
+
+    .nav-links a:hover::before {
+        width: calc(100% - 64px);
+    }
+
+    .nav-links a::after {
+        display: none;
+    }
+
+    .nav-links a.active::before {
+        width: calc(100% - 64px);
+        left: 32px;
+    }
+
+    .nav-cta {
+        margin: 20px 32px;
+        text-align: center;
+        display: block;
+        width: calc(100% - 64px);
+        padding: 16px 32px;
+    }
+
+    .menu-toggle {
+        display: flex;
+    }
+
+    .has-notification::after {
+        right: 24px;
+    }
+}
+
+/* ============================================
+           RESPONSIVE - MOBILE SMALL
+============================================ */
+@media screen and (max-width: 576px) {
+    :root {
+        --nav-padding-x: 16px;
+        --nav-padding-y: 15px;
+    }
+
+    .logo {
+        font-size: 22px;
+    }
+
+    .logo img {
+        max-height: 32px;
+    }
+
+    .nav-links {
+        width: 100%;
+        max-width: 320px;
+    }
+}
+
+/* ============================================
+           ANIMATIONS ON LOAD
+============================================ */
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.nav-wrapper {
+    animation: fadeInDown 0.6s ease-out;
+}
+
+.nav-links li {
+    opacity: 0;
+    animation: fadeInDown 0.5s ease-out forwards;
+}
+
+.nav-links li:nth-child(1) { animation-delay: 0.1s; }
+.nav-links li:nth-child(2) { animation-delay: 0.2s; }
+.nav-links li:nth-child(3) { animation-delay: 0.3s; }
+.nav-links li:nth-child(4) { animation-delay: 0.4s; }
+.nav-links li:nth-child(5) { animation-delay: 0.5s; }
+.nav-links li:nth-child(6) { animation-delay: 0.6s; }
+
+/* Reduce motion for accessibility */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+
+/* ============================================
+           PRINT STYLES
+============================================ */
+@media print {
+    .nav-wrapper {
+        position: relative;
+        background: var(--white);
+        box-shadow: none;
+    }
+    
+    .menu-toggle,
+    .nav-overlay {
+        display: none;
+    }
+    
+    .nav-cta {
+        display: none;
+    }
+}
+</style>
+
+<!-- ============================================
+     NAVIGATION HTML
+============================================ -->
+<div class="nav-wrapper" role="navigation" aria-label="Navigation principale">
+    <nav>
+        <!-- Logo -->
+        <a href="<%= root_path %>" class="logo" aria-label="Retour à l'accueil - Sarki Excellence">
+            <%= image_tag "logo.png", alt: "Sarki Excellence - Vision du leadership", loading: "eager" %>
+        </a>
+
+        <!-- Menu Toggle Button -->
+        <button 
+            class="menu-toggle" 
+            onclick="toggleMenu()" 
+            id="menuToggle"
+            aria-label="Toggle navigation menu"
+            aria-expanded="false"
+            aria-controls="navLinks"
+        >
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+
+        <!-- Navigation Links -->
+        <ul class="nav-links" id="navLinks" role="menubar">
+            <li role="none">
+                <a href="<%= root_path %>" role="menuitem" aria-label="Accueil">
+                    Accueil
+                </a>
+            </li>
+            <li role="none">
+                <a href="<%= candidates_path %>" role="menuitem" aria-label="Candidats">
+                    Candidats
+                </a>
+            </li>
+            <li role="none">
+                <a href="<%= videos_path %>" role="menuitem" aria-label="Parcours vidéo">
+                    Parcours
+                </a>
+            </li>
+            <li class="has-notification" role="none">
+                <a href="<%= emissions_index_path %>" role="menuitem" aria-label="Émissions - Nouveau contenu disponible">
+                    Émissions
+                </a>
+            </li>
+
+            <% if user_signed_in? %>
+                <% if current_user.admin? %>
+                    <li role="none">
+                        <a href="<%= admin_dashboard_index_path %>" class="nav-cta" role="menuitem" aria-label="Accéder au tableau de bord administrateur">
+                            Mon Dashboard
+                        </a>
+                    </li>
+                <% end %>
+                <li role="none">
+                    <%= button_to "Se Déconnecter", 
+                        destroy_user_session_path, 
+                        method: :delete, 
+                        form: { class: "inline" }, 
+                        class: "nav-cta",
+                        role: "menuitem",
+                        aria_label: "Se déconnecter de votre compte" 
+                    %>
+                </li>
+            <% else %>
+                <li role="none">
+                    <a href="<%= new_user_session_path %>" class="nav-cta" role="menuitem" aria-label="Se connecter à votre compte">
+                        Connexion
+                    </a>
+                </li>
+            <% end %>
+        </ul>
+    </nav>
+
+    <!-- Mobile Overlay -->
+    <div 
+        class="nav-overlay" 
+        id="navOverlay" 
+        onclick="toggleMenu()"
+        aria-hidden="true"
+    ></div>
+</div>
+
+<!-- ============================================
+     JAVASCRIPT
+============================================ -->
+<script>
+(function() {
+    'use strict';
+
+    // Cache DOM elements
+    const navWrapper = document.querySelector('.nav-wrapper');
+    const navLinks = document.getElementById('navLinks');
+    const menuToggle = document.getElementById('menuToggle');
+    const navOverlay = document.getElementById('navOverlay');
+    
+    // State
+    let scrollTimeout;
+    let isMenuOpen = false;
+
+    /**
+     * Toggle mobile menu
+     */
+    window.toggleMenu = function() {
+        isMenuOpen = !isMenuOpen;
+        
+        navLinks.classList.toggle('show');
+        menuToggle.classList.toggle('active');
+        navOverlay.classList.toggle('show');
+        
+        // Update aria-expanded
+        menuToggle.setAttribute('aria-expanded', isMenuOpen);
+        
+        // Prevent body scroll when menu is open
+        document.body.style.overflow = isMenuOpen ? 'hidden' : '';
+        
+        // Focus management
+        if (isMenuOpen) {
+            // Focus first link when menu opens
+            const firstLink = navLinks.querySelector('a');
+            if (firstLink) {
+                setTimeout(() => firstLink.focus(), 300);
+            }
+        } else {
+            // Return focus to toggle button when menu closes
+            menuToggle.focus();
+        }
+    };
+
+    /**
+     * Close menu
+     */
+    function closeMenu() {
+        if (!isMenuOpen) return;
+        
+        isMenuOpen = false;
+        navLinks.classList.remove('show');
+        menuToggle.classList.remove('active');
+        navOverlay.classList.remove('show');
+        menuToggle.setAttribute('aria-expanded', 'false');
+        document.body.style.overflow = '';
+    }
+
+    /**
+     * Handle navbar scroll effect with RAF for performance
+     */
+    function handleScroll() {
+        if (scrollTimeout) {
+            window.cancelAnimationFrame(scrollTimeout);
+        }
+        
+        scrollTimeout = window.requestAnimationFrame(() => {
+            if (window.scrollY > 50) {
+                navWrapper.classList.add('scrolled');
+            } else {
+                navWrapper.classList.remove('scrolled');
+            }
+        });
+    }
+
+    /**
+     * Handle window resize
+     */
+    function handleResize() {
+        if (window.innerWidth > 992) {
+            closeMenu();
+        }
+    }
+
+    /**
+     * Set active link based on current page
+     */
+    function setActiveLink() {
+        const currentPath = window.location.pathname;
+        const links = navLinks.querySelectorAll('a:not(.nav-cta)');
+        
+        links.forEach(link => {
+            const linkPath = new URL(link.href).pathname;
+            if (linkPath === currentPath || (currentPath.startsWith(linkPath) && linkPath !== '/')) {
+                link.classList.add('active');
+            } else {
+                link.classList.remove('active');
+            }
+        });
+    }
+
+    /**
+     * Handle keyboard navigation
+     */
+    function handleKeyboard(e) {
+        // Close menu on Escape
+        if (e.key === 'Escape' && isMenuOpen) {
+            closeMenu();
+        }
+        
+        // Trap focus in mobile menu when open
+        if (isMenuOpen && e.key === 'Tab') {
+            const focusableElements = navLinks.querySelectorAll('a, button');
+            const firstElement = focusableElements[0];
+            const lastElement = focusableElements[focusableElements.length - 1];
+            
+            if (e.shiftKey && document.activeElement === firstElement) {
+                e.preventDefault();
+                lastElement.focus();
+            } else if (!e.shiftKey && document.activeElement === lastElement) {
+                e.preventDefault();
+                firstElement.focus();
+            }
+        }
+    }
+
+    /**
+     * Initialize event listeners
+     */
+    function init() {
+        // Scroll event
+        window.addEventListener('scroll', handleScroll, { passive: true });
+        
+        // Resize event (debounced)
+        let resizeTimeout;
+        window.addEventListener('resize', () => {
+            clearTimeout(resizeTimeout);
+            resizeTimeout = setTimeout(handleResize, 150);
+        });
+        
+        // Keyboard events
+        document.addEventListener('keydown', handleKeyboard);
+        
+        // Close menu when clicking on a non-CTA link
+        navLinks.querySelectorAll('a:not(.nav-cta)').forEach(link => {
+            link.addEventListener('click', () => {
+                if (window.innerWidth <= 992) {
+                    setTimeout(closeMenu, 150);
+                }
+            });
+        });
+        
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+        
+        // Set active link on load
+        setActiveLink();
+        
+        // Initial scroll check
+        handleScroll();
+    }
+
+    // Initialize when DOM is ready
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+    } else {
+        init();
+    }
+})();
+</script>

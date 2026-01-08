@@ -1,0 +1,347 @@
+<div class="admin-headerr">
+  <h1><%= @video.title %></h1>
+  <div class="actions">
+    <%= link_to 'Modifier', edit_admin_video_path(@video), class: 'btn btn-primary' %>
+    <%= link_to 'Retour', admin_videos_path, class: 'btn btn-secondary' %>
+  </div>
+</div>
+
+<div class="video-detail">
+  <div class="video-player-container">
+    <% if @video.url.present? %>
+      <% m = @video.url.match(/youtu\.be\/([^\?&\s]+)/) || @video.url.match(/[\?&]v=([^&\s]+)/) || @video.url.match(/embed\/([^\?&\s]+)/)
+         id = m && m[1] %>
+      <% if id %>
+        <div class="video-embed">
+          <iframe 
+            width="100%" 
+            height="280" 
+            src="https://www.youtube.com/embed/<%= id %>?rel=0" 
+            frameborder="0" 
+            allowfullscreen
+            class="video-iframe">
+          </iframe>
+        </div>
+      <% else %>
+        <div class="video-unavailable">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <polygon points="23 7 16 12 23 17 23 7"></polygon>
+            <rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect>
+          </svg>
+          <p>Aperçu non disponible</p>
+          <%= link_to 'Voir la vidéo', @video.url, target: :_blank, class: 'video-external-link' %>
+        </div>
+      <% end %>
+    <% end %>
+
+    <% if @video.thumbnail.attached? %>
+      <div class="thumbnail-section">
+        <h4 class="subsection-title">Miniature</h4>
+        <%= image_tag url_for(@video.thumbnail), alt: 'Miniature', class: 'thumbnail-image' %>
+      </div>
+    <% end %>
+  </div>
+
+  <div class="video-info">
+    <div class="info-section">
+      <div class="info-row">
+        <span class="info-label">Candidat</span>
+        <% if @video.candidate %>
+          <%= link_to @video.candidate.name, admin_candidate_path(@video.candidate), class: 'candidate-link' %>
+        <% else %>
+          <span class="info-value-empty">Non attribué</span>
+        <% end %>
+      </div>
+
+      <div class="info-row">
+        <span class="info-label">URL de la vidéo</span>
+        <div class="url-container">
+          <%= link_to @video.url, @video.url, target: :_blank, rel: 'noopener', class: 'url-link' %>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+            <polyline points="15 3 21 3 21 9"></polyline>
+            <line x1="10" y1="14" x2="21" y2="3"></line>
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <div class="info-section">
+      <h3 class="section-title">Description</h3>
+      <% if @video.description.present? %>
+        <p class="description-text"><%= simple_format(@video.description) %></p>
+      <% else %>
+        <p class="description-empty">Aucune description disponible</p>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<style>
+  .admin-headerr {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 2px solid #e0e0e0;
+  }
+
+  .admin-header h1 {
+    color: #2c3e50;
+    font-size: 28px;
+    margin: 0;
+  }
+
+  .actions {
+    display: flex;
+    gap: 12px;
+  }
+
+  .btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-decoration: none;
+    display: inline-block;
+  }
+
+  .btn-primary {
+    background: #c29600;
+    color: white;
+  }
+
+  .btn-primary:hover {
+    background: #a67c00;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(194, 150, 0, 0.3);
+  }
+
+  .btn-secondary {
+    background: #6c757d;
+    color: white;
+  }
+
+  .btn-secondary:hover {
+    background: #5a6268;
+  }
+
+  .video-detail {
+    display: flex;
+    gap: 32px;
+    align-items: flex-start;
+    margin-top: 24px;
+  }
+
+  .video-player-container {
+    flex: 0 0 420px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .video-embed {
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+    background: #000;
+  }
+
+  .video-iframe {
+    display: block;
+  }
+
+  .video-unavailable {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border: 2px dashed #dee2e6;
+    border-radius: 8px;
+    padding: 40px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    color: #6c757d;
+  }
+
+  .video-unavailable p {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 500;
+  }
+
+  .video-external-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: #c29600;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 14px;
+    margin-top: 8px;
+    padding: 8px 16px;
+    background: white;
+    border-radius: 6px;
+    border: 1px solid #c29600;
+    transition: all 0.2s ease;
+  }
+
+  .video-external-link:hover {
+    background: #c29600;
+    color: white;
+  }
+
+  .thumbnail-section {
+    background: white;
+    padding: 16px;
+    border-radius: 8px;
+    border: 1px solid #e0e0e0;
+  }
+
+  .thumbnail-image {
+    width: 100%;
+    border-radius: 6px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  .video-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .info-section {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    border: 1px solid #e0e0e0;
+  }
+
+  .section-title {
+    color: #2c3e50;
+    font-size: 20px;
+    margin: 0 0 16px 0;
+    font-weight: 600;
+    border-bottom: 2px solid #c29600;
+    padding-bottom: 8px;
+  }
+
+  .subsection-title {
+    color: #495057;
+    font-size: 14px;
+    margin: 0 0 12px 0;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .info-row {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 16px;
+  }
+
+  .info-row:last-child {
+    margin-bottom: 0;
+  }
+
+  .info-label {
+    font-weight: 600;
+    color: #6c757d;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .candidate-link {
+    color: #c29600;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 16px;
+    transition: color 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .candidate-link:hover {
+    color: #a67c00;
+    text-decoration: underline;
+  }
+
+  .candidate-link::after {
+    content: '→';
+    font-size: 18px;
+  }
+
+  .info-value-empty {
+    color: #adb5bd;
+    font-style: italic;
+    font-size: 14px;
+  }
+
+  .url-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .url-link {
+    color: #c29600;
+    text-decoration: none;
+    font-weight: 500;
+    word-break: break-all;
+    font-size: 14px;
+    transition: color 0.2s ease;
+  }
+
+  .url-link:hover {
+    color: #a67c00;
+    text-decoration: underline;
+  }
+
+  .url-container svg {
+    flex-shrink: 0;
+    color: #c29600;
+  }
+
+  .description-text {
+    color: #495057;
+    line-height: 1.7;
+    margin: 0;
+    white-space: pre-wrap;
+  }
+
+  .description-empty {
+    color: #adb5bd;
+    font-style: italic;
+    margin: 0;
+  }
+
+  @media (max-width: 768px) {
+    .admin-headerr {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 16px;
+    }
+
+    .video-detail {
+      flex-direction: column;
+    }
+
+    .video-player-container {
+      flex: 1;
+      width: 100%;
+    }
+
+    .video-embed iframe {
+      height: 220px;
+    }
+  }
+</style>

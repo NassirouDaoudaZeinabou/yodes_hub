@@ -1,0 +1,10 @@
+<h2>Paiement iPay (Sandbox)</h2>
+
+<p>Vote pour : <strong><%= @vote.candidate.name %></strong></p>
+<p>Montant : <strong>100 FCFA</strong></p>
+
+<form method="post" action="<%= ipay_fake_confirm_path(@vote) %>">
+  <button type="submit">
+    Simuler paiement réussi (Airtel / Moov)
+  </button>
+</form>

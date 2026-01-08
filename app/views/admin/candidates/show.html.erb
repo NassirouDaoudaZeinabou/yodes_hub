@@ -1,0 +1,280 @@
+<div class="admin-header">
+  <h1><%= @candidate.name %></h1>
+  <div class="actions">
+    <%= link_to 'Modifier', edit_admin_candidate_path(@candidate), class: 'btn btn-primary' %>
+    <%= link_to 'Retour', admin_candidates_path, class: 'btn btn-secondary' %>
+  </div>
+</div>
+
+<div class="candidate-detail">
+  <div class="candidate-image-container">
+    <% if @candidate.image.attached? %>
+      <% begin %>
+        <% if @candidate.image.variable? %>
+			 <%= image_tag @candidate.image.variant(resize_to_limit: [640, 420]), alt: @candidate.name, 
+              class: 'candidate-image' %>
+        <% else %>
+		     <%= image_tag url_for(@candidate.image), alt: @candidate.name,
+              class: 'candidate-image' %>
+        <% end %>
+      <% rescue => _e %>
+			<%= image_tag url_for(@candidate.image), alt: @candidate.name, 
+            class: 'candidate-image' %>
+      <% end %>
+    <% else %>
+      <div class="candidate-image-placeholder">
+        <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+          <circle cx="8.5" cy="8.5" r="1.5"></circle>
+          <polyline points="21 15 16 10 5 21"></polyline>
+        </svg>
+        <span>Aucune image</span>
+      </div>
+    <% end %>
+  </div>
+
+  <div class="candidate-info">
+    <div class="info-section">
+      <h3 class="section-title">Biographie</h3>
+      <p class="bio-text"><%= simple_format(@candidate.bio) %></p>
+    </div>
+
+    <% if @candidate.video_url.present? %>
+      <div class="info-section">
+        <h4 class="subsection-title">Vidéo</h4>
+        <div class="video-link-container">
+          <%= link_to @candidate.video_url, @candidate.video_url, 
+              target: :_blank, 
+              rel: 'noopener', 
+              class: 'video-link' %>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+            <polyline points="15 3 21 3 21 9"></polyline>
+            <line x1="10" y1="14" x2="21" y2="3"></line>
+          </svg>
+        </div>
+      </div>
+    <% end %>
+
+    <div class="info-section">
+      <div class="status-badge <%= @candidate.active? ? 'status-active' : 'status-inactive' %>">
+        <span class="status-dot"></span>
+        <span class="status-text">
+          <%= @candidate.active? ? 'Candidat actif' : 'Candidat inactif' %>
+        </span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .admin-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 2px solid #e0e0e0;
+  }
+
+  .admin-header h1 {
+    color: #2c3e50;
+    font-size: 28px;
+    margin: 0;
+  }
+
+  .actions {
+    display: flex;
+    gap: 12px;
+  }
+
+  .btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-decoration: none;
+    display: inline-block;
+  }
+
+  .btn-primary {
+    background: #c29600;
+    color: white;
+  }
+
+  .btn-primary:hover {
+    background: #a67c00;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(194, 150, 0, 0.3);
+  }
+
+  .btn-secondary {
+    background: #6c757d;
+    color: white;
+  }
+
+  .btn-secondary:hover {
+    background: #5a6268;
+  }
+
+  .candidate-detail {
+    display: flex;
+    gap: 32px;
+    align-items: flex-start;
+    margin-top: 24px;
+  }
+
+  .candidate-image-container {
+    flex: 0 0 320px;
+  }
+
+  .candidate-image {
+    width: 100%;
+    border-radius: 8px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease;
+  }
+
+  .candidate-image:hover {
+    transform: scale(1.02);
+  }
+
+  .candidate-image-placeholder {
+    width: 100%;
+    height: 240px;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #adb5bd;
+    gap: 12px;
+    border: 2px dashed #dee2e6;
+  }
+
+  .candidate-image-placeholder span {
+    font-size: 14px;
+    font-weight: 500;
+  }
+
+  .candidate-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .info-section {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    border: 1px solid #e0e0e0;
+  }
+
+  .section-title {
+    color: #2c3e50;
+    font-size: 20px;
+    margin: 0 0 16px 0;
+    font-weight: 600;
+    border-bottom: 2px solid #c29600;
+    padding-bottom: 8px;
+  }
+
+  .subsection-title {
+    color: #495057;
+    font-size: 16px;
+    margin: 0 0 12px 0;
+    font-weight: 600;
+  }
+
+  .bio-text {
+    color: #495057;
+    line-height: 1.7;
+    margin: 0;
+    white-space: pre-wrap;
+  }
+
+  .video-link-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .video-link {
+    color: #c29600;
+    text-decoration: none;
+    font-weight: 500;
+    word-break: break-all;
+    transition: color 0.2s ease;
+  }
+
+  .video-link:hover {
+    color: #a67c00;
+    text-decoration: underline;
+  }
+
+  .video-link-container svg {
+    flex-shrink: 0;
+    color: #c29600;
+  }
+
+  .status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 14px;
+  }
+
+  .status-active {
+    background: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+  }
+
+  .status-inactive {
+    background: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+  }
+
+  .status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    display: block;
+  }
+
+  .status-active .status-dot {
+    background: #28a745;
+    box-shadow: 0 0 0 2px rgba(40, 167, 69, 0.2);
+  }
+
+  .status-inactive .status-dot {
+    background: #dc3545;
+    box-shadow: 0 0 0 2px rgba(220, 53, 69, 0.2);
+  }
+
+  @media (max-width: 768px) {
+    .admin-header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 16px;
+    }
+
+    .candidate-detail {
+      flex-direction: column;
+    }
+
+    .candidate-image-container {
+      flex: 1;
+      width: 100%;
+    }
+  }
+</style>

@@ -1,0 +1,213 @@
+<div class="v-admin-wrapper">
+  
+  <header class="v-admin-header">
+    <div class="v-admin-header-main">
+      <div class="v-admin-title-box">
+        <span class="v-admin-icon-main">🎬</span>
+        <h1>Gestion des Vidéos</h1>
+      </div>
+      <%= link_to "+ Nouvelle Vidéo", new_admin_video_path, class: "v-admin-btn-primary" %>
+    </div>
+
+    <div class="v-admin-stats-grid">
+      <div class="v-admin-stat-item">
+        <span class="v-admin-stat-label">Total</span>
+        <span class="v-admin-stat-value"><%= @candidate_videos.count + @emission_videos.count %></span>
+      </div>
+      <div class="v-admin-stat-item">
+        <span class="v-admin-stat-label">Candidats</span>
+        <span class="v-admin-stat-value"><%= @candidate_videos.count %></span>
+      </div>
+      <div class="v-admin-stat-item">
+        <span class="v-admin-stat-label">Émissions</span>
+        <span class="v-admin-stat-value"><%= @emission_videos.count %></span>
+      </div>
+    </div>
+  </header>
+
+  <div class="v-admin-section">
+    <div class="v-admin-section-title">
+      <span class="v-admin-dot amber"></span>
+      <h2>Vidéos des Candidats</h2>
+    </div>
+
+    <div class="v-admin-card">
+      <table class="v-admin-table">
+        <thead>
+          <tr>
+            <th>Aperçu</th>
+            <th>Détails</th>
+            <th>Candidat</th>
+            <th class="v-text-right">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @candidate_videos.each do |video| %>
+            <tr>
+              <td style="width: 150px;">
+                <div class="v-admin-video-thumb">
+                 <% thumb_url =
+                if video.thumbnail.attached?
+                  url_for(video.thumbnail)
+                else
+                  youtube_thumbnail(video.url)
+                end %>
+
+                  <iframe src="<%= thumb_url %>" frameborder="0"></iframe>
+                </div>
+              </td>
+              <td>
+                <div class="v-admin-video-info">
+                  <strong><%= video.title %></strong>
+                  <p><%= truncate(video.description, length: 60) %></p>
+                </div>
+              </td>
+              <td><span class="v-admin-badge-user">👤 <%= video.candidate.try(:name) %></span></td>
+              <td>
+                <div class="v-admin-actions">
+                  <%= link_to "✏️", edit_admin_video_path(video), class: "v-admin-btn-edit" %>
+                  <%= button_to "🗑️", admin_video_path(video), method: :delete, data: { confirm: "Supprimer ?" }, class: "v-admin-btn-delete" %>
+                   <a href="<%= admin_video_path(video) %>" class="voir">
+                        <span class="icon">👁️</span> 
+                      </a>
+                  </div>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="v-admin-section" style="margin-top: 40px;">
+    <div class="v-admin-section-title">
+      <span class="v-admin-dot indigo"></span>
+      <h2>Émissions & Reportages</h2>
+    </div>
+
+    <div class="v-admin-card">
+      <table class="v-admin-table">
+        <thead>
+          <tr>
+            <th>Aperçu</th>
+            <th>Détails</th>
+            <th>Date</th>
+            <th class="v-text-right">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @emission_videos.each do |video| %>
+            <tr>
+              <td style="width: 150px;">
+                <div class="v-admin-video-thumb">*
+                 <% thumb_url =
+                if video.thumbnail.attached?
+                  url_for(video.thumbnail)
+                else
+                  youtube_thumbnail(video.url)
+                end %>
+
+                  <iframe src="<%= thumb_url %>" frameborder="0"></iframe>
+                </div>
+              </td>
+              <td>
+                <div class="v-admin-video-info">
+                  <strong><%= video.title %></strong>
+                  <p><%= truncate(video.description, length: 80) %></p>
+                </div>
+              </td>
+              <td class="v-admin-date"><%= video.created_at.strftime("%d/%m/%y") %></td>
+              <td>
+                <div class="v-admin-actions">
+                  <%= link_to "✏️", edit_admin_video_path(video), class: "v-admin-btn-edit" %>
+                  <%= button_to "🗑️", admin_video_path(video), method: :delete, data: { confirm: "Supprimer ?" }, class: "v-admin-btn-delete" %>
+                  <a href="<%= admin_video_path(video) %>" class="voir">
+                        <span class="icon">👁️</span> 
+                      </a>
+                  </div>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<style>
+  .v-admin-wrapper {
+    background: #f8fafc;
+    padding: 30px;
+    font-family: 'Inter', system-ui, sans-serif;
+    color: #1e293b;
+    min-height: 100vh;
+  }
+
+  /* Header */
+  .v-admin-header { margin-bottom: 30px; }
+  .v-admin-header-main { 
+    display: flex; justify-content: space-between; align-items: center; 
+    background: white; padding: 20px; border-radius: 12px; border: 1px solid #e2e8f0;
+  }
+  .v-admin-title-box { display: flex; align-items: center; gap: 15px; }
+  .v-admin-title-box h1 { margin: 0; font-size: 1.5rem; font-weight: 800; }
+  
+  .v-admin-btn-primary {
+    background: #d97706; color: white !important; padding: 10px 20px; 
+    border-radius: 8px; text-decoration: none; font-weight: 700;
+  }
+
+  /* Stats */
+  .v-admin-stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 15px; }
+  .v-admin-stat-item { 
+    background: white; padding: 15px; border-radius: 12px; border: 1px solid #e2e8f0;
+    display: flex; flex-direction: column;
+  }
+  .v-admin-stat-label { font-size: 0.75rem; color: #64748b; text-transform: uppercase; font-weight: 700; }
+  .v-admin-stat-value { font-size: 1.25rem; font-weight: 800; }
+
+  /* Section Title */
+  .v-admin-section-title { display: flex; align-items: center; gap: 10px; margin-bottom: 15px; }
+  .v-admin-section-title h2 { font-size: 1.1rem; font-weight: 700; margin: 0; }
+  .v-admin-dot { width: 10px; height: 10px; border-radius: 50%; }
+  .v-admin-dot.amber { background: #f59e0b; }
+  .v-admin-dot.indigo { background: #6366f1; }
+
+  /* Card & Table */
+  .v-admin-card { background: white; border-radius: 12px; border: 1px solid #e2e8f0; overflow: hidden; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
+  .v-admin-table { width: 100%; border-collapse: collapse; }
+  .v-admin-table th { background: #f1f5f9; padding: 12px 20px; text-align: left; font-size: 0.75rem; color: #64748b; text-transform: uppercase; }
+  .v-admin-table td { padding: 15px 20px; border-bottom: 1px solid #f1f5f9; vertical-align: middle; }
+
+  /* Video Thumb */
+  .v-admin-video-thumb { width: 140px; height: 80px; background: black; border-radius: 6px; overflow: hidden; }
+  .v-admin-video-thumb iframe { width: 100%; height: 100%; pointer-events: none; }
+
+  /* Info & Badges */
+  .v-admin-video-info strong { display: block; font-size: 0.95rem; margin-bottom: 4px; }
+  .v-admin-video-info p { margin: 0; font-size: 0.8rem; color: #64748b; }
+  .v-admin-badge-user { background: #f1f5f9; padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; color: #475569; }
+  .v-admin-date { font-family: monospace; font-size: 0.85rem; color: #64748b; }
+
+  /* Actions */
+  .v-admin-actions { display: flex; gap: 8px; justify-content: flex-end; }
+  .v-admin-btn-edit, .v-admin-btn-delete { 
+    width: 34px; height: 34px; display: flex; align-items: center; justify-content: center;
+    border-radius: 6px; border: none; cursor: pointer; text-decoration: none; font-size: 1rem;
+  }
+  .v-admin-btn-edit { background: #eff6ff; }
+  .v-admin-btn-delete { background: #fee2e2; }
+  .v-text-right { text-align: right; }
+  .voir {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: #2563eb;
+  text-decoration: none;
+}
+
+.voir:hover {
+  text-decoration: underline;
+}
+
+</style>

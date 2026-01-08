@@ -1,0 +1,620 @@
+<style>
+/* ============================================
+   FOOTER - Enhanced Version
+   ============================================ */
+
+:root {
+  --footer-bg: #0f172a;
+  --footer-bg-light: #1e293b;
+  --footer-text: #94a3b8;
+  --footer-heading: #f1f5f9;
+  --footer-border: rgba(255, 255, 255, 0.08);
+  --footer-hover: rgba(212, 175, 55, 0.1);
+}
+
+footer {
+  background: linear-gradient(180deg, var(--footer-bg) 0%, #020617 100%);
+  color: var(--footer-text);
+  padding: 0;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Decorative background elements */
+footer::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, 
+    transparent, 
+    var(--gold) 50%, 
+    transparent
+  );
+  opacity: 0.3;
+}
+
+footer::after {
+  content: '';
+  position: absolute;
+  top: -200px;
+  right: -200px;
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(212, 175, 55, 0.03) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.footer-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 80px 48px 0;
+  position: relative;
+  z-index: 1;
+}
+
+/* Main Footer Grid */
+.footer-main {
+  display: grid;
+  grid-template-columns: 2fr repeat(3, 1fr);
+  gap: 64px;
+  margin-bottom: 64px;
+  padding-bottom: 64px;
+  border-bottom: 1px solid var(--footer-border);
+}
+
+/* Brand Section */
+.footer-brand {
+  max-width: 420px;
+}
+
+.footer-brand h3 {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 32px;
+  font-weight: 900;
+  background: linear-gradient(135deg, var(--gold) 0%, var(--yellow) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 16px;
+  letter-spacing: -0.02em;
+}
+
+.footer-brand-tagline {
+  line-height: 1.8;
+  font-size: 15px;
+  margin-bottom: 24px;
+  opacity: 0.9;
+}
+
+/* Newsletter Section */
+.footer-newsletter {
+  margin-top: 32px;
+}
+
+.newsletter-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--footer-heading);
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.newsletter-form {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.newsletter-input {
+  flex: 1;
+  padding: 12px 16px;
+  background: var(--footer-bg-light);
+  border: 1px solid var(--footer-border);
+  border-radius: 8px;
+  color: var(--footer-heading);
+  font-size: 14px;
+  transition: all 0.3s ease;
+}
+
+.newsletter-input:focus {
+  outline: none;
+  border-color: var(--gold);
+  background: rgba(30, 41, 59, 0.8);
+  box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.1);
+}
+
+.newsletter-input::placeholder {
+  color: var(--footer-text);
+  opacity: 0.6;
+}
+
+.newsletter-btn {
+  padding: 12px 24px;
+  background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+  border: none;
+  border-radius: 8px;
+  color: white;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.newsletter-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(212, 175, 55, 0.3);
+}
+
+.newsletter-btn:active {
+  transform: translateY(0);
+}
+
+.newsletter-privacy {
+  font-size: 12px;
+  opacity: 0.7;
+  line-height: 1.5;
+}
+
+.newsletter-privacy a {
+  color: var(--gold);
+  text-decoration: none;
+}
+
+/* Social Links */
+.footer-social {
+  display: flex;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.social-link {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--footer-bg-light);
+  border: 1px solid var(--footer-border);
+  border-radius: 50%;
+  color: var(--footer-text);
+  text-decoration: none;
+  font-size: 18px;
+  transition: all 0.3s ease;
+}
+
+.social-link:hover {
+  background: var(--footer-hover);
+  border-color: var(--gold);
+  color: var(--gold);
+  transform: translateY(-3px);
+}
+
+/* Footer Columns */
+.footer-column h4 {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--footer-heading);
+  margin-bottom: 24px;
+  position: relative;
+  padding-bottom: 12px;
+}
+
+.footer-column h4::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 32px;
+  height: 2px;
+  background: linear-gradient(90deg, var(--gold), transparent);
+}
+
+.footer-links {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.footer-links li {
+  margin-bottom: 14px;
+}
+
+.footer-links a {
+  color: var(--footer-text);
+  text-decoration: none;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 15px;
+  position: relative;
+}
+
+.footer-links a::before {
+  content: '→';
+  opacity: 0;
+  transform: translateX(-8px);
+  transition: all 0.3s ease;
+}
+
+.footer-links a:hover {
+  color: var(--gold);
+  padding-left: 16px;
+}
+
+.footer-links a:hover::before {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* Footer Bottom */
+.footer-bottom {
+  padding: 32px 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 24px;
+}
+
+.footer-copyright {
+  font-size: 14px;
+  opacity: 0.8;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.footer-heart {
+  color: var(--gold);
+  animation: heartbeat 2s ease-in-out infinite;
+  display: inline-block;
+}
+
+@keyframes heartbeat {
+  0%, 100% { transform: scale(1); }
+  10%, 30% { transform: scale(1.1); }
+  20%, 40% { transform: scale(1); }
+}
+
+.footer-bottom-links {
+  display: flex;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+.footer-bottom-links a {
+  color: var(--footer-text);
+  text-decoration: none;
+  font-size: 14px;
+  transition: color 0.3s ease;
+}
+
+.footer-bottom-links a:hover {
+  color: var(--gold);
+}
+
+/* Back to Top Button */
+.back-to-top {
+  position: fixed;
+  bottom: 32px;
+  right: 32px;
+  width: 48px;
+  height: 48px;
+  background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+  border: none;
+  border-radius: 50%;
+  color: white;
+  font-size: 20px;
+  cursor: pointer;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(20px);
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+}
+
+.back-to-top.visible {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.back-to-top:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(212, 175, 55, 0.4);
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .footer-main {
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
+  }
+
+  .footer-brand {
+    grid-column: 1 / -1;
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  .footer-container {
+    padding: 60px 24px 0;
+  }
+
+  .footer-main {
+    grid-template-columns: 1fr;
+    gap: 40px;
+    margin-bottom: 48px;
+    padding-bottom: 48px;
+  }
+
+  .footer-brand h3 {
+    font-size: 28px;
+  }
+
+  .newsletter-form {
+    flex-direction: column;
+  }
+
+  .newsletter-btn {
+    width: 100%;
+  }
+
+  .footer-bottom {
+    flex-direction: column;
+    text-align: center;
+    padding: 24px 0;
+  }
+
+  .footer-bottom-links {
+    justify-content: center;
+  }
+
+  .back-to-top {
+    bottom: 20px;
+    right: 20px;
+    width: 44px;
+    height: 44px;
+  }
+}
+
+@media (max-width: 480px) {
+  .footer-social {
+    flex-wrap: wrap;
+  }
+
+  .footer-links a:hover {
+    padding-left: 12px;
+  }
+}
+
+/* Print Styles */
+@media print {
+  footer {
+    display: none;
+  }
+}
+</style>
+
+<!-- Footer -->
+<footer role="contentinfo">
+  <div class="footer-container">
+    <div class="footer-main">
+      
+      <!-- Brand & Newsletter -->
+      <div class="footer-brand">
+        <h3>Sarki Excellence</h3>
+        <p class="footer-brand-tagline">
+          Initiative dédiée à promouvoir les meilleurs talents et leaders de demain. 
+          Ensemble, construisons un avenir meilleur, plus juste et plus durable.
+        </p>
+
+        <!-- Newsletter Subscription -->
+        <div class="footer-newsletter">
+          <div class="newsletter-title">
+            <span>📧</span>
+            <span>Restez informé</span>
+          </div>
+          <%= form_with  method: :post, local: true, class: "newsletter-form" do |f| %>
+            <%= f.email_field :email, 
+                placeholder: "Votre email", 
+                class: "newsletter-input",
+                required: true,
+                "aria-label": "Adresse email pour la newsletter" %>
+            <%= f.submit "S'abonner", class: "newsletter-btn" %>
+          <% end %>
+          <p class="newsletter-privacy">
+            En vous abonnant, vous acceptez notre 
+            <%= link_to "politique de confidentialité"%>.
+          </p>
+        </div>
+
+        <!-- Social Media Links -->
+        <div class="footer-social">
+          <a href="https://facebook.com/sarkiexcellence" 
+             target="_blank" 
+             rel="noopener noreferrer"
+             class="social-link"
+             aria-label="Facebook">
+            <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+            </svg>
+          </a>
+          <a href="https://twitter.com/sarkiexcellence" 
+             target="_blank" 
+             rel="noopener noreferrer"
+             class="social-link"
+             aria-label="Twitter">
+            <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/>
+            </svg>
+          </a>
+          <a href="https://linkedin.com/company/sarkiexcellence" 
+             target="_blank" 
+             rel="noopener noreferrer"
+             class="social-link"
+             aria-label="LinkedIn">
+            <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+            </svg>
+          </a>
+          <a href="https://instagram.com/sarkiexcellence" 
+             target="_blank" 
+             rel="noopener noreferrer"
+             class="social-link"
+             aria-label="Instagram">
+            <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M12 0C8.74 0 8.333.015 7.053.072 5.775.132 4.905.333 4.14.63c-.789.306-1.459.717-2.126 1.384S.935 3.35.63 4.14C.333 4.905.131 5.775.072 7.053.012 8.333 0 8.74 0 12s.015 3.667.072 4.947c.06 1.277.261 2.148.558 2.913.306.788.717 1.459 1.384 2.126.667.666 1.336 1.079 2.126 1.384.766.296 1.636.499 2.913.558C8.333 23.988 8.74 24 12 24s3.667-.015 4.947-.072c1.277-.06 2.148-.262 2.913-.558.788-.306 1.459-.718 2.126-1.384.666-.667 1.079-1.335 1.384-2.126.296-.765.499-1.636.558-2.913.06-1.28.072-1.687.072-4.947s-.015-3.667-.072-4.947c-.06-1.277-.262-2.149-.558-2.913-.306-.789-.718-1.459-1.384-2.126C21.319 1.347 20.651.935 19.86.63c-.765-.297-1.636-.499-2.913-.558C15.667.012 15.26 0 12 0zm0 2.16c3.203 0 3.585.016 4.85.071 1.17.055 1.805.249 2.227.415.562.217.96.477 1.382.896.419.42.679.819.896 1.381.164.422.36 1.057.413 2.227.057 1.266.07 1.646.07 4.85s-.015 3.585-.074 4.85c-.061 1.17-.256 1.805-.421 2.227-.224.562-.479.96-.899 1.382-.419.419-.824.679-1.38.896-.42.164-1.065.36-2.235.413-1.274.057-1.649.07-4.859.07-3.211 0-3.586-.015-4.859-.074-1.171-.061-1.816-.256-2.236-.421-.569-.224-.96-.479-1.379-.899-.421-.419-.69-.824-.9-1.38-.165-.42-.359-1.065-.42-2.235-.045-1.26-.061-1.649-.061-4.844 0-3.196.016-3.586.061-4.861.061-1.17.255-1.814.42-2.234.21-.57.479-.96.9-1.381.419-.419.81-.689 1.379-.898.42-.166 1.051-.361 2.221-.421 1.275-.045 1.65-.06 4.859-.06l.045.03zm0 3.678c-3.405 0-6.162 2.76-6.162 6.162 0 3.405 2.76 6.162 6.162 6.162 3.405 0 6.162-2.76 6.162-6.162 0-3.405-2.76-6.162-6.162-6.162zM12 16c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4zm7.846-10.405c0 .795-.646 1.44-1.44 1.44-.795 0-1.44-.646-1.44-1.44 0-.794.646-1.439 1.44-1.439.793-.001 1.44.645 1.44 1.439z"/>
+            </svg>
+          </a>
+          <a href="https://youtube.com/@sarkiexcellence" 
+             target="_blank" 
+             rel="noopener noreferrer"
+             class="social-link"
+             aria-label="YouTube">
+            <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+
+      <!-- Navigation Links -->
+      <div class="footer-column">
+        <h4>Navigation</h4>
+        <ul class="footer-links">
+          <li><%= link_to "Accueil", root_path %></li>
+          <li><%= link_to "Candidats", candidates_path %></li>
+          <li><%= link_to "Vidéos", videos_path %></li>
+          <li><%= link_to "Nos Emissions", emissions_index_path %></li>
+        </ul>
+      </div>
+
+      <!-- Resources -->
+      <div class="footer-column">
+        <h4>Ressources</h4>
+        <ul class="footer-links">
+          <li><%= link_to "Blog" %></li>
+          <li><%= link_to "Événements" %></li>
+          <li><%= link_to "Actualités" %></li>
+          <li><%= link_to "Contact" %></li>
+          <li><%= link_to "FAQ" %></li>
+        </ul>
+      </div>
+
+      <!-- Legal -->
+      <div class="footer-column">
+        <h4>Légal</h4>
+        <ul class="footer-links">
+          <li><%= link_to "Confidentialité" %></li>
+          <li><%= link_to "Conditions d'utilisation" %></li>
+          <li><%= link_to "Politique des cookies" %></li>
+          <li><%= link_to "Mentions légales" %></li>
+        </ul>
+      </div>
+
+    </div>
+
+    <!-- Bottom Bar -->
+    <div class="footer-bottom">
+      <p class="footer-copyright">
+        &copy; <%= Date.current.year %> Sarki Excellence. Tous droits réservés. 
+        Fait avec <span class="footer-heart">♥</span> pour un avenir meilleur.
+      </p>
+      <div class="footer-bottom-links">
+        <a href="/sitemap.xml">Plan du site</a>
+        <a href="/accessibility">Accessibilité</a>
+        <a href="/press">Presse</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Back to Top Button -->
+  <button 
+    class="back-to-top" 
+    id="backToTop"
+    aria-label="Retour en haut de la page"
+    type="button">
+    ↑
+  </button>
+</footer>
+
+<script>
+(() => {
+  'use strict';
+
+  // Back to Top functionality
+  const backToTopBtn = document.getElementById('backToTop');
+  
+  if (backToTopBtn) {
+    // Show/hide button based on scroll position
+    const toggleBackToTop = () => {
+      if (window.pageYOffset > 300) {
+        backToTopBtn.classList.add('visible');
+      } else {
+        backToTopBtn.classList.remove('visible');
+      }
+    };
+
+    // Smooth scroll to top
+    const scrollToTop = () => {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    };
+
+    // Event listeners
+    window.addEventListener('scroll', toggleBackToTop, { passive: true });
+    backToTopBtn.addEventListener('click', scrollToTop);
+
+    // Initial check
+    toggleBackToTop();
+  }
+
+  // Newsletter form enhancement
+  const newsletterForm = document.querySelector('.newsletter-form');
+  if (newsletterForm) {
+    newsletterForm.addEventListener('submit', (e) => {
+      const emailInput = newsletterForm.querySelector('.newsletter-input');
+      const submitBtn = newsletterForm.querySelector('.newsletter-btn');
+      
+      if (emailInput && submitBtn) {
+        // Add loading state
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Envoi...';
+        
+        // Re-enable after submission (handled by Rails UJS)
+        setTimeout(() => {
+          submitBtn.disabled = false;
+          submitBtn.textContent = "S'abonner";
+        }, 2000);
+      }
+    });
+  }
+
+  // Add smooth scroll behavior to all footer links
+  document.querySelectorAll('.footer-links a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+      e.preventDefault();
+      const target = document.querySelector(this.getAttribute('href'));
+      if (target) {
+        target.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start'
+        });
+      }
+    });
+  });
+})();
+</script>

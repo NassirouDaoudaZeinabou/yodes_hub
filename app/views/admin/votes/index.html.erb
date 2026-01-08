@@ -1,0 +1,447 @@
+<div class="votes-dashboard">
+  <div class="dashboard-header">
+    <div class="header-content">
+      <div class="header-title-row">
+        <h1 class="dashboard-title">Tableau de Votes</h1>
+      </div>
+      <div class="stats-bar">
+        <div class="stat-card card-total">
+          <div class="stat-icon-wrapper">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+              <path d="M7 3a1 1 0 000 2h6a1 1 0 100-2H7zM4 7a1 1 0 011-1h10a1 1 0 110 2H5a1 1 0 01-1-1zM2 11a2 2 0 012-2h12a2 2 0 012 2v4a2 2 0 01-2 2H4a2 2 0 01-2-2v-4z" />
+            </svg>
+          </div>
+          <div class="stat-details">
+            <span class="stat-value"><%= @votes.count %></span>
+            <span class="stat-label">Total votes</span>
+          </div>
+        </div>
+        
+        <div class="stat-card card-success">
+          <div class="stat-icon-wrapper">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+              <path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+            </svg>
+          </div>
+          <div class="stat-details">
+            <span class="stat-value"><%= @votes.where(status: 'success').count %></span>
+            <span class="stat-label">Validés</span>
+          </div>
+        </div>
+
+        <div class="stat-card card-amount">
+          <div class="stat-icon-wrapper">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+              <path d="M8.433 7.418c.155-.103.346-.196.567-.267v1.698a2.305 2.305 0 01-.567-.267C8.07 8.34 8 8.114 8 8c0-.114.07-.34.433-.582zM11 12.849v-1.698c.22.071.412.164.567.267.364.243.433.468.433.582 0 .114-.07.34-.433.582a2.305 2.305 0 01-.567.267z" />
+              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-13a1 1 0 10-2 0v.092a4.535 4.535 0 00-1.676.662C6.602 6.234 6 7.009 6 8c0 .99.602 1.765 1.324 2.246.48.32 1.054.545 1.676.662v1.941c-.391-.127-.68-.317-.843-.504a1 1 0 10-1.514 1.31c.563.649 1.413 1.076 2.357 1.253V15a1 1 0 102 0v-.092a4.535 4.535 0 001.676-.662C13.398 13.766 14 12.991 14 12c0-.99-.602-1.765-1.324-2.246a4.535 4.535 0 00-1.676-.662V7.151c.391.127.68.317.843.504a1 1 0 101.514-1.31c-.563-.649-1.413-1.076-2.357-1.253V5z" clip-rule="evenodd" />
+            </svg>
+          </div>
+          <div class="stat-details">
+            <span class="stat-value amount-stat"><%= number_to_currency(@votes.where(status: 'success').sum(:amount), unit: 'FCFA ', precision: 0) %></span>
+            <span class="stat-label">Montant total</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <% if @votes.empty? %>
+    <div class="empty-state">
+      <div class="empty-icon-container">
+        <svg class="empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+        </svg>
+      </div>
+      <h3>Aucun vote enregistré</h3>
+      <p>Les données apparaîtront ici une fois les premiers votes effectués.</p>
+    </div>
+  <% else %>
+    <div class="table-container">
+      <table class="votes-table">
+        <thead>
+          <tr>
+            <th class="col-id">#</th>
+            <th class="col-candidate">Candidat</th>
+            <th class="col-phone">Téléphone</th>
+            <th class="col-amount text-right">Montant</th>
+            <th class="col-payment text-center">Paiement</th>
+            <th class="col-status text-center">Statut</th>
+            <th class="col-ip">IP</th>
+            <th class="col-date">Date</th>
+            <th class="col-action text-center">Action</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <% @votes.each_with_index do |vote, index| %>
+            <tr class="vote-row" style="animation-delay: <%= index * 0.03 %>s">
+              <td class="col-id">
+                <span class="id-badge"><%= vote.id %></span>
+              </td>
+
+              <td class="col-candidate">
+                <div class="candidate-info">
+                  <div class="candidate-avatar">
+                    <%= vote.candidate.name.first.upcase if vote.candidate %>
+                  </div>
+                  <div class="candidate-details">
+                    <span class="candidate-name">
+                      <%= vote.candidate&.name || "Non défini" %>
+                    </span>
+                  </div>
+                </div>
+              </td>
+
+              <td class="col-phone">
+                <span class="data-secondary font-mono">
+                  <%= vote.phone_number.presence || "—" %>
+                </span>
+              </td>
+
+              <td class="col-amount text-right">
+                <span class="amount-value">
+                  <%= number_to_currency(vote.amount, unit: '', precision: 0) %><small>FCFA</small>
+                </span>
+              </td>
+
+              <td class="col-payment text-center">
+                <span class="payment-method">
+                  <%= vote.payment_method || "—" %>
+                </span>
+              </td>
+
+              <td class="col-status text-center">
+                <% case vote.status %>
+                <% when "success" %>
+                  <span class="status-badge status-success" title="Validé">
+                    <svg class="status-icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                      <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                    </svg>
+                  </span>
+                <% when "failed" %>
+                  <span class="status-badge status-failed" title="Échoué">
+                    <svg class="status-icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                      <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
+                    </svg>
+                  </span>
+                <% else %>
+                  <span class="status-badge status-pending" title="En attente">
+                    <svg class="status-icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                      <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd" />
+                    </svg>
+                  </span>
+                <% end %>
+              </td>
+
+              <td class="col-ip">
+                <span class="data-secondary font-mono" title="<%= vote.ip_address %>">
+                  <%= vote.ip_address.truncate(12) %>
+                </span>
+              </td>
+
+              <td class="col-date">
+                <span class="data-secondary font-mono">
+                  <%= l(vote.created_at, format: :short) %>
+                </span>
+              </td>
+
+              <td class="col-action text-center">
+                <%= link_to admin_vote_path(vote),
+                    method: :delete,
+                    data: { confirm: "Êtes-vous sûr de vouloir supprimer ce vote ?" },
+                    class: "btn-icon-delete", title: "Supprimer" do %>
+                  <svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                    <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
+                  </svg>
+                <% end %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  <% end %>
+</div>
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+  :root {
+    /* Palette Ambre (Accent uniquement) */
+    --amber-50: #fffbeb;
+    --amber-100: #fef3c7;
+    --amber-200: #fde68a;
+    --amber-300: #fcd34d;
+    --amber-400: #fbbf24;
+    --amber-500: #f59e0b;
+    --amber-600: #d97706;
+    
+    /* Neutres */
+    --bg-app: #f8fafc; /* Gris très pâle pour le fond de page */
+    --bg-card: #ffffff; /* Blanc pur pour les cartes */
+    --text-primary: #1e293b; /* Gris foncé presque noir */
+    --text-secondary: #64748b; /* Gris moyen */
+    --border-neutral: #e2e8f0; /* Gris clair pour les bordures neutres */
+    
+    /* Ombres Neutres (plus de teinte jaune) */
+    --shadow-card: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+    --shadow-hover: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -2px rgba(0, 0, 0, 0.04);
+    --card-border: 1px solid var(--border-neutral);
+  }
+
+  body { background-color: var(--bg-app); }
+
+  .votes-dashboard {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    min-height: 100vh;
+    padding: 1.5rem;
+    color: var(--text-primary);
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  /* Header & Stats */
+  .dashboard-header { margin-bottom: 1.5rem; animation: slideDown 0.5s ease-out; }
+
+  .header-content {
+    background: var(--bg-card);
+    border-radius: 16px;
+    padding: 1.25rem;
+    box-shadow: var(--shadow-card);
+    border: var(--card-border);
+  }
+  
+  .header-title-row { margin-bottom: 1rem; }
+
+  .dashboard-title {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--text-primary);
+    margin: 0;
+    letter-spacing: -0.03em;
+  }
+
+  .stats-bar {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+  }
+
+  .stat-card {
+    /* NOUVEAU : Fond blanc neutre */
+    background: var(--bg-card);
+    padding: 1rem;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    color: var(--text-primary); /* Texte foncé */
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: var(--shadow-card);
+    border: var(--card-border);
+  }
+
+  .stat-card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-hover);
+    border-color: var(--amber-300); /* Subtile touche de couleur au survol sur la bordure */
+  }
+  
+  .stat-icon-wrapper {
+      /* NOUVEAU : Fond gris neutre */
+      background: var(--bg-app);
+      padding: 0.625rem;
+      border-radius: 10px;
+      display: flex;
+  }
+  
+  .stat-icon-wrapper svg {
+      width: 22px;
+      height: 22px;
+      /* NOUVEAU : L'icône prend la couleur d'accent */
+      color: var(--amber-500);
+  }
+
+  .stat-details { display: flex; flex-direction: column; }
+
+  .stat-value {
+    font-size: 1.5rem;
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+  }
+  
+  .amount-stat { white-space: nowrap; }
+
+  .stat-label {
+    font-size: 0.75rem;
+    opacity: 1;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-top: 0.15rem;
+    /* NOUVEAU : Label en gris secondaire */
+    color: var(--text-secondary);
+  }
+
+  /* Conteneurs communs */
+  .empty-state, .table-container {
+    background: var(--bg-card);
+    border-radius: 16px;
+    box-shadow: var(--shadow-card);
+    border: var(--card-border);
+    animation: fadeIn 0.6s ease-out;
+    overflow: hidden;
+  }
+
+  /* Empty State (Ajusté pour le neutre) */
+  .empty-state {
+    padding: 4rem 1.5rem;
+    text-align: center;
+    display: flex; flex-direction: column; align-items: center;
+  }
+  
+  .empty-icon-container {
+      background-color: var(--bg-app); /* Fond neutre */
+      padding: 1.5rem;
+      border-radius: 50%;
+      margin-bottom: 1.5rem;
+      box-shadow: inset 0 0 0 1px var(--border-neutral);
+  }
+
+  .empty-icon { width: 48px; height: 48px; color: var(--text-secondary); /* Icône neutre */ }
+  .empty-state h3 { font-size: 1.25rem; color: var(--text-primary); margin-bottom: 0.5rem; font-weight: 700; }
+
+  /* Table */
+  .table-container { overflow-x: auto; }
+  .votes-table { width: 100%; border-collapse: collapse; white-space: nowrap; }
+
+  /* NOUVEAU : En-tête blanc pur et neutre */
+  .votes-table thead {
+    background: white;
+    color: var(--text-secondary); /* Texte des headers en gris pour moins de poids visuel */
+    border-bottom: 1px solid var(--border-neutral);
+  }
+  
+  .votes-table th {
+    padding: 0.875rem 1rem;
+    text-align: left;
+    font-weight: 700;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.075em;
+  }
+  
+  /* Utilitaires */
+  .text-right { text-align: right; }
+  .text-center { text-align: center; }
+  .font-mono { font-family: 'SF Mono', 'Roboto Mono', Menlo, monospace; }
+
+  .votes-table tbody tr {
+    border-bottom: 1px solid var(--border-neutral);
+    transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), 
+                box-shadow 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+                background-color 0.2s ease;
+    animation: slideUp 0.4s ease-out backwards;
+    background-color: var(--bg-card);
+  }
+
+  .votes-table tbody tr:hover {
+    background-color: var(--bg-app); /* Gris très pâle au survol */
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-card);
+    z-index: 1; position: relative;
+  }
+
+  .votes-table td {
+    padding: 0.75rem 1rem;
+    vertical-align: middle;
+    font-size: 0.875rem;
+  }
+
+  /* Colonnes spécifiques */
+  .col-id { width: 60px; padding-right: 0.5rem !important; }
+  .id-badge {
+    font-family: 'SF Mono', monospace;
+    font-weight: 700;
+    color: var(--text-secondary);
+    font-size: 0.8125rem;
+  }
+
+  .candidate-info { display: flex; align-items: center; gap: 0.75rem; }
+
+  .candidate-avatar {
+    width: 30px; height: 30px;
+    /* On garde une touche de couleur ici pour identifier */
+    background: linear-gradient(135deg, var(--amber-400), var(--amber-500));
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    color: white; font-weight: 700; font-size: 0.8125rem;
+    box-shadow: 0 2px 4px rgba(0,0,0, 0.1);
+    border: 2px solid white;
+  }
+
+  .candidate-name { font-weight: 600; color: var(--text-primary); }
+  .data-secondary { color: var(--text-secondary); font-size: 0.8125rem; }
+
+  .amount-value {
+    font-weight: 800;
+    color: var(--text-primary); /* Montant foncé */
+    font-feature-settings: "tnum";
+  }
+  
+  .amount-value small { font-weight: 600; color: var(--text-secondary); font-size: 0.75rem; margin-left: 2px; }
+
+  .payment-method {
+    display: inline-block;
+    background: var(--bg-app);
+    padding: 0.2rem 0.5rem;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    border: var(--card-border);
+  }
+
+  /* Badges de statut (Restent colorés pour l'information) */
+  .status-badge {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 26px; height: 26px;
+    border-radius: 50%;
+    transition: transform 0.2s;
+  }
+  .status-badge:hover { transform: scale(1.15); }
+  .status-icon { width: 16px; height: 16px; }
+
+  .status-success { background: #dcfce7; color: #15803d; box-shadow: inset 0 0 0 1px #86efac; }
+  .status-failed { background: #fee2e2; color: #b91c1c; box-shadow: inset 0 0 0 1px #fca5a5; }
+  .status-pending { background: var(--amber-100); color: var(--amber-600); box-shadow: inset 0 0 0 1px var(--amber-300); }
+
+  /* Bouton d'action discret */
+  .btn-icon-delete {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 28px; height: 28px;
+    color: var(--text-secondary);
+    border-radius: 8px;
+    transition: all 0.2s ease;
+    opacity: 0.7;
+  }
+  .vote-row:hover .btn-icon-delete { opacity: 1; }
+  .btn-icon-delete:hover { background-color: #fee2e2; color: #dc2626; transform: scale(1.1); }
+  .btn-icon-delete svg { width: 18px; height: 18px; }
+
+  /* Animations et Responsive (inchangés) */
+  @keyframes slideDown { from { opacity: 0; transform: translateY(-12px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes slideUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+  @media (max-width: 1024px) { .stats-bar { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); } }
+  @media (max-width: 768px) {
+    .votes-dashboard { padding: 1rem; }
+    .dashboard-title { font-size: 1.25rem; }
+    .header-content { padding: 1rem; }
+    .stat-card { padding: 0.875rem; }
+    .stat-value { font-size: 1.25rem; }
+    .votes-table th, .votes-table td { padding: 0.75rem 0.5rem; }
+    .col-ip, .col-date { display: none; }
+  }
+</style>
