@@ -115,6 +115,7 @@
   font-size: 16px;
   color: var(--text);
   background: transparent;
+  min-width: 0;
 }
 
 .search-input::placeholder {
@@ -135,13 +136,18 @@
   box-shadow: 0 4px 12px rgba(212, 175, 55, 0.3);
 }
 
-.search-btn:hover {
+.search-btn:hover:not(:disabled) {
   transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(212, 175, 55, 0.4);
 }
 
-.search-btn:active {
+.search-btn:active:not(:disabled) {
   transform: translateY(0);
+}
+
+.search-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 
 .search-meta {
@@ -177,6 +183,7 @@
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   border: 1px solid var(--border);
   position: relative;
+  will-change: transform;
 }
 
 .video-card::before {
@@ -189,6 +196,7 @@
   background: linear-gradient(90deg, var(--gold), var(--gold-dark));
   transform: scaleX(0);
   transition: transform 0.4s ease;
+  transform-origin: left;
 }
 
 .video-card:hover {
@@ -222,6 +230,11 @@
   height: 100%;
   object-fit: cover;
   transition: transform 0.6s ease;
+  will-change: transform;
+}
+
+.thumb-img.loaded {
+  animation: fadeIn 0.3s ease;
 }
 
 .video-card:hover .thumb-img {
@@ -259,9 +272,11 @@
   color: var(--gold-dark);
   transition: var(--transition);
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+  padding-left: 4px; /* Visual centering for play icon */
 }
 
-.play-btn:hover .play-icon {
+.play-btn:hover .play-icon,
+.play-btn:focus .play-icon {
   transform: scale(1.15);
   background: var(--gold);
   color: #fff;
@@ -288,6 +303,8 @@
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
+  word-break: break-word;
+  hyphens: auto;
 }
 
 .video-desc {
@@ -299,6 +316,7 @@
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
+  word-break: break-word;
 }
 
 .video-meta {
@@ -308,6 +326,7 @@
   gap: 12px;
   padding-top: 16px;
   border-top: 1px solid var(--border);
+  flex-wrap: wrap;
 }
 
 .video-link {
@@ -324,14 +343,17 @@
 .video-link::after {
   content: '→';
   transition: transform 0.3s ease;
+  display: inline-block;
 }
 
-.video-link:hover {
+.video-link:hover,
+.video-link:focus {
   color: var(--gold);
   gap: 10px;
 }
 
-.video-link:hover::after {
+.video-link:hover::after,
+.video-link:focus::after {
   transform: translateX(4px);
 }
 
@@ -346,6 +368,7 @@
 .empty-state {
   text-align: center;
   padding: 80px 20px;
+  animation: fadeIn 0.6s ease;
 }
 
 .empty-state-icon {
@@ -367,6 +390,8 @@
   color: var(--muted);
   font-size: 16px;
   line-height: 1.6;
+  max-width: 500px;
+  margin: 0 auto;
 }
 
 .empty-state .video-link {
@@ -386,7 +411,7 @@
   justify-content: center;
   opacity: 0;
   visibility: hidden;
-  transition: all 0.3s ease;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
   z-index: 9999;
   padding: 20px;
 }
@@ -405,6 +430,10 @@
   position: relative;
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
   animation: modalSlideIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.video-modal:not(.open) .modal-inner {
+  animation: none;
 }
 
 @keyframes modalSlideIn {
@@ -439,7 +468,8 @@
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
-.modal-close:hover {
+.modal-close:hover,
+.modal-close:focus {
   background: #fff;
   transform: rotate(90deg) scale(1.1);
 }
@@ -448,6 +478,7 @@
   position: relative;
   padding-bottom: 56.25%; /* 16:9 */
   height: 0;
+  background: #000;
 }
 
 .modal-content iframe {
@@ -468,19 +499,40 @@
 
 .loading::after {
   content: '';
-  display: inline-block;
+  display: block;
   width: 32px;
   height: 32px;
   border: 3px solid var(--gold-light);
   border-top-color: var(--gold);
   border-radius: 50%;
   animation: spin 0.8s linear infinite;
-  margin-top: 16px;
+  margin: 16px auto 0;
 }
 
 @keyframes spin {
   to {
     transform: rotate(360deg);
+  }
+}
+
+/* Skeleton Loading for Images */
+.thumb-img:not(.loaded) {
+  background: linear-gradient(
+    90deg,
+    var(--cream) 0%,
+    var(--gold-light) 50%,
+    var(--cream) 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
   }
 }
 
@@ -555,6 +607,26 @@
   }
 }
 
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .video-card {
+    border: 2px solid var(--text);
+  }
+  
+  .search-card {
+    border: 2px solid var(--text);
+  }
+}
+
+/* Dark mode support (if needed) */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --text: #f1f5f9;
+    --text-light: #cbd5e1;
+    --border: #334155;
+  }
+}
+
 /* Accessibility */
 @media (prefers-reduced-motion: reduce) {
   *,
@@ -570,43 +642,65 @@
 .play-btn:focus-visible,
 .search-btn:focus-visible,
 .video-link:focus-visible,
-.modal-close:focus-visible {
+.modal-close:focus-visible,
+.search-input:focus-visible {
   outline: 3px solid var(--gold);
   outline-offset: 3px;
 }
+
+/* Print styles */
+@media print {
+  .videos-wrap::before,
+  .play-btn,
+  .search-wrapper,
+  .video-modal {
+    display: none !important;
+  }
+  
+  .videos-wrap {
+    background: white;
+  }
+  
+  .video-card {
+    break-inside: avoid;
+    box-shadow: none;
+    border: 1px solid #ccc;
+  }
+}
 </style>
 
-<div class="videos-wrap">
+<div class="videos-wrap" role="main">
   <div class="videos-inner">
 
-    <div class="videos-hero">
+    <header class="videos-hero">
       <div class="videos-hero-content">
         <h1>Émissions</h1>
         <p>Suivez nos émissions et reportages exclusifs</p>
       </div>
 
-      <%= form_with url: videos_path, method: :get, local: true, class: "search-wrapper" do |f| %>
+      <%= form_with url: emissions_path, method: :get, local: true, class: "search-wrapper", role: "search" do |f| %>
         <div class="search-card">
           <%= f.text_field :query, 
               value: params[:query], 
               placeholder: "Rechercher une vidéo…", 
               class: "search-input",
               autocomplete: "off",
-              "aria-label": "Rechercher une vidéo" %>
-          <%= f.submit "Rechercher", class: "search-btn" %>
+              "aria-label": "Rechercher une vidéo",
+              required: false %>
+          <%= f.submit "Rechercher", class: "search-btn", data: { disable_with: "Recherche..." } %>
         </div>
         <% if @videos.any? %>
-          <div class="search-meta">
+          <div class="search-meta" role="status" aria-live="polite">
             <%= pluralize(@videos.count, 'vidéo') %> trouvée<%= 's' if @videos.count > 1 %>
           </div>
         <% end %>
       <% end %>
-    </div>
+    </header>
 
     <% if @videos.any? %>
-      <div class="videos-grid">
+      <div class="videos-grid" role="list">
         <% @videos.each do |video| %>
-          <article class="video-card" itemscope itemtype="https://schema.org/VideoObject">
+          <article class="video-card" role="listitem" itemscope itemtype="https://schema.org/VideoObject">
             <div class="video-thumb">
               <% thumb_url = video.thumbnail.attached? ? url_for(video.thumbnail) : youtube_thumbnail(video.url) %>
               
@@ -615,11 +709,15 @@
                 src="<%= thumb_url %>" 
                 alt="Miniature de <%= h(video.title) %>"
                 loading="lazy"
-                itemprop="thumbnailUrl">
+                width="640"
+                height="360"
+                itemprop="thumbnailUrl"
+                onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22640%22 height=%22360%22%3E%3Crect fill=%22%23F4E4B8%22 width=%22640%22 height=%22360%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 fill=%22%23B8860B%22 font-size=%2220%22%3EImage non disponible%3C/text%3E%3C/svg%3E';">
               
               <button 
                 class="play-btn" 
                 data-video-url="<%= h(video.url) %>" 
+                data-video-title="<%= h(video.title) %>"
                 aria-label="Lire la vidéo <%= h(video.title) %>"
                 type="button">
                 <span class="play-icon" aria-hidden="true">▶</span>
@@ -643,7 +741,8 @@
                   target="_blank" 
                   rel="noopener noreferrer"
                   class="video-link"
-                  itemprop="url">
+                  itemprop="url"
+                  aria-label="Voir <%= h(video.title) %> sur YouTube">
                   Voir la vidéo
                 </a>
                 <time 
@@ -657,14 +756,38 @@
           </article>
         <% end %>
       </div>
+      <% if defined?(@total_pages) && @total_pages > 1 %>
+        <nav class="pagination" aria-label="Pagination" style="display:flex; justify-content:center; margin-top: 32px;">
+          <div style="display:flex; gap:8px; align-items:center;">
+            <% prev_disabled = @page <= 1 %>
+            <% next_disabled = @page >= @total_pages %>
+
+            <% base_params = {}.merge(params.permit(:query, :per_page).to_h) %>
+
+            <%= link_to '← Préc', emissions_path(base_params.merge(page: @page - 1)), class: "btn btn-secondary", style: (prev_disabled ? 'opacity:0.5; pointer-events:none;' : '') %>
+
+            <% left = [1, @page - 2].max %>
+            <% right = [@total_pages, @page + 2].min %>
+            <% (left..right).each do |pnum| %>
+              <% if pnum == @page %>
+                <span style="padding:8px 12px; background:var(--gold); color:#fff; border-radius:8px; font-weight:700;"><%= pnum %></span>
+              <% else %>
+                <%= link_to pnum, emissions_path(base_params.merge(page: pnum)), style: 'padding:8px 12px; border-radius:8px; text-decoration:none; color:var(--text); background:#fff; border:1px solid #eee;' %>
+              <% end %>
+            <% end %>
+
+            <%= link_to 'Suiv →', emissions_path(base_params.merge(page: @page + 1)), class: "btn btn-secondary", style: (next_disabled ? 'opacity:0.5; pointer-events:none;' : '') %>
+          </div>
+        </nav>
+      <% end %>
     <% else %>
-      <div class="empty-state">
-        <div class="empty-state-icon">🎬</div>
+      <div class="empty-state" role="status">
+        <div class="empty-state-icon" aria-hidden="true">🎬</div>
         <h2>Aucune vidéo trouvée</h2>
         <p>
           <% if params[:query].present? %>
             Essayez avec d'autres mots-clés ou<br>
-            <%= link_to "voir toutes les vidéos", videos_path, class: "video-link" %>
+            <%= link_to "voir toutes les vidéos", emissions_path, class: "video-link" %>
           <% else %>
             Les vidéos seront bientôt disponibles.<br>
             Revenez nous voir prochainement !
@@ -683,7 +806,8 @@
   role="dialog" 
   aria-modal="true" 
   aria-labelledby="modalTitle"
-  aria-hidden="true">
+  aria-hidden="true"
+  aria-describedby="modalDesc">
   <div class="modal-inner">
     <button 
       class="modal-close" 
@@ -691,9 +815,26 @@
       type="button">
       ✕
     </button>
+    <h2 id="modalTitle" class="sr-only">Lecteur vidéo</h2>
+    <p id="modalDesc" class="sr-only">Appuyez sur Échap pour fermer</p>
     <div class="modal-content" id="modalContent"></div>
   </div>
 </div>
+
+<!-- Screen reader only class for accessibility -->
+<style>
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+  }
+</style>
 
 <script>
 (() => {
@@ -702,25 +843,27 @@
   const modal = document.getElementById('videoModal');
   const content = document.getElementById('modalContent');
   const closeBtn = modal.querySelector('.modal-close');
+  let lastFocusedElement = null;
 
   // Extract YouTube video ID and create embed URL
   const getEmbedUrl = (url) => {
     const patterns = [
       /(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&\n?#]+)/,
-      /youtube\.com\/embed\/([^&\n?#]+)/
+      /youtube\.com\/embed\/([^&\n?#]+)/,
+      /youtube\.com\/shorts\/([^&\n?#]+)/
     ];
     
     for (const pattern of patterns) {
       const match = url.match(pattern);
-      if (match && match[1]) {
-        return `https://www.youtube.com/embed/${match[1]}?autoplay=1&rel=0&modestbranding=1`;
+      if (match?.[1]) {
+        return `https://www.youtube-nocookie.com/embed/${match[1]}?autoplay=1&rel=0&modestbranding=1`;
       }
     }
     return null;
   };
 
   // Open modal with video
-  const openModal = (videoUrl) => {
+  const openModal = (videoUrl, videoTitle = '') => {
     const embedUrl = getEmbedUrl(videoUrl);
     
     if (!embedUrl) {
@@ -728,12 +871,16 @@
       return;
     }
 
+    // Store current focus to restore later
+    lastFocusedElement = document.activeElement;
+
     content.innerHTML = `
       <iframe 
         src="${embedUrl}" 
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
         allowfullscreen
-        title="Lecteur vidéo YouTube">
+        title="${videoTitle || 'Lecteur vidéo YouTube'}"
+        loading="lazy">
       </iframe>
     `;
     
@@ -741,8 +888,14 @@
     modal.setAttribute('aria-hidden', 'false');
     document.body.style.overflow = 'hidden';
     
+    // Update modal title for screen readers
+    const modalTitle = document.getElementById('modalTitle');
+    if (modalTitle && videoTitle) {
+      modalTitle.textContent = videoTitle;
+    }
+    
     // Focus close button for accessibility
-    setTimeout(() => closeBtn.focus(), 100);
+    requestAnimationFrame(() => closeBtn.focus());
   };
 
   // Close modal
@@ -751,15 +904,25 @@
     modal.setAttribute('aria-hidden', 'true');
     content.innerHTML = '';
     document.body.style.overflow = '';
+    
+    // Restore focus to element that opened modal
+    if (lastFocusedElement) {
+      requestAnimationFrame(() => {
+        lastFocusedElement.focus();
+        lastFocusedElement = null;
+      });
+    }
   };
 
-  // Event listeners for play buttons
-  document.querySelectorAll('.play-btn').forEach(btn => {
-    btn.addEventListener('click', (e) => {
+  // Event delegation for play buttons
+  document.addEventListener('click', (e) => {
+    const playBtn = e.target.closest('.play-btn');
+    if (playBtn) {
       e.preventDefault();
-      const url = btn.dataset.videoUrl;
-      if (url) openModal(url);
-    });
+      const url = playBtn.dataset.videoUrl;
+      const title = playBtn.dataset.videoTitle;
+      if (url) openModal(url, title);
+    }
   });
 
   // Close button listener
@@ -780,7 +943,12 @@
   // Trap focus in modal when open
   modal.addEventListener('keydown', (e) => {
     if (e.key === 'Tab' && modal.classList.contains('open')) {
-      const focusableElements = modal.querySelectorAll('button, [href], iframe');
+      const focusableElements = Array.from(
+        modal.querySelectorAll('button, [href], iframe, [tabindex]:not([tabindex="-1"])')
+      );
+      
+      if (focusableElements.length === 0) return;
+      
       const firstElement = focusableElements[0];
       const lastElement = focusableElements[focusableElements.length - 1];
 
@@ -794,18 +962,66 @@
     }
   });
 
-  // Lazy loading optimization
+  // Lazy loading optimization and error handling
   if ('loading' in HTMLImageElement.prototype) {
     const images = document.querySelectorAll('img[loading="lazy"]');
-    images.forEach(img => {
-      if (img.complete) {
-        img.classList.add('loaded');
-      } else {
-        img.addEventListener('load', () => {
-          img.classList.add('loaded');
-        });
+    
+    const imageObserver = new IntersectionObserver((entries, observer) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const img = entry.target;
+          
+          img.addEventListener('load', () => {
+            img.classList.add('loaded');
+          }, { once: true });
+          
+          // If image is already loaded (cached)
+          if (img.complete) {
+            img.classList.add('loaded');
+          }
+          
+          observer.unobserve(img);
+        }
+      });
+    }, {
+      rootMargin: '50px'
+    });
+    
+    images.forEach(img => imageObserver.observe(img));
+  }
+
+  // Announce page updates for screen readers
+  const announceUpdate = (message) => {
+    const announcement = document.createElement('div');
+    announcement.setAttribute('role', 'status');
+    announcement.setAttribute('aria-live', 'polite');
+    announcement.className = 'sr-only';
+    announcement.textContent = message;
+    document.body.appendChild(announcement);
+    
+    setTimeout(() => {
+      document.body.removeChild(announcement);
+    }, 1000);
+  };
+
+  // Performance monitoring (optional, can be removed in production)
+  if ('PerformanceObserver' in window) {
+    const perfObserver = new PerformanceObserver((entryList) => {
+      for (const entry of entryList.getEntries()) {
+        if (entry.element?.classList.contains('thumb-img')) {
+          // Log slow image loads (optional for debugging)
+          if (entry.loadTime > 3000) {
+            console.warn('Slow image load:', entry.element.src, `${entry.loadTime}ms`);
+          }
+        }
       }
     });
+    
+    try {
+      perfObserver.observe({ entryTypes: ['element'] });
+    } catch (e) {
+      // Element timing not supported
+    }
   }
 })();
 </script>

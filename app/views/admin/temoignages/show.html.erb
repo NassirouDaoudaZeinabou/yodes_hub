@@ -1,0 +1,47 @@
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
+
+      <div class="card border-0 shadow-lg p-5 text-center temoignage-show-card">
+
+        <% if @temoignage.image.attached? %>
+          <%= image_tag @temoignage.image,
+              class: "rounded-circle mb-4 shadow",
+              style: "width:150px;height:150px;object-fit:cover;" %>
+        <% else %>
+          <%= image_tag "https://via.placeholder.com/150",
+              class: "rounded-circle mb-4 shadow" %>
+        <% end %>
+
+        <h2 class="fw-bold mb-3"><%= @temoignage.name %></h2>
+           <h4 class="fw-bold mb-3"><%= @temoignage.profil %></h4>
+
+
+        <div class="temoignage-texte my-4">
+          <i class="fs-1 text-muted">“</i>
+          <p class="lead fst-italic d-inline">
+            <%= @temoignage.texte %>
+          </p>
+          <i class="fs-1 text-muted">”</i>
+        </div>
+
+        <% if @temoignage.url.present? %>
+          <div class="mt-4">
+            <%= link_to "Voir son profil",
+                @temoignage.url,
+                target: "_blank",
+                class: "btn btn-primary rounded-pill px-4" %>
+          </div>
+        <% end %>
+
+        <div class="mt-5">
+          <%= link_to "← Retour aux témoignages",
+              admin_temoignages_path,
+              class: "btn btn-outline-secondary rounded-pill px-4" %>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+</div>

@@ -1,0 +1,241 @@
+<style>
+  /* Modal styles (self-contained for reuse) */
+  .modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.75);
+    backdrop-filter: blur(8px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    padding: 20px;
+  }
+
+  .modal-overlay.active {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .modal-container {
+    background: #ffffff;
+    border-radius: 32px;
+    max-width: 640px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    position: relative;
+    box-shadow: 0 35px 80px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(197,160,33,0.1), inset 0 1px 0 rgba(255,255,255,0.9);
+    transform: scale(0.96) translateY(20px);
+    transition: all 0.36s cubic-bezier(0.4,0,0.2,1);
+  }
+
+  .modal-overlay.active .modal-container { transform: scale(1) translateY(0); }
+
+  .modal-header {
+    background: linear-gradient(135deg, #0f1419 0%, #1a1f2e 100%);
+    padding: 36px 32px;
+    position: relative;
+    border-radius: 32px 32px 0 0;
+    color: #fff;
+    text-align: center;
+  }
+
+  .modal-close {
+    position: absolute;
+    top: 18px;
+    right: 18px;
+    width: 44px;
+    height: 44px;
+    border: none;
+    background: rgba(255,255,255,0.08);
+    border-radius: 50%;
+    color: #fff;
+    font-size: 22px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .modal-icon {
+    width: 78px;
+    height: 78px;
+    margin: 0 auto 10px;
+    background: linear-gradient(135deg, #D4AF37 0%, #E6C95A 100%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 36px;
+    box-shadow: 0 12px 30px rgba(212,175,55,0.35);
+  }
+
+  .modal-title { font-family: 'Playfair Display', serif; font-size: 26px; font-weight: 800; margin-top: 6px; }
+  .modal-subtitle { font-size: 14px; color: rgba(255,255,255,0.85); margin-top: 6px; }
+
+  .modal-body { padding: 28px 30px; }
+  .form-group { margin-bottom: 18px; }
+  .form-label { display:block; font-weight:600; margin-bottom:6px; }
+  .form-input, .form-textarea, .form-select { width:100%; padding:12px 14px; border-radius:10px; border:1px solid #e6e6e6; }
+  .form-textarea { min-height:110px; resize: vertical; }
+  .form-checkbox-group { display:flex; gap:10px; align-items:flex-start; }
+  .form-checkbox { width:18px; height:18px; }
+
+  .modal-footer { padding: 0 30px 30px; display:flex; gap:12px; }
+  .modal-footer .btn { flex:1; padding:12px 18px; }
+
+  .modal-success { text-align:center; padding: 40px 30px; }
+  .success-icon { width:84px; height:84px; margin:0 auto 18px; border-radius:50%; background:linear-gradient(135deg,#10b981,#059669); color:#fff; font-size:40px; display:flex; align-items:center; justify-content:center; }
+
+  @media (max-width: 640px) {
+    .modal-container { border-radius: 18px; }
+    .modal-header { padding: 22px 18px; }
+    .modal-body { padding: 18px; }
+    .modal-footer { padding: 0 18px 20px; flex-direction: column; }
+  }
+</style>
+
+
+ <!-- Vote Modal -->
+    <div class="modal-overlay" id="voteModal">
+        <div class="modal-container">
+            <div class="modal-header">
+                <button class="modal-close" id="modalClose">×</button>
+                <div class="modal-icon">🗳️</div>
+                <h3 class="modal-title">Votez maintenant</h3>
+                <p class="modal-subtitle">
+                    Vous votez pour
+                    <span class="candidate-name-highlight" id="modalCandidateName"></span>
+                </p>
+            </div>
+
+            <div class="modal-body" id="voteForm">
+                <%= form_with model: Vote.new, url: votes_path, id: "votingForm", local: true do |f| %>
+                    <%= hidden_field_tag :candidate_id, "", id: "candidateIdField" %>
+
+                    <div class="form-group">
+                        <%= f.label :phone_number, class: "form-label" do %>
+                            Numéro de téléphone <span class="required">*</span>
+                        <% end %>
+                        <%= f.text_field :phone_number,
+                                class: "form-input",
+                                placeholder: "Ex: 90XXXXXX",
+                                required: true %>
+                    </div>
+
+                    <div class="form-group">
+                        <p style="margin-top: 8px; font-size: 15px; color: var(--gray-700);">
+                            Montant : <strong style="color: var(--gold);">100 FCFA</strong>
+                        </p>
+                    </div>
+
+          <div class="modal-footer" id="modalFooter">
+                        <button type="button" class="btn btn-secondary" id="cancelBtn">
+                            Annuler
+                        </button>
+            <%= f.submit "Confirmer mon vote", class: "btn btn-primary", id: "submitVoteBtn" %>
+                    </div>
+                <% end %>
+            </div>
+
+            <div class="modal-success" id="successState" style="display: none;">
+                <div class="success-icon">✓</div>
+                <h3 class="success-title">Vote enregistré !</h3>
+                <p class="success-message">
+                    Merci pour votre participation. Votre vote a été pris en compte et contribue à soutenir l'excellence !
+                </p>
+                <button class="btn btn-primary" id="closeSuccessBtn">
+                    <span>Fermer</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+<script>
+  // Reusable modal JS
+  (function(){
+    const modal = document.getElementById('voteModal');
+    if (!modal) return;
+    const modalClose = document.getElementById('modalClose');
+    const cancelBtn = document.getElementById('cancelBtn');
+    const submitVoteBtn = document.getElementById('submitVoteBtn');
+    const closeSuccessBtn = document.getElementById('closeSuccessBtn');
+    const voteForm = document.getElementById('voteForm');
+    const modalFooter = document.getElementById('modalFooter');
+    const successState = document.getElementById('successState');
+    const modalCandidateName = document.getElementById('modalCandidateName');
+    const votingForm = document.getElementById('votingForm');
+    const candidateIdField = document.getElementById('candidateIdField');
+
+    let currentCandidate = '';
+    let currentCandidateId = '';
+
+    // attach click handlers safely (some pages attach their own script)
+    document.querySelectorAll('.vote-btn').forEach(btn => {
+      btn.addEventListener('click', function() {
+        currentCandidate = this.getAttribute('data-candidate') || '';
+        currentCandidateId = this.getAttribute('data-candidate-id') || '';
+        if (modalCandidateName) modalCandidateName.textContent = currentCandidate;
+        if (candidateIdField) candidateIdField.value = currentCandidateId;
+        openModal();
+      });
+    });
+
+    function openModal() {
+      modal.classList.add('active');
+      document.body.classList.add('modal-open');
+    }
+
+    function closeModal() {
+      modal.classList.remove('active');
+      document.body.classList.remove('modal-open');
+      setTimeout(resetModal, 400);
+    }
+
+    function resetModal() {
+      if (voteForm) voteForm.style.display = 'block';
+      if (modalFooter) modalFooter.style.display = 'flex';
+      if (successState) successState.style.display = 'none';
+      if (votingForm) votingForm.reset();
+    }
+
+    function showSuccess() {
+      if (voteForm) voteForm.style.display = 'none';
+      if (modalFooter) modalFooter.style.display = 'none';
+      if (successState) successState.style.display = 'block';
+    }
+
+    if (modalClose) modalClose.addEventListener('click', closeModal);
+    if (cancelBtn) cancelBtn.addEventListener('click', closeModal);
+    if (closeSuccessBtn) closeSuccessBtn.addEventListener('click', closeModal);
+
+    modal.addEventListener('click', function(e) {
+      if (e.target === modal) closeModal();
+    });
+
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape' && modal.classList.contains('active')) closeModal();
+    });
+
+    // If there is a dedicated submit button, use it to validate and submit the form.
+    if (submitVoteBtn) {
+      submitVoteBtn.addEventListener('click', function(e) {
+        if (votingForm) {
+          if (votingForm.checkValidity()) {
+            // submit the form to the server (let VotesController#create handle redirect/payment)
+            votingForm.submit();
+          } else {
+            votingForm.reportValidity();
+          }
+        }
+      });
+    }
+  })();
+</script>

@@ -1,0 +1,43 @@
+<style>
+.question-form-wrapper {
+  max-width: 600px;
+  margin: 80px auto;
+  padding: 24px;
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+.question-form-wrapper h1 {
+  margin-bottom: 24px;
+  text-align: center;
+}
+.field {
+  margin-bottom: 16px;
+}
+.question-textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #cbd5e0;
+  border-radius: 8px;
+  resize: vertical;
+}
+.actions {
+  text-align: center;
+}
+</style>
+
+<div class="question-form-wrapper">
+  <h1>Poser une question</h1>
+
+  <%= form_with model: @question, local: true do |f| %>
+    <div class="field">
+      <%= f.label :content, "Votre question" %><br>
+      <%= f.text_area :content, rows: 5, class: "question-textarea" %>
+    </div>
+
+    <div class="actions">
+      <%= f.submit "Envoyer", class: "btn btn-primary" %>
+    </div>
+  <% end %>
+</div>

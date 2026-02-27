@@ -1,0 +1,46 @@
+<%= form_with(model: [:admin, @partenaire], local: true, html: { multipart: true }) do |f| %>
+  <% if @partenaire.errors.any? %>
+    <div class="form-errors">
+      <h2><%= pluralize(@partenaire.errors.count, "erreur") %> empêchent l'enregistrement :</h2>
+      <ul>
+        <% @partenaire.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="form-row">
+    <%= f.label :name, 'Nom' %>
+    <%= f.text_field :name, class: 'input' %>
+  </div>
+
+  <div class="form-row">
+    <%= f.label :email, 'Email' %>
+    <%= f.email_field :email, class: 'input' %>
+  </div>
+
+  <div class="form-row">
+    <%= f.label :phone, 'Téléphone' %>
+    <%= f.telephone_field :phone, class: 'input' %>
+  </div>
+
+  <div class="form-row">
+    <%= f.label :image, 'Logo (PNG, JPG) - max 5MB' %>
+    <% if @partenaire.image.attached? %>
+      <div style="margin:8px 0">
+        <%= image_tag url_for(@partenaire.image), alt: @partenaire.name, style: 'max-width:160px;max-height:120px;border-radius:6px' %>
+      </div>
+      <div style="margin-bottom:8px">
+        <%= f.check_box :remove_image, {}, '1', '0' %>
+        <%= f.label :remove_image, 'Supprimer le logo actuel' %>
+      </div>
+    <% end %>
+    <%= f.file_field :image, accept: 'image/*' %>
+  </div>
+
+  <div class="form-actions" style="margin-top:12px">
+    <%= f.submit class: 'button primary' %>
+    <%= link_to 'Annuler', admin_partenaires_path, class: 'button' %>
+  </div>
+<% end %>

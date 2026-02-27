@@ -425,17 +425,8 @@ footer::after {
             <span>📧</span>
             <span>Restez informé</span>
           </div>
-          <%= form_with  method: :post, local: true, class: "newsletter-form" do |f| %>
-            <%= f.email_field :email, 
-                placeholder: "Votre email", 
-                class: "newsletter-input",
-                required: true,
-                "aria-label": "Adresse email pour la newsletter" %>
-            <%= f.submit "S'abonner", class: "newsletter-btn" %>
-          <% end %>
           <p class="newsletter-privacy">
-            En vous abonnant, vous acceptez notre 
-            <%= link_to "politique de confidentialité"%>.
+             Phone: +227 93 94 47 39
           </p>
         </div>
 
@@ -496,7 +487,8 @@ footer::after {
           <li><%= link_to "Accueil", root_path %></li>
           <li><%= link_to "Candidats", candidates_path %></li>
           <li><%= link_to "Vidéos", videos_path %></li>
-          <li><%= link_to "Nos Emissions", emissions_index_path %></li>
+          <li><%= link_to "Nos Emissions", emissions_path %></li>
+          
         </ul>
       </div>
 

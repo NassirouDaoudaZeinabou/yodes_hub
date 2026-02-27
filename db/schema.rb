@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_12_30_153436) do
+ActiveRecord::Schema[8.0].define(version: 2026_02_26_100000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_trgm"
@@ -50,6 +50,32 @@ ActiveRecord::Schema[8.0].define(version: 2025_12_30_153436) do
     t.boolean "active"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "ecole_id"
+    t.index ["ecole_id"], name: "index_candidates_on_ecole_id"
+  end
+
+  create_table "ecoles", force: :cascade do |t|
+    t.string "nom"
+    t.string "adress"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "partenaires", force: :cascade do |t|
+    t.string "name"
+    t.string "email"
+    t.string "phone"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "questions", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.text "content", null: false
+    t.string "status", default: "pending", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_questions_on_user_id"
   end
 
   create_table "settings", force: :cascade do |t|
@@ -58,6 +84,15 @@ ActiveRecord::Schema[8.0].define(version: 2025_12_30_153436) do
     t.datetime "voting_end"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "temoignages", force: :cascade do |t|
+    t.string "name"
+    t.text "texte"
+    t.string "url"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "profil"
   end
 
   create_table "users", force: :cascade do |t|
@@ -99,6 +134,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_12_30_153436) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "candidates", "ecoles"
+  add_foreign_key "questions", "users"
   add_foreign_key "videos", "candidates"
   add_foreign_key "votes", "candidates"
 end

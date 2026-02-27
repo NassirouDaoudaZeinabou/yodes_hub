@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Questions du Public — Sarki Excellence</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #1a0f00; font-family: 'Inter', sans-serif; }
+
+  /* ── Navbar ── */
+  .nav {
+    height: 64px;
+    background: #120a00;
+    border-bottom: 1px solid rgba(212,175,55,.2);
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 48px;
+    position: sticky; top: 0; z-index: 100;
+  }
+  .nav-left { display: flex; align-items: center; gap: 16px; }
+  .nav-logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px; font-weight: 900;
+    background: linear-gradient(135deg, #D4AF37, #C48A00);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .nav-dot { width: 6px; height: 6px; background: #D4AF37; border-radius: 50%; opacity: .5; }
+
+  /* ── Auth zone in navbar ── */
+  .nav-auth { display: flex; align-items: center; gap: 14px; }
+
+  /* Badge utilisateur (visible quand connecté) */
+  .nav-user {
+    display: none;
+    align-items: center; gap: 10px;
+    background: rgba(212,175,55,.1);
+    border: 1px solid rgba(212,175,55,.3);
+    border-radius: 50px;
+    padding: 6px 16px 6px 10px;
+  }
+  .nav-user-avatar {
+    width: 30px; height: 30px; border-radius: 50%;
+    background: linear-gradient(135deg, #D4AF37, #C48A00);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; font-weight: 700; color: #111827;
+  }
+  .nav-user-name { font-size: 13px; font-weight: 600; color: rgba(255,255,255,.85); }
+
+  .nav-btn {
+    padding: 8px 20px; border-radius: 50px;
+    font-weight: 700; font-size: 13px; letter-spacing: .4px;
+    cursor: pointer; border: none; transition: all .25s;
+  }
+  .nav-btn--login {
+    background: linear-gradient(135deg, #D4AF37, #C48A00);
+    color: #111827;
+    box-shadow: 0 4px 15px rgba(212,175,55,.3);
+  }
+  .nav-btn--login:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(212,175,55,.45); }
+
+  .nav-btn--logout {
+    background: transparent;
+    color: rgba(255,255,255,.55);
+    border: 1.5px solid rgba(255,255,255,.15);
+    display: none;
+  }
+  .nav-btn--logout:hover { border-color: rgba(255,100,100,.4); color: #ff6b6b; background: rgba(255,100,100,.07); }
+
+  /* ============================================================
+     SECTION
+  ============================================================ */
+  .pq-section {
+    padding: 110px 48px;
+    background: linear-gradient(160deg, #1a0f00 0%, #2e1f0a 55%, #1a0f00 100%);
+    position: relative; overflow: hidden;
+    min-height: calc(100vh - 64px);
+  }
+
+  .pq-section::before {
+    content: '';
+    position: absolute; inset: -60%;
+    background:
+      radial-gradient(circle at 25% 40%, rgba(212,140,30,.18) 0%, transparent 50%),
+      radial-gradient(circle at 75% 60%, rgba(160,90,10,.14) 0%, transparent 50%);
+    animation: pqAmbient 20s ease-in-out infinite;
+    pointer-events: none;
+  }
+
+  .pq-section::after {
+    content: '';
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(212,175,55,.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(212,175,55,.025) 1px, transparent 1px);
+    background-size: 50px 50px;
+    pointer-events: none;
+  }
+
+  .pq-inner { max-width: 1400px; margin: 0 auto; position: relative; z-index: 1; }
+
+  .pq-inner::before {
+    content: '';
+    position: absolute;
+    top: -110px; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #0f1419 0%, #D4AF37 20%, #C48A00 50%, #D4AF37 80%, #0f1419 100%);
+    background-size: 200% auto;
+    animation: pqLineMove 4s linear infinite;
+  }
+
+  @keyframes pqAmbient {
+    0%,100% { transform: scale(1) translate(0,0); }
+    50%     { transform: scale(1.08) translate(30px,20px); }
+  }
+  @keyframes pqLineMove {
+    0%   { background-position: 0% 50%; }
+    100% { background-position: 200% 50%; }
+  }
+  @keyframes pqGold {
+    0%,100% { background-position: 0% 50%; }
+    50%     { background-position: 100% 50%; }
+  }
+  @keyframes pqFloat {
+    0%,100% { transform: translateY(0); }
+    50%     { transform: translateY(-10px); }
+  }
+  @keyframes pqBar {
+    0%,100% { transform: scaleY(1); opacity: .7; }
+    50%     { transform: scaleY(.35); opacity: 1; }
+  }
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── Header ── */
+  .pq-header { text-align: center; margin-bottom: 64px; }
+
+  .pq-tag {
+    display: inline-block;
+    background: linear-gradient(135deg, #D4AF37, #C48A00);
+    color: #111827;
+    padding: 10px 28px; border-radius: 50px;
+    font-size: 12px; font-weight: 800;
+    letter-spacing: 1.5px; text-transform: uppercase;
+    margin-bottom: 24px;
+    box-shadow: 0 8px 25px rgba(212,175,55,.35);
+  }
+
+  .pq-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(36px, 5vw, 52px); font-weight: 900;
+    color: #fff; line-height: 1.15; margin-bottom: 20px;
+    text-shadow: 0 2px 12px rgba(0,0,0,.3);
+  }
+
+  .pq-highlight {
+    background: linear-gradient(135deg, #D4AF37 0%, #E6C95A 50%, #D4AF37 100%);
+    background-size: 200% auto;
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: pqGold 4s ease infinite;
+  }
+
+  .pq-subtitle {
+    font-size: 17px; color: rgba(255,255,255,.72);
+    max-width: 620px; margin: 0 auto; line-height: 1.8;
+  }
+  .pq-subtitle em { color: #D4AF37; font-style: normal; font-weight: 600; }
+
+  /* ── Grid ── */
+  .pq-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.6fr;
+    gap: 48px; align-items: center;
+  }
+
+  /* ── Visual ── */
+  .pq-visual { display: flex; justify-content: center; }
+
+  .pq-visual-inner {
+    background: rgba(212,140,30,.07);
+    border: 1px solid rgba(212,175,55,.22);
+    border-radius: 28px; padding: 48px 40px;
+    text-align: center; width: 100%; max-width: 320px;
+    position: relative; overflow: hidden;
+    transition: border-color .3s;
+  }
+  .pq-visual-inner:hover { border-color: rgba(212,175,55,.45); }
+  .pq-visual-inner::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, #D4AF37, transparent);
+  }
+
+  .pq-mic-icon {
+    font-size: 72px; margin-bottom: 20px; display: block;
+    animation: pqFloat 5s ease-in-out infinite;
+    filter: drop-shadow(0 8px 20px rgba(212,175,55,.4));
+  }
+
+  .pq-visual-lines {
+    display: flex; align-items: flex-end;
+    justify-content: center; gap: 5px;
+    height: 40px; margin-bottom: 24px;
+  }
+
+  .pq-vline {
+    width: 5px;
+    background: linear-gradient(180deg, #D4AF37, #C48A00);
+    border-radius: 3px;
+    animation: pqBar 1.4s ease-in-out infinite;
+  }
+  .pq-vline--1 { height: 18px; animation-delay: 0s; }
+  .pq-vline--2 { height: 30px; animation-delay: 0.2s; }
+  .pq-vline--3 { height: 40px; animation-delay: 0.4s; }
+  .pq-vline--4 { height: 25px; animation-delay: 0.6s; }
+  .pq-vline--5 { height: 14px; animation-delay: 0.8s; }
+
+  .pq-visual-label {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px; font-weight: 700;
+    color: #fff; margin-bottom: 6px;
+  }
+  .pq-visual-sub {
+    font-size: 13px; color: rgba(255,255,255,.5);
+    letter-spacing: .8px; text-transform: uppercase;
+  }
+
+  /* ── Right panel ── */
+  .pq-form-area {
+    background: rgba(212,140,30,.06);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(212,175,55,.2);
+    border-radius: 24px; padding: 44px 40px;
+    position: relative; overflow: hidden;
+  }
+
+  .pq-form-area::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #D4AF37, #C48A00, #D4AF37);
+    background-size: 200% auto;
+    animation: pqLineMove 3s linear infinite;
+  }
+
+  /* ── States ── */
+  .panel { display: none; animation: fadeInUp .4s ease; }
+  .panel.visible { display: block; }
+
+  /* ── Form ── */
+  .pq-form { display: flex; flex-direction: column; gap: 22px; }
+  .pq-form-group { display: flex; flex-direction: column; gap: 8px; }
+
+  .pq-label {
+    font-size: 13px; font-weight: 700;
+    color: rgba(255,255,255,.8);
+    text-transform: uppercase; letter-spacing: 1px;
+  }
+
+  .pq-select, .pq-textarea {
+    width: 100%;
+    background: rgba(212,140,30,.1);
+    border: 1.5px solid rgba(212,175,55,.3);
+    border-radius: 14px; padding: 14px 18px;
+    font-family: 'Inter', sans-serif; font-size: 15px;
+    color: #fff; transition: border-color .3s, box-shadow .3s;
+    outline: none;
+  }
+  .pq-select option { background: #2e1f0a; color: #fff; }
+  .pq-select:focus, .pq-textarea:focus {
+    border-color: #D4AF37;
+    box-shadow: 0 0 0 4px rgba(212,175,55,.12);
+  }
+  .pq-textarea { resize: vertical; min-height: 130px; line-height: 1.65; }
+  .pq-textarea::placeholder { color: rgba(255,255,255,.3); }
+
+  .pq-char-count {
+    text-align: right; font-size: 12px;
+    color: rgba(255,255,255,.35); margin-top: -4px;
+  }
+
+  .pq-form-footer { display: flex; flex-direction: column; align-items: flex-start; gap: 12px; }
+  .pq-form-note { font-size: 12px; color: rgba(255,255,255,.4); line-height: 1.5; }
+
+  /* ── Buttons ── */
+  .pq-btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 14px 32px; border-radius: 50px;
+    font-weight: 700; font-size: 14px; letter-spacing: .5px;
+    cursor: pointer; border: none; text-decoration: none;
+    transition: transform .25s, box-shadow .25s;
+    position: relative; overflow: hidden;
+  }
+  .pq-btn--primary {
+    background: linear-gradient(135deg, #D4AF37 0%, #C48A00 100%);
+    color: #111827;
+    box-shadow: 0 10px 28px rgba(212,175,55,.3);
+  }
+  .pq-btn--primary::after {
+    content: '';
+    position: absolute; top: 50%; left: -100%;
+    width: 100%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,.35), transparent);
+    transform: translateY(-50%);
+    transition: left .45s ease;
+  }
+  .pq-btn--primary:hover::after { left: 100%; }
+  .pq-btn--primary:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 16px 40px rgba(212,175,55,.45);
+  }
+  .pq-btn--outline {
+    background: transparent; color: #D4AF37;
+    border: 2px solid rgba(212,175,55,.5);
+  }
+  .pq-btn--outline:hover {
+    background: rgba(212,175,55,.1); border-color: #D4AF37;
+    transform: translateY(-2px);
+  }
+
+  /* ── Login CTA ── */
+  .pq-login-cta { text-align: center; padding: 20px 0; }
+  .pq-login-emoji {
+    font-size: 56px; margin-bottom: 20px; display: block;
+    animation: pqFloat 4s ease-in-out infinite;
+    filter: drop-shadow(0 6px 16px rgba(212,175,55,.35));
+  }
+  .pq-login-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 26px; font-weight: 700;
+    color: #fff; margin-bottom: 12px;
+  }
+  .pq-login-text {
+    font-size: 16px; color: rgba(255,255,255,.65);
+    line-height: 1.7; margin-bottom: 28px;
+    max-width: 380px; margin-left: auto; margin-right: auto;
+  }
+  .pq-login-actions { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+
+  /* ── Toast notification ── */
+  .toast {
+    position: fixed; bottom: 32px; right: 32px;
+    background: #2e1f0a;
+    border: 1px solid rgba(212,175,55,.4);
+    border-radius: 16px;
+    padding: 16px 24px;
+    display: flex; align-items: center; gap: 12px;
+    box-shadow: 0 16px 40px rgba(0,0,0,.4);
+    transform: translateY(80px); opacity: 0;
+    transition: transform .4s cubic-bezier(.34,1.56,.64,1), opacity .4s ease;
+    z-index: 999; max-width: 360px;
+    pointer-events: none;
+  }
+  .toast.show { transform: translateY(0); opacity: 1; }
+  .toast-icon { font-size: 24px; flex-shrink: 0; }
+  .toast-text { font-size: 14px; color: rgba(255,255,255,.85); line-height: 1.5; }
+  .toast-text strong { color: #D4AF37; display: block; margin-bottom: 2px; }
+
+  @media (max-width: 900px) {
+    .pq-grid { grid-template-columns: 1fr; gap: 36px; }
+    .pq-visual { display: none; }
+    .pq-section { padding: 80px 24px; }
+    .pq-form-area { padding: 32px 24px; }
+    .nav { padding: 0 24px; }
+  }
+  @media (max-width: 480px) {
+    .pq-login-actions { flex-direction: column; align-items: center; }
+    .pq-btn { width: 100%; justify-content: center; }
+  }
+</style>
+</head>
+<body>
+
+
+<!-- =================== SECTION =================== -->
+<section class="pq-section" id="public-questions">
+  <div class="pq-inner">
+
+    <div class="pq-header">
+      <div class="pq-tag">🎙️ PARTICIPEZ EN DIRECT</div>
+      <h2 class="pq-title">
+        Posez vos <span class="pq-highlight">questions</span>
+        aux candidats
+      </h2>
+      <p class="pq-subtitle">
+        Votre curiosité fait la différence. Soumettez vos questions — les meilleures seront posées <em>en direct</em> lors de l'émission.
+      </p>
+    </div>
+
+    <div class="pq-grid">
+
+      <!-- Visual -->
+      <div class="pq-visual">
+        <div class="pq-visual-inner">
+          <span class="pq-mic-icon">🎙️</span>
+          <div class="pq-visual-lines">
+            <div class="pq-vline pq-vline--1"></div>
+            <div class="pq-vline pq-vline--2"></div>
+            <div class="pq-vline pq-vline--3"></div>
+            <div class="pq-vline pq-vline--4"></div>
+            <div class="pq-vline pq-vline--5"></div>
+          </div>
+          <p class="pq-visual-label">Voix du public</p>
+          <p class="pq-visual-sub">Chaque question compte</p>
+        </div>
+      </div>
+
+      <!-- Right panel -->
+      <div class="pq-form-area">
+
+        <!-- PANEL : CONNECTÉ -->
+        <div class="panel" id="panelLoggedIn">
+          <form class="pq-form" onsubmit="submitQuestion(event)">
+            <div class="pq-form-group">
+              <label class="pq-label">Adressée à</label>
+              <select class="pq-select">
+                <option>— Tous les candidats —</option>
+                <option>Aminatou Maïga</option>
+                <option>Ibrahim Souleymane</option>
+                <option>Fatouma Diallo</option>
+              </select>
+            </div>
+
+            <div class="pq-form-group">
+              <label class="pq-label">Votre question</label>
+              <textarea class="pq-textarea" id="pq-ta" maxlength="400"
+                placeholder="Ex : Quelle est votre stratégie pour améliorer l'éducation au Niger ?"></textarea>
+              <span class="pq-char-count"><span id="pq-count">0</span> / 400</span>
+            </div>
+
+            <div class="pq-form-footer">
+              <button type="submit" class="pq-btn pq-btn--primary">
+                Envoyer ma question →
+              </button>
+              <p class="pq-form-note">🔒 Votre question sera examinée avant publication</p>
+            </div>
+          </form>
+        </div>
+
+        <!-- PANEL : NON CONNECTÉ -->
+        <div class="panel" id="panelLoggedOut">
+          <div class="pq-login-cta">
+            <span class="pq-login-emoji">✍️</span>
+            <h3 class="pq-login-title">Rejoignez la conversation</h3>
+            <p class="pq-login-text">
+              Connectez-vous pour soumettre vos questions aux candidats et participer à l'émission.
+            </p>
+            <div class="pq-login-actions">
+              <button class="pq-btn pq-btn--primary" onclick="openLoginModal()">Se connecter</button>
+              <button class="pq-btn pq-btn--outline" onclick="openRegisterModal()">Créer un compte</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =================== MODAL CONNEXION =================== -->
+<div id="modalOverlay" style="
+  display:none; position:fixed; inset:0;
+  background:rgba(0,0,0,.65); backdrop-filter:blur(6px);
+  z-index:200; align-items:center; justify-content:center;
+">
+  <div style="
+    background:#1e1000;
+    border:1px solid rgba(212,175,55,.25);
+    border-radius:24px; padding:44px 40px;
+    width:100%; max-width:420px;
+    position:relative;
+    animation: fadeInUp .35s ease;
+  ">
+    <!-- Close -->
+    <button onclick="closeModal()" style="
+      position:absolute; top:16px; right:20px;
+      background:none; border:none; color:rgba(255,255,255,.4);
+      font-size:22px; cursor:pointer; transition:color .2s;
+    " onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,.4)'">✕</button>
+
+    <!-- Top bar -->
+    <div style="
+      position:absolute; top:0; left:0; right:0; height:3px;
+      background:linear-gradient(90deg,#D4AF37,#C48A00,#D4AF37);
+      background-size:200% auto; animation:pqLineMove 3s linear infinite;
+      border-radius:24px 24px 0 0;
+    "></div>
+
+    <div id="modalContent"></div>
+  </div>
+</div>
+
+<!-- =================== TOAST =================== -->
+<div class="toast" id="toast">
+  <span class="toast-icon" id="toastIcon">✅</span>
+  <div class="toast-text">
+    <strong id="toastTitle"></strong>
+    <span id="toastMsg"></span>
+  </div>
+</div>
+
+<script>
+/* ─────────────────────────────────────────────
+   STATE
+───────────────────────────────────────────── */
+let isLoggedIn = false;
+let currentUser = null;
+
+// Faux utilisateurs pour démo
+const USERS = [
+  { name: 'Aminatou Maïga', email: 'aminatou@example.com', password: '1234', initial: 'A' },
+  { name: 'Ibrahim S.',      email: 'ibrahim@example.com',  password: '1234', initial: 'I' },
+];
+
+/* ─────────────────────────────────────────────
+   INIT
+───────────────────────────────────────────── */
+window.addEventListener('DOMContentLoaded', () => {
+  renderAuthState();
+
+  // Char counter
+  const ta = document.getElementById('pq-ta');
+  const counter = document.getElementById('pq-count');
+  if (ta && counter) {
+    ta.addEventListener('input', function () {
+      const len = this.value.length;
+      counter.textContent = len;
+      counter.closest('.pq-char-count').style.color =
+        len > 360 ? '#ef4444' : len > 300 ? '#D4AF37' : 'rgba(255,255,255,.35)';
+    });
+  }
+});
+
+/* ─────────────────────────────────────────────
+   RENDER AUTH STATE
+───────────────────────────────────────────── */
+function renderAuthState() {
+  const panelIn  = document.getElementById('panelLoggedIn');
+  const panelOut = document.getElementById('panelLoggedOut');
+  const navUser  = document.getElementById('navUser');
+  const navName  = document.getElementById('navName');
+  const navAvatar= document.getElementById('navAvatar');
+  const btnLogin = document.getElementById('btnLogin');
+  const btnLogout= document.getElementById('btnLogout');
+
+  if (isLoggedIn && currentUser) {
+    panelIn.classList.add('visible');
+    panelOut.classList.remove('visible');
+    navUser.style.display = 'flex';
+    btnLogout.style.display = 'block';
+    btnLogin.style.display = 'none';
+    navName.textContent  = currentUser.name.split(' ')[0];
+    navAvatar.textContent= currentUser.initial;
+  } else {
+    panelOut.classList.add('visible');
+    panelIn.classList.remove('visible');
+    navUser.style.display = 'none';
+    btnLogout.style.display = 'none';
+    btnLogin.style.display = 'block';
+  }
+}
+
+/* ─────────────────────────────────────────────
+   MODALS
+───────────────────────────────────────────── */
+function openLoginModal() {
+  document.getElementById('modalContent').innerHTML = `
+    <h3 style="font-family:'Playfair Display',serif;font-size:24px;font-weight:700;color:#fff;margin-bottom:6px;">
+      Bienvenue 👋
+    </h3>
+    <p style="font-size:14px;color:rgba(255,255,255,.5);margin-bottom:28px;">
+      Connectez-vous pour participer
+    </p>
+
+    <div style="display:flex;flex-direction:column;gap:16px;">
+      <div>
+        <label style="font-size:12px;font-weight:700;color:rgba(255,255,255,.7);text-transform:uppercase;letter-spacing:1px;display:block;margin-bottom:8px;">
+          Email
+        </label>
+        <input id="loginEmail" type="email" placeholder="votre@email.com"
+          style="width:100%;background:rgba(212,140,30,.1);border:1.5px solid rgba(212,175,55,.25);border-radius:12px;padding:12px 16px;font-size:14px;color:#fff;outline:none;font-family:Inter,sans-serif;transition:border-color .3s;"
+          onfocus="this.style.borderColor='#D4AF37'" onblur="this.style.borderColor='rgba(212,175,55,.25)'">
+      </div>
+      <div>
+        <label style="font-size:12px;font-weight:700;color:rgba(255,255,255,.7);text-transform:uppercase;letter-spacing:1px;display:block;margin-bottom:8px;">
+          Mot de passe
+        </label>
+        <input id="loginPwd" type="password" placeholder="••••••••"
+          style="width:100%;background:rgba(212,140,30,.1);border:1.5px solid rgba(212,175,55,.25);border-radius:12px;padding:12px 16px;font-size:14px;color:#fff;outline:none;font-family:Inter,sans-serif;transition:border-color .3s;"
+          onfocus="this.style.borderColor='#D4AF37'" onblur="this.style.borderColor='rgba(212,175,55,.25)'"
+          onkeydown="if(event.key==='Enter') doLogin()">
+      </div>
+
+      <p id="loginErr" style="font-size:13px;color:#ff6b6b;display:none;">
+        Email ou mot de passe incorrect.
+      </p>
+
+      <button onclick="doLogin()"
+        style="background:linear-gradient(135deg,#D4AF37,#C48A00);color:#111827;border:none;border-radius:50px;padding:14px;font-weight:700;font-size:14px;cursor:pointer;margin-top:4px;transition:transform .2s,box-shadow .2s;box-shadow:0 8px 24px rgba(212,175,55,.3);"
+        onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 12px 32px rgba(212,175,55,.45)'"
+        onmouseout="this.style.transform='none';this.style.boxShadow='0 8px 24px rgba(212,175,55,.3)'">
+        Se connecter →
+      </button>
+
+      <p style="text-align:center;font-size:13px;color:rgba(255,255,255,.4);">
+        Pas encore de compte ?
+        <a onclick="openRegisterModal()" style="color:#D4AF37;cursor:pointer;font-weight:600;">
+          S'inscrire
+        </a>
+      </p>
+
+      <p style="text-align:center;font-size:11px;color:rgba(255,255,255,.25);margin-top:-4px;">
+        💡 Démo : aminatou@example.com / 1234
+      </p>
+    </div>
+  `;
+  showModal();
+}
+
+function openRegisterModal() {
+  document.getElementById('modalContent').innerHTML = `
+    <h3 style="font-family:'Playfair Display',serif;font-size:24px;font-weight:700;color:#fff;margin-bottom:6px;">
+      Créer un compte ✨
+    </h3>
+    <p style="font-size:14px;color:rgba(255,255,255,.5);margin-bottom:28px;">
+      Rejoignez la communauté Sarki Excellence
+    </p>
+
+    <div style="display:flex;flex-direction:column;gap:16px;">
+      <div>
+        <label style="font-size:12px;font-weight:700;color:rgba(255,255,255,.7);text-transform:uppercase;letter-spacing:1px;display:block;margin-bottom:8px;">Nom complet</label>
+        <input id="regName" type="text" placeholder="Votre nom"
+          style="width:100%;background:rgba(212,140,30,.1);border:1.5px solid rgba(212,175,55,.25);border-radius:12px;padding:12px 16px;font-size:14px;color:#fff;outline:none;font-family:Inter,sans-serif;transition:border-color .3s;"
+          onfocus="this.style.borderColor='#D4AF37'" onblur="this.style.borderColor='rgba(212,175,55,.25)'">
+      </div>
+      <div>
+        <label style="font-size:12px;font-weight:700;color:rgba(255,255,255,.7);text-transform:uppercase;letter-spacing:1px;display:block;margin-bottom:8px;">Email</label>
+        <input id="regEmail" type="email" placeholder="votre@email.com"
+          style="width:100%;background:rgba(212,140,30,.1);border:1.5px solid rgba(212,175,55,.25);border-radius:12px;padding:12px 16px;font-size:14px;color:#fff;outline:none;font-family:Inter,sans-serif;transition:border-color .3s;"
+          onfocus="this.style.borderColor='#D4AF37'" onblur="this.style.borderColor='rgba(212,175,55,.25)'">
+      </div>
+      <div>
+        <label style="font-size:12px;font-weight:700;color:rgba(255,255,255,.7);text-transform:uppercase;letter-spacing:1px;display:block;margin-bottom:8px;">Mot de passe</label>
+        <input id="regPwd" type="password" placeholder="••••••••"
+          style="width:100%;background:rgba(212,140,30,.1);border:1.5px solid rgba(212,175,55,.25);border-radius:12px;padding:12px 16px;font-size:14px;color:#fff;outline:none;font-family:Inter,sans-serif;transition:border-color .3s;"
+          onfocus="this.style.borderColor='#D4AF37'" onblur="this.style.borderColor='rgba(212,175,55,.25)'">
+      </div>
+
+      <button onclick="doRegister()"
+        style="background:linear-gradient(135deg,#D4AF37,#C48A00);color:#111827;border:none;border-radius:50px;padding:14px;font-weight:700;font-size:14px;cursor:pointer;margin-top:4px;transition:transform .2s,box-shadow .2s;box-shadow:0 8px 24px rgba(212,175,55,.3);"
+        onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='none'">
+        Créer mon compte →
+      </button>
+
+      <p style="text-align:center;font-size:13px;color:rgba(255,255,255,.4);">
+        Déjà un compte ?
+        <a onclick="openLoginModal()" style="color:#D4AF37;cursor:pointer;font-weight:600;">
+          Se connecter
+        </a>
+      </p>
+    </div>
+  `;
+  showModal();
+}
+
+function showModal() {
+  const overlay = document.getElementById('modalOverlay');
+  overlay.style.display = 'flex';
+  overlay.addEventListener('click', function handler(e) {
+    if (e.target === overlay) { closeModal(); overlay.removeEventListener('click', handler); }
+  });
+}
+
+function closeModal() {
+  document.getElementById('modalOverlay').style.display = 'none';
+}
+
+/* ─────────────────────────────────────────────
+   AUTH ACTIONS
+───────────────────────────────────────────── */
+function doLogin() {
+  const email = document.getElementById('loginEmail').value.trim();
+  const pwd   = document.getElementById('loginPwd').value;
+  const err   = document.getElementById('loginErr');
+
+  const user = USERS.find(u => u.email === email && u.password === pwd);
+  if (!user) {
+    err.style.display = 'block';
+    return;
+  }
+
+  isLoggedIn  = true;
+  currentUser = user;
+  closeModal();
+  renderAuthState();
+  showToast('✅', 'Connexion réussie !', `Bienvenue, ${user.name.split(' ')[0]} 🎉`);
+}
+
+function doRegister() {
+  const name  = document.getElementById('regName').value.trim();
+  const email = document.getElementById('regEmail').value.trim();
+  const pwd   = document.getElementById('regPwd').value;
+
+  if (!name || !email || !pwd) {
+    showToast('⚠️', 'Champs manquants', 'Veuillez remplir tous les champs.');
+    return;
+  }
+
+  // Crée l'utilisateur en mémoire
+  const newUser = { name, email, password: pwd, initial: name[0].toUpperCase() };
+  USERS.push(newUser);
+  isLoggedIn  = true;
+  currentUser = newUser;
+  closeModal();
+  renderAuthState();
+  showToast('🎉', 'Compte créé !', `Bienvenue, ${name.split(' ')[0]} !`);
+}
+
+function logout() {
+  isLoggedIn  = false;
+  currentUser = null;
+  renderAuthState();
+  showToast('👋', 'Déconnexion', 'À bientôt sur Sarki Excellence !');
+}
+
+function submitQuestion(e) {
+  e.preventDefault();
+  const ta = document.getElementById('pq-ta');
+  if (!ta.value.trim()) {
+    showToast('⚠️', 'Question vide', 'Veuillez saisir votre question.');
+    return;
+  }
+  ta.value = '';
+  document.getElementById('pq-count').textContent = '0';
+  showToast('🎙️', 'Question envoyée !', 'Elle sera examinée avant d\'être publiée.');
+}
+
+/* ─────────────────────────────────────────────
+   TOAST
+───────────────────────────────────────────── */
+let toastTimer;
+function showToast(icon, title, msg) {
+  const toast = document.getElementById('toast');
+  document.getElementById('toastIcon').textContent  = icon;
+  document.getElementById('toastTitle').textContent = title;
+  document.getElementById('toastMsg').textContent   = msg;
+  toast.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => toast.classList.remove('show'), 4000);
+}
+</script>
+</body>
+</html>

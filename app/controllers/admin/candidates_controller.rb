@@ -8,8 +8,6 @@ class Admin::CandidatesController < ApplicationController
 
   def index
     @candidates = Candidate.order(created_at: :desc)
-    @candidat_actif=Candidate.where(active: true).count
-    @candidat_inactif=Candidate.where(active: false).count
   end
 
   def show
@@ -75,7 +73,7 @@ class Admin::CandidatesController < ApplicationController
     if current_user.respond_to?(:admin?)
       redirect_to root_path, alert: 'Accès admin requis.' unless current_user.admin?
     elsif current_user.respond_to?(:role)
-      redirect_to root_path, alert: 'Accès admin requis.' unless current_user.role == 'admin'
+      redirect_to root_path, alert: 'Accès admin non requis.' unless current_user.role == 'admin'
     end
   end
 end

@@ -1,0 +1,45 @@
+<div class="admin-header">
+  <h1>
+    <% if @partenaire.image.attached? %>
+      <%= image_tag url_for(@partenaire.image), alt: @partenaire.name, style: 'max-width:80px;max-height:80px;border-radius:4px;margin-right:16px' %>
+    <% end %>
+    <%= @partenaire.name %>
+  </h1>
+  <div class="actions">
+    <%= link_to 'Modifier', edit_admin_partenaire_path(@partenaire), class: 'button secondary' %>
+    <%= link_to 'Supprimer', admin_partenaire_path(@partenaire), method: :delete, data: { confirm: 'Êtes-vous sûr ?' }, class: 'button danger' %>
+    <%= link_to 'Retour', admin_partenaires_path, class: 'button' %>
+  </div>
+</div>
+
+<div style="background:white;padding:20px;border-radius:8px;margin-top:20px;max-width:600px">
+  <div style="margin-bottom:16px">
+    <strong style="display:block;margin-bottom:4px;color:#666">Email :</strong>
+    <div style="padding:8px;background:#f5f5f5;border-radius:4px"><%= @partenaire.email %></div>
+  </div>
+
+  <div style="margin-bottom:16px">
+    <strong style="display:block;margin-bottom:4px;color:#666">Téléphone :</strong>
+    <div style="padding:8px;background:#f5f5f5;border-radius:4px"><%= @partenaire.phone %></div>
+  </div>
+
+  
+
+  <div style="margin-bottom:16px">
+    <strong style="display:block;margin-bottom:4px;color:#666">Logo :</strong>
+    <div style="padding:8px;background:#f5f5f5;border-radius:4px">
+      <% if @partenaire.image.attached? %>
+        <%= image_tag url_for(@partenaire.image), alt: @partenaire.name, style: 'max-width:300px;border-radius:4px' %>
+      <% else %>
+        <span style="color:#999">Aucun logo.</span>
+      <% end %>
+    </div>
+  </div>
+
+  <div style="margin-bottom:16px;color:#999;font-size:12px">
+    Créé le <%= @partenaire.created_at.strftime('%d %B %Y à %H:%M') %>
+    <% if @partenaire.updated_at > @partenaire.created_at %>
+      <br>Modifié le <%= @partenaire.updated_at.strftime('%d %B %Y à %H:%M') %>
+    <% end %>
+  </div>
+</div>

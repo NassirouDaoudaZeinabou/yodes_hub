@@ -1,1651 +1,404 @@
 <style>
-/* ============================================
-           CANDIDATES PAGE STYLES - ENHANCED
-============================================ */
-:root {
-    /* Palette de jaune foncé sophistiquée */
-    --gold-primary: #D4AF37;
-    --gold-dark: #B8941F;
-    --gold-darker: #9A7810;
-    --gold-light: #E8C547;
-    --gold-pale: #F5E6C8;
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+
+  :root {
+    /* Palette Or Sophistiquée */
+    --gold-primary: #C5A021;
+    --gold-dark: #926F12;
+    --gold-light: #E8D081;
+    --gold-soft: rgba(197, 160, 33, 0.1);
     
-    /* Complémentaires */
-    --charcoal: #2C2C2C;
-    --slate: #3A3A3A;
-    --gray-warm: #4A4A4A;
-    --gray-medium: #666666;
-    --gray-light: #E8E8E8;
-    --gray-50: #F9FAFB;
-    --gray-100: #F3F4F6;
-    --gray-200: #E5E7EB;
-    --gray-300: #D1D5DB;
-    --gray-600: #4B5563;
-    --gray-900: #111827;
-    --cream: #FAF7F0;
-    --white: #FFFFFF;
+    /* Couleurs de contraste */
+    --dark-navy: #0F172A;
+    --slate-text: #475569;
+    --bg-gradient: linear-gradient(180deg, #FFFFFF 0%, #F8FAFC 100%);
+    --white: #ffffff;
     
-    /* Ombres sophistiquées */
-    --shadow-xs: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-    --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.08);
-    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.08);
-    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.12);
-    --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
-    --shadow-gold-sm: 0 2px 12px rgba(212, 175, 55, 0.15);
-    --shadow-gold-md: 0 4px 24px rgba(212, 175, 55, 0.25);
-    --shadow-gold-lg: 0 8px 40px rgba(212, 175, 55, 0.35);
-    --shadow-dark: 0 4px 16px rgba(44, 44, 44, 0.12);
-    --glow-gold: 0 0 25px rgba(212, 175, 55, 0.3);
-    
-    /* Transitions */
-    --transition-smooth: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    --transition-fast: all 0.25s ease;
-}
+    /* Design tokens */
+    --shadow-premium: 0 25px 50px -12px rgba(146, 111, 18, 0.15);
+    --radius-lg: 24px;
+    --transition-smooth: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  }
 
-/* ============================================
-           ANIMATED BACKGROUND
-============================================ */
-body::before {
-    content: '';
-    position: fixed;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background: radial-gradient(
-        circle at 30% 20%, 
-        rgba(212, 175, 55, 0.04) 0%, 
-        transparent 50%
-    ),
-    radial-gradient(
-        circle at 70% 80%, 
-        rgba(196, 138, 0, 0.03) 0%, 
-        transparent 50%
-    );
-    pointer-events: none;
-    z-index: 0;
-    animation: ambientMove 25s ease-in-out infinite;
-}
-
-@keyframes ambientMove {
-    0%, 100% { transform: translate(0, 0) rotate(0deg); }
-    50% { transform: translate(40px, 25px) rotate(3deg); }
-}
-
-.particles-bg {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-    z-index: 0;
-    overflow: hidden;
-}
-
-.particle {
-    position: absolute;
-    width: 4px;
-    height: 4px;
-    background: var(--gold-primary);
-    border-radius: 50%;
-    opacity: 0.15;
-    animation: float-particle 20s infinite ease-in-out;
-}
-
-.particle:nth-child(1) { left: 10%; animation-delay: 0s; animation-duration: 18s; }
-.particle:nth-child(2) { left: 25%; animation-delay: 3s; animation-duration: 22s; }
-.particle:nth-child(3) { left: 45%; animation-delay: 1s; animation-duration: 20s; }
-.particle:nth-child(4) { left: 65%; animation-delay: 4s; animation-duration: 19s; }
-.particle:nth-child(5) { left: 85%; animation-delay: 2s; animation-duration: 21s; }
-.particle:nth-child(6) { left: 15%; animation-delay: 2.5s; animation-duration: 23s; }
-.particle:nth-child(7) { left: 50%; animation-delay: 1.5s; animation-duration: 19s; }
-.particle:nth-child(8) { left: 75%; animation-delay: 3.5s; animation-duration: 21s; }
-
-@keyframes float-particle {
-    0%, 100% {
-        transform: translateY(100vh) translateX(0) scale(1);
-        opacity: 0;
-    }
-    10% { opacity: 0.15; }
-    90% { opacity: 0.15; }
-    100% {
-        transform: translateY(-100px) translateX(50px) scale(0.5);
-        opacity: 0;
-    }
-}
-
-/* ============================================
-           MAIN SECTION
-============================================ */
-.candidates-section {
-    padding: 120px 36px 80px;
-    max-width: 1400px;
-    margin: 0 auto;
+  .candidates-wrap {
+    background: var(--bg-gradient);
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    color: var(--dark-navy);
+    padding: 60px 20px;
     min-height: 100vh;
-    background: linear-gradient(180deg, var(--cream) 0%, var(--white) 50%, var(--gray-50) 100%);
-    position: relative;
-    z-index: 1;
-}
+  }
 
-.candidates-section::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background-image: 
-        linear-gradient(30deg, transparent 48%, rgba(212, 175, 55, 0.015) 50%, transparent 52%),
-        linear-gradient(90deg, transparent 48%, rgba(212, 175, 55, 0.015) 50%, transparent 52%);
-    background-size: 60px 60px;
-    animation: hexMove 25s linear infinite;
-    pointer-events: none;
-}
+  .candidates-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
 
-@keyframes hexMove {
-    0% { background-position: 0 0; }
-    100% { background-position: 60px 60px; }
-}
-
-/* ============================================
-           HEADER & SEARCH
-============================================ */
-.candidates-header {
+  /* --- HEADER & HERO --- */
+  .cand-hero {
     text-align: center;
-    margin-bottom: 70px;
-    animation: fadeInUp 0.8s ease-out;
-    position: relative;
-    z-index: 2;
-}
+    margin-bottom: 60px;
+  }
 
-.page-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(10px);
-    padding: 10px 24px;
-    border-radius: 50px;
-    font-size: 12px;
-    font-weight: 700;
-    color: var(--gold-dark);
-    margin-bottom: 24px;
-    box-shadow: 
-        0 3px 10px rgba(0, 0, 0, 0.06),
-        inset 0 1px 0 rgba(255, 255, 255, 0.8),
-        0 0 0 1px rgba(212, 175, 55, 0.15);
-    text-transform: uppercase;
-    letter-spacing: 1.1px;
-    position: relative;
-    overflow: hidden;
-}
-
-.page-badge::before {
-    content: '✦';
-    color: var(--gold-primary);
-    font-size: 16px;
-    animation: sparkle 2s ease-in-out infinite;
-}
-
-@keyframes sparkle {
-    0%, 100% { opacity: 1; transform: scale(1) rotate(0deg); }
-    50% { opacity: 0.7; transform: scale(1.15) rotate(180deg); }
-}
-
-.candidates-title {
+  .cand-hero h1 {
     font-family: 'Playfair Display', serif;
-    font-size: 56px;
-    font-weight: 900;
-    color: var(--charcoal);
-    margin-bottom: 20px;
-    background: linear-gradient(135deg, var(--gold-darker) 0%, var(--gold-primary) 50%, var(--gold-dark) 100%);
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    font-weight: 800;
+    margin-bottom: 16px;
+    background: linear-gradient(to right, var(--gold-dark), var(--gold-primary));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    background-clip: text;
-    background-size: 200% auto;
-    animation: gradientShift 4s ease infinite;
-    letter-spacing: -1px;
-    line-height: 1.1;
-}
+  }
 
-@keyframes gradientShift {
-    0%, 100% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-}
-
-.candidates-subtitle {
-    font-size: 18px;
-    color: var(--gray-medium);
-    max-width: 700px;
+  .cand-hero p {
+    color: var(--slate-text);
+    font-size: 1.1rem;
+    max-width: 600px;
     margin: 0 auto 40px;
-    line-height: 1.75;
-    font-weight: 500;
-}
+  }
 
-/* Search Form */
-.search-form {
-    max-width: 650px;
-    margin: 0 auto 40px;
-    position: relative;
-    animation: fadeInUp 0.8s ease-out 0.2s backwards;
-}
-
-.search-wrapper {
-    display: flex;
-    gap: 12px;
+  /* --- FORMULAIRE DE RECHERCHE --- */
+  .search-container {
     background: var(--white);
-    padding: 8px;
-    border-radius: 50px;
-    box-shadow: var(--shadow-gold-md);
-    transition: var(--transition-smooth);
-    border: 2px solid transparent;
-}
+    padding: 10px;
+    border-radius: 100px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    max-width: 800px;
+    margin: 0 auto;
+    border: 1px solid rgba(197, 160, 33, 0.15);
+  }
 
-.search-wrapper:focus-within {
-    box-shadow: var(--shadow-gold-lg);
-    border-color: var(--gold-light);
-    transform: translateY(-2px);
-}
-
-.search-input {
+  .search-group {
+    display: flex;
+    align-items: center;
     flex: 1;
-    border: none;
-    outline: none;
-    padding: 16px 28px;
-    font-size: 16px;
-    background: transparent;
-    color: var(--charcoal);
-    font-weight: 500;
-}
+    min-width: 200px;
+    padding: 0 15px;
+  }
 
-.search-input::placeholder {
-    color: var(--gray-medium);
-    opacity: 0.8;
-}
-
-.search-btn {
-    background: linear-gradient(135deg, var(--gold-dark) 0%, var(--gold-darker) 100%);
-    color: var(--white);
+  .search-input, .search-select {
     border: none;
-    padding: 16px 40px;
-    border-radius: 50px;
-    font-weight: 700;
+    width: 100%;
+    padding: 12px;
     font-size: 15px;
+    font-family: inherit;
+    color: var(--dark-navy);
+  }
+
+  .search-input:focus, .search-select:focus { outline: none; }
+
+  .search-divider {
+    width: 1px;
+    height: 30px;
+    background: #E2E8F0;
+    align-self: center;
+  }
+
+  .search-btn {
+    background: var(--gold-dark);
+    color: white;
+    border: none;
+    padding: 14px 32px;
+    border-radius: 100px;
+    font-weight: 700;
     cursor: pointer;
     transition: var(--transition-smooth);
-    box-shadow: var(--shadow-gold-md);
-    position: relative;
-    overflow: hidden;
-}
-
-.search-btn::before {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 0;
-    height: 0;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.2);
-    transform: translate(-50%, -50%);
-    transition: width 0.5s ease, height 0.5s ease;
-}
-
-.search-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-gold-lg);
-    background: linear-gradient(135deg, var(--gold-darker) 0%, #7A5F08 100%);
-}
-
-.search-btn:hover::before {
-    width: 300px;
-    height: 300px;
-}
-
-.search-btn:active {
-    transform: translateY(0);
-}
-
-/* Results Info */
-.results-info {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 16px;
-    margin-bottom: 40px;
-    padding: 0 8px;
-    animation: fadeInUp 0.8s ease-out 0.3s backwards;
-}
-
-.results-count {
-    font-size: 16px;
-    color: var(--gray-warm);
-    font-weight: 700;
-    padding: 12px 24px;
-    background: linear-gradient(135deg, var(--gold-pale) 0%, #FFF8E7 100%);
-    border-radius: 25px;
-    border: 2px solid var(--gold-light);
-    box-shadow: var(--shadow-sm);
-}
-
-.search-query {
-    font-size: 15px;
-    color: var(--white);
-    background: linear-gradient(135deg, var(--gold-dark) 0%, var(--gold-darker) 100%);
-    padding: 12px 28px;
-    border-radius: 25px;
-    font-weight: 700;
-    box-shadow: var(--shadow-gold-sm);
-}
-
-.search-query strong {
-    color: var(--white);
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
-}
-
-/* Filter & Sort Bar */
-.filter-sort-bar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 16px;
-    margin-bottom: 40px;
-    padding: 20px 24px;
-    background: rgba(255, 255, 255, 0.6);
-    backdrop-filter: blur(10px);
-    border-radius: 20px;
-    border: 1px solid rgba(212, 175, 55, 0.1);
-    animation: fadeInUp 0.8s ease-out 0.4s backwards;
-}
-
-.filter-group {
-    display: flex;
-    gap: 12px;
-    align-items: center;
-    flex-wrap: wrap;
-}
-
-.filter-label {
-    font-size: 14px;
-    font-weight: 600;
-    color: var(--gray-warm);
     text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-
-.filter-btn {
-    padding: 8px 18px;
-    border: 2px solid var(--gray-300);
-    background: var(--white);
-    color: var(--gray-600);
-    border-radius: 25px;
-    font-size: 13px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: var(--transition-fast);
-}
-
-.filter-btn:hover,
-.filter-btn.active {
-    background: linear-gradient(135deg, var(--gold-dark) 0%, var(--gold-darker) 100%);
-    border-color: var(--gold-dark);
-    color: var(--white);
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-gold-sm);
-}
-
-.sort-select {
-    padding: 10px 16px;
-    border: 2px solid var(--gray-300);
-    background: var(--white);
-    color: var(--gray-700);
-    border-radius: 12px;
+    letter-spacing: 1px;
     font-size: 14px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: var(--transition-fast);
-    outline: none;
-}
+  }
 
-.sort-select:focus {
-    border-color: var(--gold-dark);
-    box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.1);
-}
+  .search-btn:hover {
+    background: var(--dark-navy);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+  }
 
-/* ============================================
-           CANDIDATES GRID
-============================================ */
-.candidates-grid {
+  /* --- GRID & CARDS --- */
+  .candidates-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-    gap: 36px;
-    margin-bottom: 60px;
-}
+    gap: 40px;
+    margin-top: 50px;
+  }
 
-.candidate-card {
-    background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(10px);
-    border-radius: 28px;
+  .candidate-card {
+    background: var(--white);
+    border-radius: var(--radius-lg);
     overflow: hidden;
-    box-shadow: 
-        var(--shadow-lg),
-        0 0 0 1px rgba(212, 175, 55, 0.08);
     transition: var(--transition-smooth);
+    border: 1px solid rgba(0,0,0,0.03);
     position: relative;
-    animation: fadeInUp 0.6s ease-out backwards;
     display: flex;
     flex-direction: column;
-}
+  }
 
-.candidate-card::before {
-    content: '';
-    position: absolute;
-    inset: -2px;
-    border-radius: 28px;
-    background: linear-gradient(
-        45deg,
-        var(--gold-primary),
-        var(--gold-light),
-        var(--gold-primary)
-    );
-    background-size: 300% 300%;
-    opacity: 0;
-    z-index: -1;
-    animation: borderGlow 3s ease infinite;
-    transition: opacity 0.4s ease;
-}
+  .candidate-card:hover {
+    transform: translateY(-12px);
+    box-shadow: var(--shadow-premium);
+    border-color: var(--gold-soft);
+  }
 
-@keyframes borderGlow {
-    0%, 100% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-}
-
-.candidate-card:hover::before {
-    opacity: 1;
-}
-
-.candidate-card:hover {
-    transform: translateY(-12px) scale(1.01);
-    box-shadow: 
-        0 25px 60px rgba(0, 0, 0, 0.14),
-        0 0 35px rgba(212, 175, 55, 0.25);
-}
-
-/* Stagger animation */
-.candidate-card:nth-child(1) { animation-delay: 0.1s; }
-.candidate-card:nth-child(2) { animation-delay: 0.15s; }
-.candidate-card:nth-child(3) { animation-delay: 0.2s; }
-.candidate-card:nth-child(4) { animation-delay: 0.25s; }
-.candidate-card:nth-child(5) { animation-delay: 0.3s; }
-.candidate-card:nth-child(6) { animation-delay: 0.35s; }
-.candidate-card:nth-child(n+7) { animation-delay: 0.4s; }
-
-/* Card Image */
-.card-image-wrapper {
+  .candidate-media {
     position: relative;
-    width: 100%;
-    height: 300px;
+    height: 340px;
     overflow: hidden;
-    background: linear-gradient(135deg, var(--gold-pale) 0%, var(--cream) 100%);
-}
+  }
 
-.card-image-wrapper::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: 140px;
-    background: linear-gradient(to top, rgba(44, 44, 44, 0.8) 0%, transparent 100%);
-    opacity: 0;
-    transition: var(--transition-smooth);
-    z-index: 1;
-}
-
-.candidate-card:hover .card-image-wrapper::after {
-    opacity: 1;
-}
-
-.card-image {
+  .candidate-media img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
-}
+    transition: transform 0.8s ease;
+  }
 
-.candidate-card:hover .card-image {
-    transform: scale(1.12);
-}
+  .candidate-card:hover .candidate-media img {
+    transform: scale(1.1);
+  }
 
-.card-category {
+  .candidate-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(15, 23, 42, 0.8) 0%, transparent 60%);
+    opacity: 0;
+    transition: 0.4s;
+  }
+
+  .candidate-card:hover .candidate-overlay { opacity: 1; }
+
+  .candidate-category-pill {
     position: absolute;
     top: 20px;
     right: 20px;
-    background: linear-gradient(135deg, var(--gold-dark) 0%, var(--gold-darker) 100%);
-    color: var(--white);
-    padding: 10px 20px;
-    border-radius: 25px;
+    background: var(--white);
+    color: var(--gold-dark);
+    padding: 6px 16px;
+    border-radius: 50px;
     font-size: 12px;
     font-weight: 800;
     text-transform: uppercase;
-    letter-spacing: 1px;
-    box-shadow: var(--shadow-gold-md);
-    backdrop-filter: blur(10px);
-    border: 2px solid rgba(255, 255, 255, 0.2);
-    z-index: 2;
-    transition: var(--transition-fast);
-}
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  }
 
-.candidate-card:hover .card-category {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-gold-lg);
-}
-
-/* Vote Badge */
-.vote-count-badge {
+  /* Ecole pill displayed over the image (bottom-left) */
+  .candidate-ecole-pill {
     position: absolute;
-    bottom: 20px;
-    left: 20px;
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(10px);
-    color: var(--gold-darker);
-    padding: 8px 16px;
-    border-radius: 25px;
-    font-size: 12px;
+    left: 16px;
+    bottom: 16px;
+    background: linear-gradient(90deg, rgba(0,0,0,0.6), rgba(0,0,0,0.35));
+    color: white;
+    padding: 8px 12px;
+    border-radius: 12px;
+    font-size: 13px;
     font-weight: 700;
-    box-shadow: var(--shadow-md);
-    z-index: 2;
-    opacity: 0;
-    transform: translateY(10px);
-    transition: var(--transition-smooth);
-}
+    z-index: 4;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.25);
+  }
 
-.candidate-card:hover .vote-count-badge {
-    opacity: 1;
-    transform: translateY(0);
-}
+  .candidate-meta {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 12px;
+  }
 
-.vote-count-badge::before {
-    content: '🗳️';
-    font-size: 14px;
-}
+  .meta-pill {
+    background: rgba(237, 242, 247, 0.8);
+    color: var(--dark-navy);
+    padding: 6px 10px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 600;
+  }
 
-/* Card Content */
-.card-content {
-    padding: 32px;
-    flex: 1;
+  .meta-votes {
+    background: linear-gradient(90deg, var(--gold-light), var(--gold-primary));
+    color: var(--dark-navy);
+    box-shadow: 0 6px 18px rgba(197,160,33,0.12);
+  }
+
+  .candidate-body {
+    padding: 30px;
+    text-align: center;
+    flex-grow: 1;
     display: flex;
     flex-direction: column;
-    background: var(--white);
-}
+  }
 
-.card-name {
+  .candidate-name {
     font-family: 'Playfair Display', serif;
-    font-size: 26px;
-    font-weight: 800;
-    color: var(--charcoal);
-    margin-bottom: 14px;
-    line-height: 1.3;
-    background: linear-gradient(135deg, var(--charcoal) 0%, var(--slate) 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-}
-
-.card-description {
-    color: var(--gray-medium);
-    font-size: 15px;
-    line-height: 1.7;
-    margin-bottom: 24px;
-    flex: 1;
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    font-weight: 500;
-}
-
-/* Card Actions */
-.card-actions {
-    display: flex;
-    gap: 12px;
-    padding-top: 20px;
-    border-top: 2px solid var(--gold-pale);
-}
-
-.btn-ghost {
-    flex: 1;
-    padding: 14px 20px;
-    border: 2px solid var(--charcoal);
-    background: transparent;
-    color: var(--charcoal);
-    border-radius: 50px;
-    font-weight: 700;
-    font-size: 15px;
-    text-decoration: none;
-    text-align: center;
-    transition: var(--transition-smooth);
-    cursor: pointer;
-    position: relative;
-    overflow: hidden;
-}
-
-.btn-ghost::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: var(--charcoal);
-    transition: left 0.4s ease;
-    z-index: -1;
-}
-
-.btn-ghost:hover {
-    color: var(--white);
-    border-color: var(--charcoal);
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-dark);
-}
-
-.btn-ghost:hover::before {
-    left: 0;
-}
-
-.btn-primary {
-    flex: 1;
-    padding: 14px 20px;
-    border: none;
-    background: linear-gradient(135deg, var(--gold-dark) 0%, var(--gold-darker) 100%);
-    color: var(--white);
-    border-radius: 50px;
-    font-weight: 800;
-    font-size: 15px;
-    text-decoration: none;
-    text-align: center;
-    transition: var(--transition-smooth);
-    cursor: pointer;
-    box-shadow: var(--shadow-gold-md);
-    position: relative;
-    overflow: hidden;
-}
-
-.btn-primary::before {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 0;
-    height: 0;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.25);
-    transform: translate(-50%, -50%);
-    transition: width 0.5s ease, height 0.5s ease;
-}
-
-.btn-primary:hover {
-    transform: translateY(-3px);
-    box-shadow: var(--shadow-gold-lg);
-    background: linear-gradient(135deg, var(--gold-darker) 0%, #7A5F08 100%);
-}
-
-.btn-primary:hover::before {
-    width: 300px;
-    height: 300px;
-}
-
-/* ============================================
-           VOTE MODAL (From Homepage)
-============================================ */
-.modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.75);
-    backdrop-filter: blur(8px);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 9999;
-    opacity: 0;
-    visibility: hidden;
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    padding: 20px;
-}
-
-.modal-overlay.active {
-    opacity: 1;
-    visibility: visible;
-}
-
-body.modal-open {
-    overflow: hidden;
-}
-
-.modal-container {
-    background: var(--white);
-    border-radius: 32px;
-    max-width: 600px;
-    width: 100%;
-    max-height: 90vh;
-    overflow-y: auto;
-    position: relative;
-    box-shadow: 
-        0 35px 80px rgba(0, 0, 0, 0.3),
-        0 0 0 1px rgba(212, 175, 55, 0.1),
-        inset 0 1px 0 rgba(255, 255, 255, 0.9);
-    transform: scale(0.9) translateY(30px);
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.modal-overlay.active .modal-container {
-    transform: scale(1) translateY(0);
-}
-
-.modal-header {
-    background: linear-gradient(135deg, #0f1419 0%, #1a1f2e 100%);
-    padding: 48px 40px;
-    position: relative;
-    overflow: hidden;
-    border-radius: 32px 32px 0 0;
-}
-
-.modal-header::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 4px;
-    background: linear-gradient(
-        90deg, 
-        var(--gold-primary) 0%, 
-        var(--gold-light) 50%,
-        var(--gold-primary) 100%
-    );
-    background-size: 200% auto;
-    animation: gradientMove 3s linear infinite;
-}
-
-@keyframes gradientMove {
-    0% { background-position: 0% 50%; }
-    100% { background-position: 200% 50%; }
-}
-
-.modal-header::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: 
-        radial-gradient(circle at 20% 30%, rgba(212, 175, 55, 0.08) 0%, transparent 50%),
-        radial-gradient(circle at 80% 70%, rgba(196, 138, 0, 0.06) 0%, transparent 50%);
-}
-
-.modal-close {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    width: 40px;
-    height: 40px;
-    border: none;
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(10px);
-    border-radius: 50%;
-    color: var(--white);
     font-size: 24px;
-    cursor: pointer;
-    transition: var(--transition-smooth);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 10;
-}
+    margin-bottom: 10px;
+    color: var(--dark-navy);
+  }
 
-.modal-close:hover {
-    background: rgba(255, 255, 255, 0.2);
-    transform: rotate(90deg);
-}
-
-.modal-icon {
-    width: 80px;
-    height: 80px;
-    margin: 0 auto 20px;
-    background: linear-gradient(135deg, var(--gold-primary) 0%, var(--gold-light) 100%);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 40px;
-    box-shadow: 
-        0 12px 30px rgba(212, 175, 55, 0.4),
-        inset 0 3px 6px rgba(255, 255, 255, 0.4);
-    position: relative;
-    animation: pulse 2s ease-in-out infinite;
-}
-
-@keyframes pulse {
-    0%, 100% { 
-        transform: scale(1); 
-        box-shadow: 0 12px 30px rgba(212, 175, 55, 0.4);
-    }
-    50% { 
-        transform: scale(1.06); 
-        box-shadow: 0 18px 40px rgba(212, 175, 55, 0.5);
-    }
-}
-
-.modal-icon::before {
-    content: '';
-    position: absolute;
-    top: 15%;
-    left: 15%;
-    width: 35%;
-    height: 35%;
-    background: radial-gradient(
-        circle,
-        rgba(255, 255, 255, 0.6) 0%,
-        transparent 70%
-    );
-    border-radius: 50%;
-}
-
-.modal-title {
-    font-family: 'Playfair Display', serif;
-    font-size: 32px;
-    font-weight: 900;
-    color: var(--white);
-    text-align: center;
-    margin-bottom: 12px;
-    position: relative;
-    z-index: 1;
-}
-
-.modal-subtitle {
+  .candidate-desc {
+    color: var(--slate-text);
     font-size: 15px;
-    color: rgba(255, 255, 255, 0.75);
-    text-align: center;
-    position: relative;
-    z-index: 1;
-}
-
-.modal-subtitle .candidate-name-highlight {
-    color: var(--gold-light);
-    font-weight: 700;
-}
-
-.modal-body {
-    padding: 40px;
-}
-
-.form-group {
-    margin-bottom: 24px;
-}
-
-.form-label {
-    display: block;
-    font-weight: 600;
-    font-size: 14px;
-    color: var(--gray-900);
-    margin-bottom: 8px;
-    letter-spacing: 0.3px;
-}
-
-.form-label .required {
-    color: #ef4444;
-    margin-left: 2px;
-}
-
-.form-input,
-.form-textarea {
-    width: 100%;
-    padding: 14px 18px;
-    border: 2px solid var(--gray-200);
-    border-radius: 14px;
-    font-size: 15px;
-    font-family: 'Inter', sans-serif;
-    transition: var(--transition-smooth);
-    background: var(--white);
-    color: var(--gray-900);
-}
-
-.form-input:focus,
-.form-textarea:focus {
-    outline: none;
-    border-color: var(--gold-primary);
-    box-shadow: 0 0 0 4px rgba(212, 175, 55, 0.1);
-}
-
-.form-textarea {
-    resize: vertical;
-    min-height: 100px;
-}
-
-.form-info {
-    font-size: 13px;
-    color: var(--gray-medium);
-    margin-top: 8px;
-    line-height: 1.5;
-}
-
-.modal-footer {
-    padding: 0 40px 40px;
-    display: flex;
-    gap: 12px;
-}
-
-.modal-footer .btn-secondary {
-    flex: 1;
-    padding: 16px 32px;
-    border: 2px solid var(--gray-900);
-    background: transparent;
-    color: var(--gray-900);
-    border-radius: 50px;
-    font-weight: 700;
-    font-size: 15px;
-    cursor: pointer;
-    transition: var(--transition-smooth);
-    text-align: center;
-}
-
-.modal-footer .btn-secondary:hover {
-    background: var(--gray-900);
-    color: var(--white);
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-dark);
-}
-
-.modal-footer .btn-primary {
-    flex: 2;
-    padding: 16px 32px;
-    font-size: 15px;
-}
-
-/* Success State */
-.modal-success {
-    text-align: center;
-    padding: 60px 40px;
-}
-
-.success-icon {
-    width: 100px;
-    height: 100px;
-    margin: 0 auto 30px;
-    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 50px;
-    color: white;
-    box-shadow: 
-        0 15px 40px rgba(16, 185, 129, 0.3),
-        inset 0 3px 6px rgba(255, 255, 255, 0.3);
-    animation: successPop 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-}
-
-@keyframes successPop {
-    0% {
-        transform: scale(0);
-        opacity: 0;
-    }
-    50% {
-        transform: scale(1.1);
-    }
-    100% {
-        transform: scale(1);
-        opacity: 1;
-    }
-}
-
-.success-title {
-    font-family: 'Playfair Display', serif;
-    font-size: 28px;
-    font-weight: 900;
-    color: var(--gray-900);
-    margin-bottom: 16px;
-}
-
-.success-message {
-    font-size: 15px;
-    color: var(--gray-600);
     line-height: 1.6;
-    margin-bottom: 32px;
-}
+    margin-bottom: 25px;
+    flex-grow: 1;
+  }
 
-/* ============================================
-           EMPTY STATE
-============================================ */
-.empty-state {
-    text-align: center;
-    padding: 100px 40px;
-    animation: fadeInUp 0.8s ease-out;
-    background: rgba(255, 255, 255, 0.5);
-    border-radius: 28px;
-    border: 2px dashed var(--gray-300);
-}
+  /* --- BUTTONS --- */
+  .candidate-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
 
-.empty-state-icon {
-    font-size: 80px;
-    margin-bottom: 28px;
-    opacity: 0.5;
-}
-
-.empty-state-title {
-    font-family: 'Playfair Display', serif;
-    font-size: 32px;
-    font-weight: 800;
-    color: var(--charcoal);
-    margin-bottom: 14px;
-    background: linear-gradient(135deg, var(--charcoal) 0%, var(--gold-darker) 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-}
-
-.empty-state-text {
-    color: var(--gray-medium);
-    font-size: 17px;
-    margin-bottom: 36px;
-    font-weight: 500;
-    max-width: 500px;
-    margin-left: auto;
-    margin-right: auto;
-}
-
-.btn-view-all {
-    display: inline-block;
-    padding: 18px 48px;
-    background: linear-gradient(135deg, var(--gold-dark) 0%, var(--gold-darker) 100%);
-    color: var(--white);
-    border-radius: 50px;
-    font-weight: 800;
-    font-size: 16px;
+  .btn-premium {
+    padding: 12px 20px;
+    border-radius: 12px;
+    font-weight: 700;
+    font-size: 14px;
     text-decoration: none;
     transition: var(--transition-smooth);
-    box-shadow: var(--shadow-gold-md);
-}
-
-.btn-view-all:hover {
-    transform: translateY(-4px);
-    box-shadow: var(--shadow-gold-lg);
-    background: linear-gradient(135deg, var(--gold-darker) 0%, #7A5F08 100%);
-}
-
-/* ============================================
-           PAGINATION
-============================================ */
-.pagination {
     display: flex;
-    justify-content: center;
     align-items: center;
-    gap: 12px;
-    margin-top: 60px;
-    animation: fadeInUp 0.8s ease-out;
-}
+    justify-content: center;
+    gap: 8px;
+  }
 
-.pagination-btn {
-    padding: 12px 24px;
-    border: 2px solid var(--gray-300);
-    background: var(--white);
-    color: var(--gray-700);
-    border-radius: 12px;
-    font-size: 14px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: var(--transition-fast);
-}
+  .btn-view {
+    background: var(--gold-soft);
+    color: var(--gold-dark);
+  }
 
-.pagination-btn:hover:not(:disabled) {
+  .btn-view:hover {
     background: var(--gold-primary);
-    border-color: var(--gold-primary);
-    color: var(--white);
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-gold-sm);
-}
+    color: white;
+  }
 
-.pagination-btn:disabled {
-    opacity: 0.4;
-    cursor: not-allowed;
-}
+  .btn-vote {
+    background: var(--dark-navy);
+    color: white;
+    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.2);
+  }
 
-.pagination-btn.active {
-    background: linear-gradient(135deg, var(--gold-dark) 0%, var(--gold-darker) 100%);
-    border-color: var(--gold-dark);
-    color: var(--white);
-    box-shadow: var(--shadow-gold-sm);
-}
+  .btn-vote:hover {
+    background: var(--gold-dark);
+    transform: scale(1.05);
+  }
 
-/* ============================================
-           ANIMATIONS
-============================================ */
-@keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(30px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-/* ============================================
-           RESPONSIVE
-============================================ */
-@media screen and (max-width: 1024px) {
-    .candidates-grid {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 28px;
-    }
-    
-    .filter-sort-bar {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-}
-
-@media screen and (max-width: 768px) {
-    .candidates-section {
-        padding: 100px 24px 60px;
-    }
-
-    .candidates-title {
-        font-size: 42px;
-    }
-
-    .candidates-subtitle {
-        font-size: 16px;
-    }
-
-    .candidates-grid {
-        grid-template-columns: 1fr;
-        gap: 24px;
-    }
-
-    .results-info {
-        flex-direction: column;
-        gap: 14px;
-        align-items: stretch;
-    }
-
-    .search-wrapper {
-        flex-direction: column;
-        border-radius: 20px;
-    }
-
-    .search-btn {
-        width: 100%;
-    }
-
-    .card-actions {
-        flex-direction: column;
-    }
-
-    .filter-group {
-        width: 100%;
-        justify-content: space-between;
-    }
-
-    .modal-container {
-        border-radius: 24px;
-    }
-
-    .modal-header {
-        padding: 36px 28px;
-        border-radius: 24px 24px 0 0;
-    }
-
-    .modal-body {
-        padding: 32px 24px;
-    }
-
-    .modal-footer {
-        padding: 0 24px 32px;
-        flex-direction: column;
-    }
-
-    .modal-title {
-        font-size: 26px;
-    }
-}
-
-@media screen and (max-width: 480px) {
-    .candidates-title {
-        font-size: 34px;
-    }
-
-    .card-name {
-        font-size: 22px;
-    }
-
-    .page-badge {
-        font-size: 11px;
-        padding: 8px 20px;
-    }
-}
+  /* Mobile */
+  @media (max-width: 640px) {
+    .search-container { border-radius: 20px; }
+    .search-divider { display: none; }
+    .search-btn { width: 100%; }
+    .candidate-actions { grid-template-columns: 1fr; }
+  }
 </style>
 
-<!-- Floating particles background -->
-<div class="particles-bg">
-    <% 8.times do %>
-        <div class="particle"></div>
-    <% end %>
-</div>
-
-<!-- Candidates Section -->
-<section class="candidates-section">
-    <!-- Header -->
-    <div class="candidates-header">
-        <div class="page-badge">
-            Découvrez nos talents
+<div class="candidates-wrap">
+  <div class="candidates-inner">
+    
+    <header class="cand-hero">
+      <h1>Nos Leaders de Demain</h1>
+      <p>Découvrez les candidats d'exception qui s'engagent pour l'innovation et l'excellence au sein de nos écoles.</p>
+      
+      <%= form_with url: candidates_path, method: :get, local: true, class: "search-container" do |f| %>
+        <div class="search-group">
+          <span style="margin-right: 10px">🔍</span>
+          <%= f.text_field :query, value: params[:query], placeholder: "Nom...", class: "search-input" %>
         </div>
-        <h1 class="candidates-title">Nos Excellents</h1>
-        <p class="candidates-subtitle">
-            Rencontrez les leaders qui portent des projets concrets et inspirants dans leurs communautés.
-            Votez pour soutenir ceux qui vous inspirent le plus.
-        </p>
+        <div class="search-divider"></div>
+        <div class="search-group">
+          <%= f.select :ecole_id, options_from_collection_for_select(@ecoles, :id, :nom, params[:ecole_id]), { include_blank: 'Toutes les écoles' }, class: 'search-select' %>
+        </div>
+        <%= f.submit "Rechercher", class: "search-btn" %>
+      <% end %>
+    </header>
 
-        <!-- Search Form -->
-        <%= form_with url: candidates_path, method: :get, local: true, class: "search-form" do |f| %>
-            <div class="search-wrapper">
-                <%= f.text_field :query, 
-                    value: params[:query], 
-                    placeholder: "🔍 Rechercher par nom, catégorie ou projet...", 
-                    class: "search-input", 
-                    autocomplete: "off" %>
-                <%= f.submit "Rechercher", class: "search-btn" %>
-            </div>
-        <% end %>
+    <div style="margin-bottom: 20px; color: var(--gold-dark); font-weight: 600;">
+      ✨ <%= @total_candidates || @candidates.count %> candidats inspirants trouvés
     </div>
 
-    <!-- Filter & Sort Bar -->
-    <div class="filter-sort-bar">
-        <div class="filter-group">
-            <span class="filter-label">Catégories :</span>
-            <button class="filter-btn active" data-filter="all">Tous</button>
-            <button class="filter-btn" data-filter="leadership">Leadership</button>
-            <button class="filter-btn" data-filter="innovation">Innovation</button>
-            <button class="filter-btn" data-filter="social">Social</button>
-        </div>
-        <div class="filter-group">
-            <span class="filter-label">Trier par :</span>
-            <select class="sort-select" id="sortSelect">
-                <option value="recent">Plus récents</option>
-                <option value="popular">Plus populaires</option>
-                <option value="name">Nom (A-Z)</option>
-            </select>
-        </div>
-    </div>
-
-    <!-- Results Info -->
-    <div class="results-info">
-        <span class="results-count">
-            <%= pluralize(@candidates.count, 'candidat', 'candidats') %>
-        </span>
-        <% if params[:query].present? %>
-            <span class="search-query">
-                Recherche : <strong>"<%= h params[:query] %>"</strong>
-            </span>
-        <% end %>
-    </div>
-
-    <!-- Candidates Grid -->
     <% if @candidates.any? %>
-        <div class="candidates-grid">
-            <% @candidates.each do |candidate| %>
-                <article class="candidate-card" data-candidate-id="<%= candidate.id %>">
-                    <!-- Card Image -->
-                    <div class="card-image-wrapper">
-                        <% if candidate.image.attached? %>
-                            <%= image_tag url_for(candidate.image), 
-                                alt: candidate.name, 
-                                loading: 'lazy',
-                                class: 'card-image',
-                                onerror: "this.onerror=null; this.src='data:image/svg+xml,%3Csvg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 400 300\"%3E%3Crect fill=\"%23f0f6fb\" width=\"400\" height=\"300\"/%3E%3Ctext x=\"50%25\" y=\"50%25\" text-anchor=\"middle\" dy=\".3em\" fill=\"%2364748b\" font-family=\"Arial\" font-size=\"16\"%3E#{candidate.name}%3C/text%3E%3C/svg%3E';" %>
-                        <% elsif candidate.respond_to?(:image_url) && candidate.image_url.present? %>
-                            <%= image_tag candidate.image_url, 
-                                alt: candidate.name, 
-                                loading: 'lazy',
-                                class: 'card-image',
-                                onerror: "this.onerror=null; this.src='data:image/svg+xml,%3Csvg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 400 300\"%3E%3Crect fill=\"%23f0f6fb\" width=\"400\" height=\"300\"/%3E%3Ctext x=\"50%25\" y=\"50%25\" text-anchor=\"middle\" dy=\".3em\" fill=\"%2364748b\" font-family=\"Arial\" font-size=\"16\"%3E#{candidate.name}%3C/text%3E%3C/svg%3E';" %>
-                        <% else %>
-                            <%= image_tag 'sarki.webp', 
-                                alt: candidate.name, 
-                                loading: 'lazy',
-                                class: 'card-image',
-                                onerror: "this.onerror=null; this.src='data:image/svg+xml,%3Csvg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 400 300\"%3E%3Crect fill=\"%23f0f6fb\" width=\"400\" height=\"300\"/%3E%3Ctext x=\"50%25\" y=\"50%25\" text-anchor=\"middle\" dy=\".3em\" fill=\"%2364748b\" font-family=\"Arial\" font-size=\"16\"%3E#{candidate.name}%3C/text%3E%3C/svg%3E';" %>
-                        <% end %>
+      <div class="candidates-grid">
+        <% @candidates.each do |candidate| %>
+          <article class="candidate-card">
+            <div class="candidate-media">
+              <% if candidate.image.attached? %>
+                <%= image_tag url_for(candidate.image), alt: candidate.name %>
+              <% else %>
+                <%= image_tag 'sarki.webp', alt: candidate.name %>
+              <% end %>
+              <div class="candidate-overlay"></div>
+              <% if candidate.respond_to?(:ecole) && candidate.ecole.present? %>
+                <span class="candidate-ecole-pill"><%= candidate.ecole.nom %></span>
+              <% end %>
+              <% if candidate.respond_to?(:category) && candidate.category.present? %>
+                <span class="candidate-category-pill"><%= candidate.category %></span>
+              <% end %>
+            </div>
 
-                        <!-- Category Badge -->
-                        <% if candidate.respond_to?(:category) && candidate.category.present? %>
-                            <span class="card-category"><%= h candidate.category %></span>
-                        <% else %>
-                            <span class="card-category">Leadership</span>
-                        <% end %>
-
-                        <!-- Vote Count Badge -->
-                        <% if candidate.respond_to?(:votes) %>
-                            <div class="vote-count-badge">
-                                <%= pluralize(candidate.votes.where(status: 'paid').count, 'vote') %>
-                            </div>
-                        <% end %>
-                    </div>
-
-                    <!-- Card Content -->
-                    <div class="card-content">
-                        <h2 class="card-name"><%= h candidate.name %></h2>
-                        <p class="card-description">
-                            <%= h(candidate.try(:description) || candidate.try(:bio) || 'Profil à découvrir. Ce candidat apporte une contribution significative à sa communauté à travers des initiatives innovantes.') %>
-                        </p>
-
-                        <!-- Card Actions -->
-                        <div class="card-actions">
-                            <% show_path = defined?(candidate_path) ? candidate_path(candidate) : "/candidates/#{candidate.id}" %>
-                            <%= link_to 'Voir le profil', show_path, class: 'btn-ghost btn-view' %>
-                            <button 
-                                class="btn-primary btn-vote" 
-                                data-candidate-name="<%= j candidate.name %>" 
-                                data-candidate-id="<%= candidate.id %>">
-                                Voter
-                            </button>
-                        </div>
-                    </div>
-                </article>
-            <% end %>
-        </div>
-    <% else %>
-        <!-- Empty State -->
-        <div class="empty-state">
-            <div class="empty-state-icon">🔍</div>
-            <h2 class="empty-state-title">Aucun candidat trouvé</h2>
-            <p class="empty-state-text">
-                <% if params[:query].present? %>
-                    Aucun résultat ne correspond à votre recherche "<%= h params[:query] %>".
-                    Essayez une autre recherche ou explorez tous nos candidats.
-                <% else %>
-                    Les profils des candidats seront bientôt disponibles.
-                    Revenez régulièrement pour découvrir nos talents !
+            <div class="candidate-body">
+              <h3 class="candidate-name"><%= candidate.name %></h3>
+              <div class="candidate-meta" aria-hidden="false">
+                <% if candidate.respond_to?(:ecole) && candidate.ecole.present? %>
+                  <span class="meta-pill meta-school" title="École"><%= candidate.ecole.nom %></span>
                 <% end %>
-            </p>
-            <%= link_to 'Voir tous les candidats', candidates_path, class: 'btn-view-all' %>
-        </div>
+                <span class="meta-pill meta-votes" title="Votes">🏆 <strong><%= candidate.total_votes %></strong></span>
+              </div>
+              <p class="candidate-desc">
+                <%= truncate(candidate.try(:description) || candidate.try(:bio) || 'Profil en cours de finalisation...', length: 100) %>
+              </p>
+
+              <div class="candidate-actions">
+                <% show_path = defined?(candidate_path) ? candidate_path(candidate) : "/candidates/#{candidate.id}" %>
+                <%= link_to show_path, class: 'btn-premium btn-view' do %>
+                  <span>Détails</span>
+                <% end %>
+                
+                <%= button_tag type: 'button', class: 'btn-premium btn-vote vote-btn', data: { candidate: candidate.name, candidate_id: candidate.id } do %>
+                  <span>Voter</span>
+                <% end %>
+              </div>
+            </div>
+          </article>
+        <% end %>
+      </div>
+
+      <!-- Pagination -->
+      <% if defined?(@total_pages) && @total_pages > 1 %>
+        <nav class="pagination" aria-label="Pagination" style="display:flex; justify-content:center; margin-top: 32px;">
+          <div style="display:flex; gap:8px; align-items:center;">
+            <% prev_disabled = @page <= 1 %>
+            <% next_disabled = @page >= @total_pages %>
+
+            <% base_params = {}.merge(params.permit(:query, :ecole_id).to_h) %>
+
+            <%= link_to '← Préc', candidates_path(base_params.merge(page: @page - 1)), class: "btn-premium", style: (prev_disabled ? 'opacity:0.5; pointer-events:none;' : '') %>
+
+            <%# show a few page links around current page %>
+            <% left = [1, @page - 2].max %>
+            <% right = [@total_pages, @page + 2].min %>
+            <% (left..right).each do |pnum| %>
+              <% if pnum == @page %>
+                <span style="padding:8px 12px; background:var(--gold-primary); color:#fff; border-radius:8px; font-weight:700;"><%= pnum %></span>
+              <% else %>
+                <%= link_to pnum, candidates_path(base_params.merge(page: pnum)), style: 'padding:8px 12px; border-radius:8px; text-decoration:none; color:var(--dark-navy); background:#fff; border:1px solid #eee;' %>
+              <% end %>
+            <% end %>
+
+            <%= link_to 'Suiv →', candidates_path(base_params.merge(page: @page + 1)), class: "btn-premium", style: (next_disabled ? 'opacity:0.5; pointer-events:none;' : '') %>
+          </div>
+        </nav>
+      <% end %>
+    <% else %>
+      <div style="text-align: center; padding: 100px 0; background: white; border-radius: 30px; border: 2px dashed #e2e8f0;">
+        <div style="font-size: 50px; margin-bottom: 20px;">👤</div>
+        <h3 style="font-family: 'Playfair Display'; font-size: 24px;">Aucun candidat trouvé</h3>
+        <p style="color: var(--slate-text);">Modifiez vos critères de recherche pour découvrir d'autres profils.</p>
+        <%= link_to 'Réinitialiser', candidates_path, style: "color: var(--gold-dark); font-weight: bold; text-decoration: none; margin-top: 20px; display: inline-block;" %>
+      </div>
     <% end %>
 
-    <!-- Pagination (if needed) -->
-    <% if @candidates.respond_to?(:total_pages) && @candidates.total_pages > 1 %>
-        <div class="pagination">
-            <%= link_to "← Précédent", candidates_path(page: @candidates.prev_page, query: params[:query]), 
-                class: "pagination-btn", 
-                disabled: @candidates.prev_page.nil? %>
-            
-            <% (1..@candidates.total_pages).each do |page| %>
-                <%= link_to page, candidates_path(page: page, query: params[:query]), 
-                    class: "pagination-btn #{'active' if page == @candidates.current_page}" %>
-            <% end %>
-            
-            <%= link_to "Suivant →", candidates_path(page: @candidates.next_page, query: params[:query]), 
-                class: "pagination-btn",
-                disabled: @candidates.next_page.nil? %>
-        </div>
-    <% end %>
-</section>
-
-<!-- Vote Modal (From Homepage) -->
-<div class="modal-overlay" id="voteModal">
-    <div class="modal-container">
-        <div class="modal-header">
-            <button class="modal-close" id="modalClose">×</button>
-            <div class="modal-icon">🗳️</div>
-            <h3 class="modal-title">Votez maintenant</h3>
-            <p class="modal-subtitle">
-                Vous votez pour
-                <span class="candidate-name-highlight" id="modalCandidateName"></span>
-            </p>
-        </div>
-
-        <div class="modal-body" id="voteForm">
-            <%= form_with model: Vote.new, url: votes_path, id: "votingForm" do |f| %>
-                <%= hidden_field_tag :candidate_id, "", id: "candidateIdField" %>
-
-                <div class="form-group">
-                    <%= f.label :phone_number, class: "form-label" do %>
-                        Numéro de téléphone <span class="required">*</span>
-                    <% end %>
-                    <%= f.text_field :phone_number,
-                            class: "form-input",
-                            placeholder: "Ex: 90XXXXXX",
-                            required: true %>
-                    <p class="form-info">
-                        Entrez votre numéro pour recevoir la confirmation de vote
-                    </p>
-                </div>
-
-                <div class="form-group">
-                    <p style="margin-top: 8px; font-size: 16px; color: var(--gray-700); background: var(--gold-pale); padding: 16px; border-radius: 12px; border: 2px solid var(--gold-light);">
-                        💰 Montant : <strong style="color: var(--gold-darker); font-size: 18px;">100 FCFA</strong>
-                    </p>
-                </div>
-
-                <div class="modal-footer">
-                    <button type="button" class="btn-secondary" id="cancelBtn">
-                        Annuler
-                    </button>
-                    <%= f.submit "Confirmer mon vote", class: "btn-primary" %>
-                </div>
-            <% end %>
-        </div>
-
-        <div class="modal-success" id="successState" style="display: none;">
-            <div class="success-icon">✓</div>
-            <h3 class="success-title">Vote enregistré !</h3>
-            <p class="success-message">
-                Merci pour votre participation ! Votre vote a été pris en compte et contribue à soutenir l'excellence.
-                Vous recevrez une confirmation par SMS.
-            </p>
-            <button class="btn-primary" id="closeSuccessBtn">
-                <span>Fermer</span>
-            </button>
-        </div>
-    </div>
+  </div>
 </div>
 
-<script>
-    // ============================================
-    // VOTE MODAL FUNCTIONALITY
-    // ============================================
-    const modal = document.getElementById('voteModal');
-    const modalClose = document.getElementById('modalClose');
-    const cancelBtn = document.getElementById('cancelBtn');
-    const closeSuccessBtn = document.getElementById('closeSuccessBtn');
-    const voteForm = document.getElementById('voteForm');
-    const successState = document.getElementById('successState');
-    const modalCandidateName = document.getElementById('modalCandidateName');
-    const votingForm = document.getElementById('votingForm');
-    const candidateIdField = document.getElementById('candidateIdField');
-
-    // Open modal when vote button is clicked
-    document.querySelectorAll('.btn-vote').forEach(btn => {
-        btn.addEventListener('click', function() {
-            const candidateName = this.getAttribute('data-candidate-name');
-            const candidateId = this.getAttribute('data-candidate-id');
-            
-            modalCandidateName.textContent = candidateName;
-            candidateIdField.value = candidateId;
-            openModal();
-        });
-    });
-
-    function openModal() {
-        modal.classList.add('active');
-        document.body.classList.add('modal-open');
-    }
-
-    function closeModal() {
-        modal.classList.remove('active');
-        document.body.classList.remove('modal-open');
-        
-        setTimeout(() => {
-            resetModal();
-        }, 400);
-    }
-
-    function resetModal() {
-        voteForm.style.display = 'block';
-        successState.style.display = 'none';
-        if (votingForm) votingForm.reset();
-    }
-
-    // Close modal events
-    modalClose.addEventListener('click', closeModal);
-    cancelBtn.addEventListener('click', closeModal);
-    if (closeSuccessBtn) {
-        closeSuccessBtn.addEventListener('click', closeModal);
-    }
-
-    // Close on overlay click
-    modal.addEventListener('click', function(e) {
-        if (e.target === modal) {
-            closeModal();
-        }
-    });
-
-    // Close on Escape key
-    document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape' && modal.classList.contains('active')) {
-            closeModal();
-        }
-    });
-
-    // ============================================
-    // FILTER FUNCTIONALITY
-    // ============================================
-    const filterBtns = document.querySelectorAll('.filter-btn');
-    const candidateCards = document.querySelectorAll('.candidate-card');
-
-    filterBtns.forEach(btn => {
-        btn.addEventListener('click', function() {
-            // Remove active class from all buttons
-            filterBtns.forEach(b => b.classList.remove('active'));
-            // Add active class to clicked button
-            this.classList.add('active');
-
-            const filter = this.getAttribute('data-filter');
-
-            candidateCards.forEach(card => {
-                const category = card.querySelector('.card-category');
-                const categoryText = category ? category.textContent.toLowerCase() : '';
-
-                if (filter === 'all' || categoryText.includes(filter.toLowerCase())) {
-                    card.style.display = 'flex';
-                    card.style.animation = 'fadeInUp 0.6s ease-out';
-                } else {
-                    card.style.display = 'none';
-                }
-            });
-        });
-    });
-
-    // ============================================
-    // SORT FUNCTIONALITY
-    // ============================================
-    const sortSelect = document.getElementById('sortSelect');
-    const candidatesGrid = document.querySelector('.candidates-grid');
-
-    if (sortSelect && candidatesGrid) {
-        sortSelect.addEventListener('change', function() {
-            const sortValue = this.value;
-            const cardsArray = Array.from(candidateCards);
-
-            cardsArray.sort((a, b) => {
-                if (sortValue === 'name') {
-                    const nameA = a.querySelector('.card-name').textContent.toLowerCase();
-                    const nameB = b.querySelector('.card-name').textContent.toLowerCase();
-                    return nameA.localeCompare(nameB);
-                } else if (sortValue === 'popular') {
-                    const votesA = parseInt(a.querySelector('.vote-count-badge')?.textContent || '0');
-                    const votesB = parseInt(b.querySelector('.vote-count-badge')?.textContent || '0');
-                    return votesB - votesA;
-                }
-                // Default: recent (no change needed as they're already in order)
-                return 0;
-            });
-
-            // Clear and re-append sorted cards
-            candidatesGrid.innerHTML = '';
-            cardsArray.forEach(card => {
-                candidatesGrid.appendChild(card);
-            });
-        });
-    }
-
-    // ============================================
-    // SCROLL ANIMATIONS
-    // ============================================
-    const observerOptions = {
-        threshold: 0.1,
-        rootMargin: '0px 0px -50px 0px'
-    };
-
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.style.opacity = '1';
-                entry.target.style.transform = 'translateY(0)';
-            }
-        });
-    }, observerOptions);
-
-    candidateCards.forEach(card => {
-        card.style.opacity = '0';
-        card.style.transform = 'translateY(30px)';
-        observer.observe(card);
-    });
-
-    // ============================================
-    // FORM SUBMISSION HANDLING
-    // ============================================
-    if (votingForm) {
-        votingForm.addEventListener('submit', function(e) {
-            // Show loading state on submit button
-            const submitBtn = this.querySelector('[type="submit"]');
-            if (submitBtn) {
-                const originalText = submitBtn.textContent;
-                submitBtn.textContent = 'Traitement en cours...';
-                submitBtn.disabled = true;
-
-                // Re-enable after a delay if submission fails
-                setTimeout(() => {
-                    if (submitBtn.disabled) {
-                        submitBtn.textContent = originalText;
-                        submitBtn.disabled = false;
-                    }
-                }, 5000);
-            }
-        });
-    }
-
-    // ============================================
-    // SMOOTH SCROLL FOR ANCHOR LINKS
-    // ============================================
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function (e) {
-            const href = this.getAttribute('href');
-            if (href !== "#" && href.length > 1) {
-                e.preventDefault();
-                const target = document.querySelector(href);
-                if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
-                }
-            }
-        });
-    });
-</script>
+<%= render 'shared/vote_modal' %>

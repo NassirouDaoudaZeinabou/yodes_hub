@@ -29,3 +29,22 @@ voter.update!(
   role: "voter"  # utiliser le nom exact de ton enum
 )
 puts "Voter prêt : #{voter.email}"
+
+# ----- Ecoles -----    
+puts "🌱 Seeding écoles..."
+
+ecoles = [
+  { nom: "KoKoranta", adress: "Yantala" },
+  { nom: "Manou Cissé", adress: "Cité Chinoise" },
+  { nom: "Les Pionners", adress: "Lazaret" },
+  
+]
+
+ecoles.each do |ecole|
+  Ecole.find_or_create_by!(nom: ecole[:nom]) do |e|
+    e.adress = ecole[:adress]
+  end
+end
+
+puts "✅ Écoles créées avec succès"
+

@@ -1,13 +1,13 @@
 class Admin::VideosController < ApplicationController
-  before_action :authenticate_user!
+   before_action :authenticate_user!
    before_action :authorize_admin
   before_action :set_video, only: %i[show edit update destroy]
    layout 'admin'
   def index
-    @videos = Video.includes(:candidate).order(created_at: :desc)
-    @candidate_videos=Video.where(category: "candidate")
-    @emission_videos=Video.where(category: "emission")
-  end
+ @videos = Video.includes(:candidate).order(created_at: :desc)
+
+  @candidate_videos = @videos.where(category: "candidate")
+  @emission_videos  = @videos.where(category: "emission")  end
 
   def show
   end

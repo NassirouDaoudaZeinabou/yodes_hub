@@ -1,0 +1,45 @@
+<%= form_with(model: [:admin, @temoignage], local: true, html: { multipart: true }) do |form| %>
+
+  <% if @temoignage.errors.any? %>
+    <div class="alert alert-danger">
+      <h4><%= pluralize(@temoignage.errors.count, "erreur") %> empêchent l'enregistrement :</h4>
+      <ul>
+        <% @temoignage.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="mb-3">
+    <%= form.label :name, "Nom", class: "form-label" %>
+    <%= form.text_field :name, class: "form-control" %>
+  </div>
+  <div class="mb-3">
+    <%= form.label :texte, "Témoignage", class: "form-label" %>
+    <%= form.text_area :texte, rows: 5, class: "form-control" %>
+  </div>
+
+  <div class="mb-3">
+    <%= form.label :profil, "Profil", class: "form-label" %>
+    <%= form.text_field :profil, class: "form-control" %>
+  </div>
+
+  <div class="mb-3">
+    <%= form.label :image, "Image", class: "form-label" %>
+    <%= form.file_field :image, class: "form-control" %>
+  </div>
+
+  <% if @temoignage.image.attached? %>
+    <div class="mb-3">
+      <p>Image actuelle :</p>
+      <%= image_tag @temoignage.image, width: 150, class: "img-thumbnail" %>
+    </div>
+  <% end %>
+
+  <div class="mt-4">
+    <%= form.submit class: "btn btn-primary" %>
+    <%= link_to "Retour", admin_temoignages_path, class: "btn btn-secondary" %>
+  </div>
+
+<% end %>

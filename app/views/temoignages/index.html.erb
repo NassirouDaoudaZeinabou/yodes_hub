@@ -1,0 +1,256 @@
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=DM+Sans:wght@300;400;500;700&display=swap');
+
+  :root {
+    --jaune:       #F5C842;
+    --jaune-clair: #FFF3C4;
+    --marron:       #5C3A1E;
+    --marron-mid:   #8B5E3C;
+    --marron-clair: #C49A6C;
+    --creme:       #FDF8F0;
+    --ombre:       rgba(92, 58, 30, 0.08);
+  }
+
+  .temoignages-section {
+    background: var(--creme);
+    padding: 100px 20px;
+    font-family: 'DM Sans', sans-serif;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Grain de texture en arrière-plan */
+  .temoignages-section::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.05'/%3E%3C/svg%3E");
+    pointer-events: none;
+  }
+
+  .temoignages-header {
+    text-align: center;
+    margin-bottom: 70px;
+    position: relative;
+    z-index: 2;
+  }
+
+  .temoignages-header .label {
+    display: inline-block;
+    background: white;
+    color: var(--marron);
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    padding: 8px 20px;
+    border-radius: 50px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 10px var(--ombre);
+  }
+
+  .temoignages-header h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.2rem, 5vw, 3.5rem);
+    color: var(--marron);
+    line-height: 1.1;
+    margin: 0 auto 20px;
+    max-width: 800px;
+  }
+
+  .temoignages-header h2 em {
+    color: var(--marron-clair);
+    font-style: italic;
+    position: relative;
+  }
+
+  .temoignages-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 32px;
+    max-width: 1200px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+  }
+
+  .temoignage-card {
+    background: #ffffff;
+    border-radius: 24px;
+    padding: 40px;
+    position: relative;
+    box-shadow: 0 10px 30px var(--ombre);
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+    display: flex;
+    flex-direction: column;
+  }
+
+  .temoignage-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 45px rgba(92, 58, 30, 0.15);
+  }
+
+  .stars {
+    color: var(--jaune);
+    font-size: 0.9rem;
+    margin-bottom: 20px;
+    letter-spacing: 3px;
+  }
+
+  .temoignage-texte-wrapper {
+    flex: 1;
+    margin-bottom: 30px;
+  }
+
+  .temoignage-texte {
+    font-size: 1.05rem;
+    line-height: 1.8;
+    color: #4A3A2E;
+    font-weight: 400;
+    margin: 0;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 4; /* Nombre de lignes avant "Voir plus" */
+    overflow: hidden;
+    transition: all 0.3s ease;
+  }
+
+  .temoignage-texte.expanded {
+    -webkit-line-clamp: unset;
+    display: block;
+  }
+
+  .btn-voir-plus {
+    background: none;
+    border: none;
+    padding: 8px 0;
+    margin-top: 10px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--marron-mid);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .btn-voir-plus svg {
+    width: 12px;
+    transition: transform 0.3s ease;
+  }
+
+  .btn-voir-plus.expanded svg {
+    transform: rotate(180deg);
+  }
+
+  /* Footer & Info Profil */
+  .temoignage-footer {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    border-top: 1px solid #F1E6D8;
+    padding-top: 25px;
+  }
+
+  .temoignage-avatar {
+    width: 60px;
+    height: 60px;
+    border-radius: 18px; /* Forme carrée arrondie moderne */
+    object-fit: cover;
+    background: var(--jaune-clair);
+    flex-shrink: 0;
+  }
+
+  .temoignage-info {
+    overflow: hidden; /* Important pour le texte long */
+  }
+
+  .temoignage-name {
+    font-weight: 700;
+    color: var(--marron);
+    font-size: 1.1rem;
+    margin: 0 0 2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .temoignage-profil {
+    font-size: 0.85rem;
+    color: var(--marron-clair);
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis; /* Coupe le profil proprement s'il est trop long */
+    max-width: 100%;
+  }
+
+  /* Décorations */
+  .quote-icon {
+    position: absolute;
+    top: 30px;
+    right: 30px;
+    opacity: 0.05;
+    width: 40px;
+  }
+</style>
+
+<section class="temoignages-section">
+  <div class="temoignages-header">
+    <span class="label">Témoignages</span>
+    <h2>Ils nous font <em>confiance</em> au quotidien</h2>
+    <p>La meilleure publicité est celle de nos clients satisfaits.</p>
+  </div>
+
+  <div class="temoignages-grid">
+    <% @temoignages.each_with_index do |temoignage, index| %>
+      <div class="temoignage-card">
+        <svg class="quote-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M14.017 21L14.017 18C14.017 16.8954 14.9124 16 16.017 16H19.017C19.5693 16 20.017 15.5523 20.017 15V9C20.017 8.44772 19.5693 8 19.017 8H16.017C15.4647 8 15.017 8.44772 15.017 9V12C15.017 12.5523 14.5693 13 14.017 13H13.017V21H14.017ZM6.01705 21L6.01705 18C6.01705 16.8954 6.91248 16 8.01705 16H11.0171C11.5693 16 12.0171 15.5523 12.0171 15V9C12.0171 8.44772 11.5693 8 11.0171 8H8.01705C7.46477 8 7.01705 8.44772 7.01705 9V12C7.01705 12.5523 6.56932 13 6.01705 13H5.01705V21H6.01705Z"/></svg>
+
+        <div class="stars">★★★★★</div>
+
+        <div class="temoignage-texte-wrapper">
+          <p class="temoignage-texte" id="texte-<%= index %>">
+            "<%= temoignage.texte %>"
+          </p>
+          <% if temoignage.texte.length > 180 %>
+            <button class="btn-voir-plus" onclick="toggleVoirPlus(<%= index %>)" id="btn-<%= index %>">
+              <span>Voir plus</span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </button>
+          <% end %>
+        </div>
+
+        <div class="temoignage-footer">
+          <% if temoignage.image.attached? %>
+            <%= image_tag temoignage.image, class: "temoignage-avatar" %>
+          <% else %>
+            <img src="https://ui-avatars.com/api/?name=<%= temoignage.name %>&background=F5C842&color=5C3A1E&bold=true" class="temoignage-avatar" alt="avatar">
+          <% end %>
+
+          <div class="temoignage-info">
+            <h4 class="temoignage-name"><%= temoignage.name %></h4>
+            <p class="temoignage-profil" title="<%= temoignage.profil %>">
+                <%= temoignage.profil %>
+            </p>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</section>
+
+<script>
+  function toggleVoirPlus(index) {
+    const texte = document.getElementById('texte-' + index);
+    const btn = document.getElementById('btn-' + index);
+    const span = btn.querySelector('span');
+    
+    const isExpanded = texte.classList.toggle('expanded');
+    btn.classList.toggle('expanded');
+    
+    span.textContent = isExpanded ? 'Voir moins' : 'Voir plus';
+  }
+</script>

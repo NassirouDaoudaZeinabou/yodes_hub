@@ -268,7 +268,10 @@
           <%= link_to admin_dashboard_index_path do %>
             <span class="icon">📊</span> <span class="text">Tableau de bord</span>
           <% end %>
-        </li>
+         <li class="<%= 'active' if current_page?(admin_users_path) %>">
+          <%= link_to admin_users_path do %>
+            <span class="icon">👤</span> <span class="text">Utilisateurs</span>
+          <% end %>
         <li class="<%= 'active' if current_page?(admin_candidates_path) %>">
           <%= link_to admin_candidates_path do %>
             <span class="icon">👥</span> <span class="text">Candidats</span>
@@ -277,6 +280,16 @@
         <li class="<%= 'active' if current_page?(admin_videos_path) %>">
           <%= link_to admin_videos_path do %>
             <span class="icon">🎥</span> <span class="text">Vidéos</span>
+          <% end %>
+        </li>
+         <li class="<%= 'active' if current_page?(admin_partenaires_path) %>">
+          <%= link_to admin_partenaires_path do %>
+            <span class="icon">🤝</span> <span class="text">Partenaires</span>
+          <% end %>
+        </li>
+        <li class="<%= 'active' if current_page?(admin_temoignages_path) %>">
+          <%= link_to admin_temoignages_path do %>
+            <span class="icon">💬</span> <span class="text">Témoignages</span>
           <% end %>
         </li>
       </ul>
@@ -295,6 +308,7 @@
             <span class="icon">📈</span> <span class="text">Résultats</span>
           <% end %>
         </li>
+        
       </ul>
     </div>
   </nav>

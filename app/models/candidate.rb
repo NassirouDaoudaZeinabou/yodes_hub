@@ -1,6 +1,8 @@
 class Candidate < ApplicationRecord
-has_many :videos, dependent: :destroy
-has_many :votes
+    has_many :videos, dependent: :destroy
+    has_many :votes
+    belongs_to :ecole
+
 
 
     has_one_attached :image
@@ -9,11 +11,14 @@ has_many :votes
 
 
   pg_search_scope :search_by_keywords,
-    against: [:name],  
-    using: {
-      tsearch: { prefix: true, any_word: true },
-      trigram: {}
-    }
+      against: [:name],
+      associated_against: {
+        ecole: [:nom]
+      },
+      using: {
+        tsearch: { prefix: true, any_word: true },
+        trigram: {}
+      }
     has_many :votes, dependent: :destroy
 
   def total_votes

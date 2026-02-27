@@ -13,9 +13,10 @@
   --border:#e2e8f0;
   --card-shadow:0 4px 6px -1px rgba(0,0,0,.05),0 2px 4px -1px rgba(0,0,0,.03);
   --card-shadow-hover:0 20px 25px -5px rgba(0,0,0,.08),0 10px 10px -5px rgba(0,0,0,.04);
+  --transition:all .3s cubic-bezier(.4,0,.2,1);
 }
 
-*{box-sizing:border-box}
+*{box-sizing:border-box;margin:0;padding:0}
 
 /* Layout */
 .videos-wrap{
@@ -36,11 +37,12 @@
   height:400px;
   background:radial-gradient(ellipse at top,rgba(212,175,55,.12),transparent 70%);
   pointer-events:none;
+  z-index:0;
 }
 
 .videos-inner{
   max-width:1280px;
-  margin:auto;
+  margin:0 auto;
   position:relative;
   z-index:1;
 }
@@ -67,6 +69,7 @@
   -webkit-text-fill-color:transparent;
   background-clip:text;
   letter-spacing:-.02em;
+  line-height:1.2;
 }
 
 .videos-hero p{
@@ -74,6 +77,10 @@
   font-size:18px;
   margin:0 0 40px;
   font-weight:500;
+  max-width:700px;
+  margin-left:auto;
+  margin-right:auto;
+  line-height:1.6;
 }
 
 /* Search Section */
@@ -95,12 +102,13 @@
   box-shadow:var(--card-shadow);
   max-width:600px;
   width:100%;
-  transition:all .3s ease;
+  transition:var(--transition);
 }
 
 .search-card:focus-within{
   border-color:var(--gold);
   box-shadow:0 0 0 4px rgba(212,175,55,.1),var(--card-shadow);
+  transform:translateY(-2px);
 }
 
 .search-input{
@@ -110,9 +118,14 @@
   font-size:16px;
   color:var(--text);
   background:transparent;
+  min-width:0;
+  font-family:inherit;
 }
 
-.search-input::placeholder{color:var(--muted)}
+.search-input::placeholder{
+  color:var(--muted);
+  opacity:1;
+}
 
 .search-btn{
   background:linear-gradient(135deg,var(--gold),var(--gold-dark));
@@ -123,16 +136,30 @@
   font-size:15px;
   color:#fff;
   cursor:pointer;
-  transition:all .3s ease;
+  transition:var(--transition);
   box-shadow:0 4px 12px rgba(212,175,55,.3);
+  white-space:nowrap;
+  font-family:inherit;
 }
 
-.search-btn:hover{
+.search-btn:hover:not(:disabled){
   transform:translateY(-2px);
   box-shadow:0 6px 20px rgba(212,175,55,.4);
 }
 
-.search-btn:active{transform:translateY(0)}
+.search-btn:active:not(:disabled){
+  transform:translateY(0);
+}
+
+.search-btn:disabled{
+  opacity:.6;
+  cursor:not-allowed;
+}
+
+.search-btn:focus-visible{
+  outline:3px solid var(--gold);
+  outline-offset:2px;
+}
 
 .video-count{
   color:var(--muted);
@@ -158,18 +185,26 @@
   font-size:14px;
   color:var(--text-light);
   cursor:pointer;
-  transition:all .3s ease;
+  transition:var(--transition);
+  white-space:nowrap;
 }
 
 .filter-tab:hover{
   border-color:var(--gold-light);
   background:var(--cream-light);
+  transform:translateY(-2px);
+}
+
+.filter-tab:focus-visible{
+  outline:3px solid var(--gold);
+  outline-offset:2px;
 }
 
 .filter-tab.active{
   background:linear-gradient(135deg,var(--gold),var(--gold-dark));
   color:#fff;
   border-color:transparent;
+  box-shadow:0 4px 12px rgba(212,175,55,.3);
 }
 
 /* Grid */
@@ -194,6 +229,7 @@
   transition:all .4s cubic-bezier(.4,0,.2,1);
   border:1px solid var(--border);
   position:relative;
+  will-change:transform;
 }
 
 .video-card::before{
@@ -206,6 +242,8 @@
   background:linear-gradient(90deg,var(--gold),var(--gold-dark));
   transform:scaleX(0);
   transition:transform .4s ease;
+  transform-origin:left;
+  z-index:1;
 }
 
 .video-card:hover{
@@ -214,7 +252,14 @@
   border-color:var(--gold-light);
 }
 
-.video-card:hover::before{transform:scaleX(1)}
+.video-card:hover::before{
+  transform:scaleX(1);
+}
+
+.video-card:focus-within{
+  outline:2px solid var(--gold);
+  outline-offset:3px;
+}
 
 /* Thumbnail */
 .video-thumb{
@@ -229,6 +274,22 @@
   height:100%;
   object-fit:cover;
   transition:transform .6s ease;
+  will-change:transform;
+}
+
+.thumb-img.loading{
+  background:linear-gradient(90deg,var(--cream) 25%,var(--gold-light) 50%,var(--cream) 75%);
+  background-size:200% 100%;
+  animation:shimmer 1.5s ease-in-out infinite;
+}
+
+.thumb-img.loaded{
+  animation:fadeIn .3s ease;
+}
+
+@keyframes shimmer{
+  0%{background-position:-100% 0}
+  100%{background-position:100% 0}
 }
 
 .video-card:hover .thumb-img{
@@ -245,7 +306,7 @@
   background:rgba(0,0,0,.25);
   border:none;
   cursor:pointer;
-  transition:all .3s ease;
+  transition:var(--transition);
   backdrop-filter:blur(2px);
 }
 
@@ -264,15 +325,26 @@
   justify-content:center;
   font-size:24px;
   color:var(--gold-dark);
-  transition:all .3s ease;
+  transition:var(--transition);
   box-shadow:0 8px 24px rgba(0,0,0,.2);
+  padding-left:4px;
 }
 
-.play-btn:hover span{
+.play-btn:hover span,
+.play-btn:focus span{
   transform:scale(1.15);
   background:var(--gold);
   color:#fff;
   border-color:#fff;
+}
+
+.play-btn:active span{
+  transform:scale(1.05);
+}
+
+.play-btn:focus-visible{
+  outline:3px solid var(--gold);
+  outline-offset:-3px;
 }
 
 /* Body */
@@ -291,6 +363,8 @@
   -webkit-line-clamp:2;
   -webkit-box-orient:vertical;
   overflow:hidden;
+  word-break:break-word;
+  hyphens:auto;
 }
 
 .video-desc{
@@ -302,6 +376,7 @@
   -webkit-line-clamp:3;
   -webkit-box-orient:vertical;
   overflow:hidden;
+  word-break:break-word;
 }
 
 .video-meta{
@@ -310,6 +385,8 @@
   align-items:center;
   padding-top:16px;
   border-top:1px solid var(--border);
+  gap:12px;
+  flex-wrap:wrap;
 }
 
 .video-link{
@@ -320,40 +397,52 @@
   display:inline-flex;
   align-items:center;
   gap:6px;
-  transition:all .3s ease;
+  transition:var(--transition);
 }
 
 .video-link::after{
   content:'→';
   transition:transform .3s ease;
+  display:inline-block;
 }
 
-.video-link:hover{
+.video-link:hover,
+.video-link:focus{
   color:var(--gold);
   gap:10px;
 }
 
-.video-link:hover::after{
+.video-link:hover::after,
+.video-link:focus::after{
   transform:translateX(4px);
+}
+
+.video-link:focus-visible{
+  outline:2px solid var(--gold);
+  outline-offset:2px;
+  border-radius:4px;
 }
 
 .video-date{
   color:var(--muted);
   font-size:13px;
   font-weight:500;
+  white-space:nowrap;
 }
 
 /* Empty State */
 .empty-state{
   text-align:center;
   padding:80px 20px;
+  animation:fadeIn .6s ease;
 }
 
 .empty-state svg{
   width:120px;
   height:120px;
-  margin-bottom:24px;
+  margin:0 auto 24px;
   opacity:.5;
+  color:var(--gold);
 }
 
 .empty-state h3{
@@ -361,11 +450,15 @@
   font-size:24px;
   color:var(--text);
   margin:0 0 12px;
+  font-weight:700;
 }
 
 .empty-state p{
   color:var(--muted);
   font-size:16px;
+  line-height:1.6;
+  max-width:500px;
+  margin:0 auto;
 }
 
 /* Modal */
@@ -379,7 +472,7 @@
   justify-content:center;
   opacity:0;
   visibility:hidden;
-  transition:all .3s ease;
+  transition:opacity .3s ease,visibility .3s ease;
   z-index:9999;
   padding:20px;
 }
@@ -396,8 +489,11 @@
   border-radius:20px;
   overflow:hidden;
   position:relative;
-  animation:modalSlideIn .4s cubic-bezier(.4,0,.2,1);
   box-shadow:0 25px 50px -12px rgba(0,0,0,.5);
+}
+
+.video-modal.open .modal-inner{
+  animation:modalSlideIn .4s cubic-bezier(.4,0,.2,1);
 }
 
 @keyframes modalSlideIn{
@@ -411,13 +507,13 @@
   right:16px;
   background:rgba(255,255,255,.95);
   border:none;
-  padding:10px 14px;
+  padding:0;
   border-radius:50%;
   cursor:pointer;
   font-size:20px;
   font-weight:700;
   color:var(--text);
-  transition:all .3s ease;
+  transition:var(--transition);
   z-index:10;
   width:44px;
   height:44px;
@@ -427,9 +523,20 @@
   box-shadow:0 4px 12px rgba(0,0,0,.2);
 }
 
-.modal-close:hover{
+.modal-close:hover,
+.modal-close:focus{
   background:#fff;
   transform:rotate(90deg) scale(1.1);
+}
+
+.modal-close:focus-visible{
+  outline:3px solid var(--gold);
+  outline-offset:2px;
+}
+
+.modal-content{
+  position:relative;
+  background:#000;
 }
 
 .modal-content iframe{
@@ -439,15 +546,37 @@
   display:block;
 }
 
+/* Screen reader only */
+.sr-only{
+  position:absolute;
+  width:1px;
+  height:1px;
+  padding:0;
+  margin:-1px;
+  overflow:hidden;
+  clip:rect(0,0,0,0);
+  white-space:nowrap;
+  border-width:0;
+}
+
 /* Responsive */
 @media(max-width:768px){
-  .videos-wrap{padding:60px 16px 80px}
+  .videos-wrap{
+    padding:60px 16px 80px;
+  }
   
-  .videos-hero{margin-bottom:48px}
+  .videos-hero{
+    margin-bottom:48px;
+  }
   
-  .videos-hero h1{font-size:36px}
+  .videos-hero h1{
+    font-size:36px;
+  }
   
-  .videos-hero p{font-size:16px}
+  .videos-hero p{
+    font-size:16px;
+    margin-bottom:32px;
+  }
   
   .videos-grid{
     grid-template-columns:1fr;
@@ -463,82 +592,174 @@
     font-size:14px;
   }
   
-  .modal-content iframe{
-    aspect-ratio:16/9;
+  .modal-inner{
+    border-radius:12px;
+  }
+  
+  .video-modal{
+    padding:0;
   }
   
   .modal-inner{
-    border-radius:12px;
+    max-width:100%;
+    border-radius:0;
   }
 }
 
 @media(max-width:480px){
-  .videos-wrap{padding:40px 12px 60px}
+  .videos-wrap{
+    padding:40px 12px 60px;
+  }
   
-  .videos-hero h1{font-size:28px}
+  .videos-hero h1{
+    font-size:28px;
+  }
   
-  .video-body{padding:20px}
+  .video-body{
+    padding:20px;
+  }
   
   .play-btn span{
     width:60px;
     height:60px;
     font-size:20px;
   }
+  
+  .filter-tabs{
+    gap:8px;
+  }
+  
+  .filter-tab{
+    padding:6px 16px;
+    font-size:13px;
+  }
 }
 
-/* Loading Animation */
-@keyframes shimmer{
-  0%{background-position:-1000px 0}
-  100%{background-position:1000px 0}
+/* High contrast mode */
+@media(prefers-contrast:high){
+  .video-card,
+  .search-card,
+  .filter-tab{
+    border-width:2px;
+    border-color:currentColor;
+  }
 }
 
-.loading-skeleton{
-  background:linear-gradient(90deg,#f0f0f0 25%,#e0e0e0 50%,#f0f0f0 75%);
-  background-size:1000px 100%;
-  animation:shimmer 2s infinite;
+/* Reduced motion */
+@media(prefers-reduced-motion:reduce){
+  *,
+  *::before,
+  *::after{
+    animation-duration:.01ms!important;
+    animation-iteration-count:1!important;
+    transition-duration:.01ms!important;
+  }
+}
+
+/* Print styles */
+@media print{
+  .videos-wrap::before,
+  .play-btn,
+  .search-section,
+  .filter-tabs,
+  .video-modal{
+    display:none!important;
+  }
+  
+  .videos-wrap{
+    background:#fff;
+  }
+  
+  .video-card{
+    break-inside:avoid;
+    box-shadow:none;
+    border:1px solid #ccc;
+  }
+  
+  .video-link::after{
+    content:' (' attr(href) ')';
+  }
 }
 </style>
 
-<div class="videos-wrap">
+<div class="videos-wrap" role="main">
   <div class="videos-inner">
 
-    <div class="videos-hero">
+    <header class="videos-hero">
       <h1>Parcours De Nos Excellents</h1>
       <p>Découvrez nos interviews exclusives, débats enrichissants et reportages inspirants</p>
-    </div>
+    </header>
 
-    <%= form_with url: videos_path, method: :get, local: true do |f| %>
+    <%= form_with url: videos_path, method: :get, local: true, role: "search" do |f| %>
       <div class="search-section">
         <div class="search-card">
-          <%= f.text_field :query, value: params[:query], placeholder: "Rechercher une vidéo…", class: "search-input" %>
-          <%= f.submit "Rechercher", class: "search-btn" %>
+          <%= f.text_field :query, 
+              value: params[:query], 
+              placeholder: "Rechercher une vidéo…", 
+              class: "search-input",
+              autocomplete: "off",
+              "aria-label": "Rechercher une vidéo",
+              required: false %>
+          <%= f.submit "Rechercher", 
+              class: "search-btn",
+              data: { disable_with: "Recherche..." } %>
         </div>
-        <div class="video-count">
+        <div class="video-count" role="status" aria-live="polite">
           <%= pluralize(@videos.count, 'vidéo') %> <%= @videos.count > 1 ? 'disponibles' : 'disponible' %>
         </div>
       </div>
     <% end %>
 
     <% if @videos.any? %>
-      <div class="videos-grid">
+      <div class="videos-grid" role="list">
         <% @videos.each do |video| %>
-          <article class="video-card">
+          <article class="video-card" role="listitem" itemscope itemtype="https://schema.org/VideoObject">
             <div class="video-thumb">
               <% thumb_url = video.thumbnail.attached? ? url_for(video.thumbnail) : youtube_thumbnail(video.url) %>
-              <img class="thumb-img" src="<%= thumb_url %>" alt="<%= h(video.title) %>" loading="lazy">
-              <button class="play-btn" data-video-url="<%= h(video.url) %>" aria-label="Lire la vidéo <%= h(video.title) %>">
-                <span>▶</span>
+              <img 
+                class="thumb-img" 
+                src="<%= thumb_url %>" 
+                alt="Miniature de <%= h(video.title) %>"
+                width="640"
+                height="360"
+                loading="lazy"
+                itemprop="thumbnailUrl"
+                onerror="this.style.background='linear-gradient(135deg,var(--cream),var(--gold-light))';this.alt='Image non disponible';">
+              <button 
+                class="play-btn" 
+                data-video-url="<%= h(video.url) %>"
+                data-video-title="<%= h(video.title) %>"
+                aria-label="Lire la vidéo <%= h(video.title) %>"
+                type="button">
+                <span aria-hidden="true">▶</span>
               </button>
             </div>
 
             <div class="video-body">
-              <h3 class="video-title"><%= h video.title %></h3>
-              <p class="video-desc"><%= h(video.description) %></p>
+              <h3 class="video-title" itemprop="name">
+                <%= h video.title %>
+              </h3>
+              
+              <% if video.description.present? %>
+                <p class="video-desc" itemprop="description">
+                  <%= h(video.description) %>
+                </p>
+              <% end %>
+              
               <div class="video-meta">
-                <a href="<%= video.url %>" target="_blank" rel="noopener" class="video-link">
+                <a 
+                  href="<%= video.url %>" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  class="video-link"
+                  itemprop="url"
+                  aria-label="Voir <%= h(video.title) %> sur YouTube">
                   Voir la vidéo
                 </a>
-                <time class="video-date" datetime="<%= video.created_at.iso8601 %>">
+                <time 
+                  class="video-date" 
+                  datetime="<%= video.created_at.iso8601 %>"
+                  itemprop="uploadDate">
                   <%= l(video.created_at, format: :short) %>
                 </time>
               </div>
@@ -546,13 +767,44 @@
           </article>
         <% end %>
       </div>
+      <% if defined?(@total_pages) && @total_pages > 1 %>
+        <nav class="pagination" aria-label="Pagination" style="display:flex; justify-content:center; margin-top: 32px;">
+          <div style="display:flex; gap:8px; align-items:center;">
+            <% prev_disabled = @page <= 1 %>
+            <% next_disabled = @page >= @total_pages %>
+
+            <% base_params = {}.merge(params.permit(:query, :per_page).to_h) %>
+
+            <%= link_to '← Préc', videos_path(base_params.merge(page: @page - 1)), class: "search-btn", style: (prev_disabled ? 'opacity:0.5; pointer-events:none;' : '') %>
+
+            <% left = [1, @page - 2].max %>
+            <% right = [@total_pages, @page + 2].min %>
+            <% (left..right).each do |pnum| %>
+              <% if pnum == @page %>
+                <span style="padding:8px 12px; background:var(--gold); color:#fff; border-radius:8px; font-weight:700;"><%= pnum %></span>
+              <% else %>
+                <%= link_to pnum, videos_path(base_params.merge(page: pnum)), style: 'padding:8px 12px; border-radius:8px; text-decoration:none; color:var(--text); background:#fff; border:1px solid #eee;' %>
+              <% end %>
+            <% end %>
+
+            <%= link_to 'Suiv →', videos_path(base_params.merge(page: @page + 1)), class: "search-btn", style: (next_disabled ? 'opacity:0.5; pointer-events:none;' : '') %>
+          </div>
+        </nav>
+      <% end %>
     <% else %>
-      <div class="empty-state">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+      <div class="empty-state" role="status">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
           <path d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/>
         </svg>
         <h3>Aucune vidéo trouvée</h3>
-        <p>Essayez une autre recherche ou consultez notre catalogue complet</p>
+        <p>
+          <% if params[:query].present? %>
+            Essayez une autre recherche ou 
+            <%= link_to "consultez notre catalogue complet", videos_path, class: "video-link" %>
+          <% else %>
+            Les vidéos seront bientôt disponibles. Revenez nous voir prochainement !
+          <% end %>
+        </p>
       </div>
     <% end %>
 
@@ -560,68 +812,205 @@
 </div>
 
 <!-- Modal -->
-<div id="videoModal" class="video-modal" role="dialog" aria-modal="true" aria-hidden="true">
+<div 
+  id="videoModal" 
+  class="video-modal" 
+  role="dialog" 
+  aria-modal="true" 
+  aria-labelledby="modalTitle"
+  aria-describedby="modalDesc"
+  aria-hidden="true">
   <div class="modal-inner">
-    <button class="modal-close" aria-label="Fermer la vidéo">✕</button>
+    <button 
+      class="modal-close" 
+      aria-label="Fermer la vidéo"
+      type="button">
+      ✕
+    </button>
+    <h2 id="modalTitle" class="sr-only">Lecteur vidéo</h2>
+    <p id="modalDesc" class="sr-only">Appuyez sur Échap pour fermer</p>
     <div class="modal-content"></div>
   </div>
 </div>
 
 <script>
 (() => {
+  'use strict';
+
   const modal = document.getElementById('videoModal');
   const content = modal.querySelector('.modal-content');
   const closeBtn = modal.querySelector('.modal-close');
+  let lastFocusedElement = null;
 
+  // Extract YouTube video ID with support for multiple formats
   const embedUrl = url => {
-    const match = url.match(/(youtu\.be\/|youtube\.com\/watch\?v=|youtube\.com\/embed\/)([^&?\/]+)/);
-    return match ? `https://www.youtube.com/embed/${match[2]}?autoplay=1&rel=0&modestbranding=1` : null;
+    const patterns = [
+      /(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&\n?#]+)/,
+      /youtube\.com\/embed\/([^&\n?#]+)/,
+      /youtube\.com\/shorts\/([^&\n?#]+)/
+    ];
+    
+    for(const pattern of patterns){
+      const match = url.match(pattern);
+      if(match?.[1]){
+        return `https://www.youtube-nocookie.com/embed/${match[1]}?autoplay=1&rel=0&modestbranding=1`;
+      }
+    }
+    return null;
   };
 
-  document.querySelectorAll('.play-btn').forEach(btn => {
-    btn.addEventListener('click', e => {
-      e.preventDefault();
-      const url = btn.dataset.videoUrl;
-      const embed = embedUrl(url);
-      
-      if(!embed) {
-        window.open(url, '_blank', 'noopener,noreferrer');
-        return;
-      }
+  // Open modal with video
+  const openModal = (videoUrl, videoTitle = '') => {
+    const embed = embedUrl(videoUrl);
+    
+    if(!embed){
+      window.open(videoUrl, '_blank', 'noopener,noreferrer');
+      return;
+    }
 
-      content.innerHTML = `<iframe src="${embed}" allowfullscreen allow="autoplay; encrypted-media"></iframe>`;
-      modal.classList.add('open');
-      modal.setAttribute('aria-hidden', 'false');
-      document.body.style.overflow = 'hidden';
-      closeBtn.focus();
-    });
-  });
+    // Store current focus
+    lastFocusedElement = document.activeElement;
 
+    content.innerHTML = `
+      <iframe 
+        src="${embed}" 
+        allowfullscreen 
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        title="${videoTitle || 'Lecteur vidéo YouTube'}"
+        loading="lazy">
+      </iframe>
+    `;
+    
+    modal.classList.add('open');
+    modal.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+    
+    // Update modal title
+    const modalTitle = document.getElementById('modalTitle');
+    if(modalTitle && videoTitle){
+      modalTitle.textContent = videoTitle;
+    }
+    
+    // Focus close button
+    requestAnimationFrame(() => closeBtn.focus());
+  };
+
+  // Close modal
   const closeModal = () => {
     modal.classList.remove('open');
     modal.setAttribute('aria-hidden', 'true');
     content.innerHTML = '';
     document.body.style.overflow = '';
+    
+    // Restore focus
+    if(lastFocusedElement){
+      requestAnimationFrame(() => {
+        lastFocusedElement.focus();
+        lastFocusedElement = null;
+      });
+    }
   };
 
+  // Event delegation for play buttons
+  document.addEventListener('click', e => {
+    const playBtn = e.target.closest('.play-btn');
+    if(playBtn){
+      e.preventDefault();
+      const url = playBtn.dataset.videoUrl;
+      const title = playBtn.dataset.videoTitle;
+      if(url) openModal(url, title);
+    }
+  });
+
+  // Close button
   closeBtn.addEventListener('click', closeModal);
   
+  // Close on backdrop click
   modal.addEventListener('click', e => {
     if(e.target === modal) closeModal();
   });
 
+  // Close on Escape
   document.addEventListener('keydown', e => {
-    if(e.key === 'Escape' && modal.classList.contains('open')) {
+    if(e.key === 'Escape' && modal.classList.contains('open')){
       closeModal();
     }
   });
 
-  // Lazy loading optimization
-  if('loading' in HTMLImageElement.prototype){
-    const images = document.querySelectorAll('img[loading="lazy"]');
-    images.forEach(img => {
-      img.src = img.src;
+  // Focus trap in modal
+  modal.addEventListener('keydown', e => {
+    if(e.key === 'Tab' && modal.classList.contains('open')){
+      const focusableElements = Array.from(
+        modal.querySelectorAll('button, [href], iframe, [tabindex]:not([tabindex="-1"])')
+      );
+      
+      if(focusableElements.length === 0) return;
+      
+      const firstElement = focusableElements[0];
+      const lastElement = focusableElements[focusableElements.length - 1];
+
+      if(e.shiftKey && document.activeElement === firstElement){
+        e.preventDefault();
+        lastElement.focus();
+      }else if(!e.shiftKey && document.activeElement === lastElement){
+        e.preventDefault();
+        firstElement.focus();
+      }
+    }
+  });
+
+  // Lazy loading with IntersectionObserver
+  if('IntersectionObserver' in window){
+    const imageObserver = new IntersectionObserver((entries, observer) => {
+      entries.forEach(entry => {
+        if(entry.isIntersecting){
+          const img = entry.target;
+          
+          img.classList.add('loading');
+          
+          img.addEventListener('load', () => {
+            img.classList.remove('loading');
+            img.classList.add('loaded');
+          }, { once: true });
+          
+          img.addEventListener('error', () => {
+            img.classList.remove('loading');
+            console.warn('Failed to load image:', img.src);
+          }, { once: true });
+          
+          // If already loaded (cached)
+          if(img.complete){
+            img.classList.remove('loading');
+            img.classList.add('loaded');
+          }
+          
+          observer.unobserve(img);
+        }
+      });
+    }, {
+      rootMargin: '50px'
     });
+    
+    document.querySelectorAll('img[loading="lazy"]').forEach(img => {
+      imageObserver.observe(img);
+    });
+  }
+
+  // Performance monitoring (optional - can be removed in production)
+  if('PerformanceObserver' in window){
+    try{
+      const perfObserver = new PerformanceObserver(entryList => {
+        for(const entry of entryList.getEntries()){
+          if(entry.element?.classList.contains('thumb-img') && entry.loadTime > 3000){
+            console.warn('Slow image load:', entry.element.src, `${entry.loadTime}ms`);
+          }
+        }
+      });
+      
+      perfObserver.observe({ entryTypes: ['element'] });
+    }catch(e){
+      // Element timing not supported
+    }
   }
 })();
 </script>

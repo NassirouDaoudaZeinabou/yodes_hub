@@ -8,6 +8,7 @@
  *
  * Consider organizing styles into separate files for maintainability.
  */
+@import "carousel.css";
 
 /* Black & Yellow navbar styles */
 .site-header {

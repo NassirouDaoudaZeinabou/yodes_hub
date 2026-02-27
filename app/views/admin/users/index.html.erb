@@ -1,0 +1,1465 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Utilisateurs — Admin</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+/* ═══════════════════════════════════════
+   DESIGN TOKENS — OR FORGÉ + OBSIDIENNE
+   ═══════════════════════════════════════ */
+:root {
+  --void:       #060608;
+  --obsidian:   #0D0D12;
+  --onyx:       #12121A;
+  --carbon:     #1A1A26;
+  --slate:      #252535;
+  --mist:       #303048;
+
+  --gold-deep:  #7A5800;
+  --gold-forge: #A67C00;
+  --gold-warm:  #C99A00;
+  --gold-true:  #E2AF15;
+  --gold-bright:#F0C840;
+  --gold-glow:  #F8DC78;
+  --gold-pale:  #FEF3C7;
+
+  --ember:      #D97706;
+  --crimson:    #EF4444;
+  --sapphire:   #3B82F6;
+  --jade:       #10B981;
+
+  --ink:        #F0EDE8;
+  --ink-dim:    #C8C2B8;
+  --ink-muted:  #8A8478;
+  --ink-ghost:  #4A4640;
+
+  --border:     rgba(226,175,21,0.1);
+  --border-md:  rgba(226,175,21,0.2);
+  --border-hi:  rgba(226,175,21,0.45);
+  --surface:    rgba(255,255,255,0.028);
+  --surface-hi: rgba(255,255,255,0.05);
+
+  --shadow-gold: 0 0 40px rgba(226,175,21,0.12);
+  --shadow-deep: 0 24px 64px rgba(0,0,0,0.6);
+  --glow-gold:   0 0 20px rgba(226,175,21,0.3);
+
+  --radius-sm:  8px;
+  --radius-md:  12px;
+  --radius-lg:  18px;
+  --radius-xl:  24px;
+  --radius-pill:50px;
+
+  --font-display: 'Cormorant Garamond', Georgia, serif;
+  --font-body:    'Outfit', system-ui, sans-serif;
+
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* ═══════════════════════════════════════
+   RESET & BASE
+   ═══════════════════════════════════════ */
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  font-family: var(--font-body);
+  background: var(--void);
+  color: var(--ink);
+  min-height: 100vh;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ═══════════════════════════════════════
+   CANVAS — Layered background
+   ═══════════════════════════════════════ */
+.canvas {
+  min-height: 100vh;
+  padding: 2.5rem 3rem 5rem;
+  position: relative;
+  isolation: isolate;
+}
+
+/* Deep noise texture */
+.canvas::before {
+  content: '';
+  position: fixed; inset: 0; z-index: -3;
+  background: var(--obsidian);
+}
+
+/* Atmospheric glow pools */
+.canvas::after {
+  content: '';
+  position: fixed; inset: 0; z-index: -2;
+  background:
+    radial-gradient(ellipse 60% 40% at 20% 0%,  rgba(226,175,21,0.06) 0%, transparent 60%),
+    radial-gradient(ellipse 40% 60% at 90% 80%,  rgba(107,61,30,0.1)  0%, transparent 55%),
+    radial-gradient(ellipse 30% 30% at 60% 50%,  rgba(226,175,21,0.03) 0%, transparent 50%);
+  animation: atmosphereDrift 20s ease-in-out infinite alternate;
+}
+
+@keyframes atmosphereDrift {
+  0%   { opacity: 0.7; transform: scale(1); }
+  100% { opacity: 1;   transform: scale(1.05) translate(15px, -8px); }
+}
+
+/* Subtle grid */
+.grid-overlay {
+  position: fixed; inset: 0; z-index: -1; pointer-events: none;
+  background-image:
+    linear-gradient(rgba(226,175,21,0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(226,175,21,0.025) 1px, transparent 1px);
+  background-size: 60px 60px;
+  mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 40%, transparent 100%);
+}
+
+/* Floating orbs */
+.orb {
+  position: fixed; border-radius: 50%;
+  pointer-events: none; z-index: -1;
+  filter: blur(90px);
+}
+.orb-1 {
+  width: 600px; height: 600px;
+  top: -200px; left: -200px;
+  background: radial-gradient(circle, rgba(226,175,21,0.07), transparent 70%);
+  animation: orbFloat 16s ease-in-out infinite;
+}
+.orb-2 {
+  width: 400px; height: 400px;
+  bottom: -120px; right: -100px;
+  background: radial-gradient(circle, rgba(107,61,30,0.12), transparent 70%);
+  animation: orbFloat 22s ease-in-out infinite reverse;
+}
+.orb-3 {
+  width: 280px; height: 280px;
+  top: 40%; right: 10%;
+  background: radial-gradient(circle, rgba(226,175,21,0.05), transparent 70%);
+  animation: orbFloat 12s ease-in-out infinite 3s;
+}
+
+@keyframes orbFloat {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33%       { transform: translate(30px, -20px) scale(1.08); }
+  66%       { transform: translate(-20px, 15px) scale(0.94); }
+}
+
+/* ═══════════════════════════════════════
+   PAGE HEADER
+   ═══════════════════════════════════════ */
+.page-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1.5rem;
+  margin-bottom: 2.25rem;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid var(--border);
+  animation: headerReveal 0.7s var(--ease-out) both;
+}
+
+@keyframes headerReveal {
+  from { opacity: 0; transform: translateY(-24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+/* Animated icon medallion */
+.header-medallion {
+  position: relative;
+  width: 58px; height: 58px;
+  flex-shrink: 0;
+}
+
+.medallion-ring {
+  position: absolute; inset: 0;
+  border-radius: 16px;
+  border: 1.5px solid transparent;
+  background: linear-gradient(135deg, var(--gold-true), var(--gold-deep)) border-box;
+  -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: destination-out;
+  mask-composite: exclude;
+  animation: ringPulse 3s ease-in-out infinite;
+}
+
+@keyframes ringPulse {
+  0%, 100% { opacity: 0.6; transform: scale(1); }
+  50%       { opacity: 1;   transform: scale(1.04); }
+}
+
+.medallion-bg {
+  position: absolute; inset: 0;
+  border-radius: 16px;
+  background: linear-gradient(135deg, rgba(226,175,21,0.12), rgba(122,88,0,0.15));
+  backdrop-filter: blur(4px);
+  display: flex; align-items: center; justify-content: center;
+}
+
+.medallion-bg svg {
+  width: 26px; height: 26px;
+  color: var(--gold-bright);
+  filter: drop-shadow(0 0 8px rgba(226,175,21,0.5));
+}
+
+.header-text { display: flex; flex-direction: column; gap: 0.2rem; }
+
+.header-title {
+  font-family: var(--font-display);
+  font-size: 2.1rem;
+  font-weight: 600;
+  color: var(--ink);
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+
+.header-title span {
+  background: linear-gradient(135deg, var(--gold-true) 0%, var(--gold-glow) 60%, var(--gold-warm) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.header-sub {
+  font-size: 0.8rem;
+  color: var(--ink-muted);
+  font-weight: 400;
+  letter-spacing: 0.04em;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 0.875rem;
+}
+
+/* Stat pill */
+.stat-pill {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.55rem 1.1rem;
+  background: var(--surface);
+  border: 1px solid var(--border-md);
+  border-radius: var(--radius-pill);
+  backdrop-filter: blur(8px);
+  transition: all 0.3s ease;
+}
+
+.stat-pill:hover {
+  border-color: var(--border-hi);
+  background: var(--surface-hi);
+  box-shadow: var(--shadow-gold);
+}
+
+.stat-count {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--gold-bright);
+  line-height: 1;
+  filter: drop-shadow(0 0 6px rgba(226,175,21,0.4));
+}
+
+.stat-label {
+  font-size: 0.75rem;
+  color: var(--ink-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 500;
+}
+
+/* CTA Button */
+.btn-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.7rem 1.4rem;
+  background: linear-gradient(135deg, var(--gold-forge) 0%, var(--gold-true) 50%, var(--gold-warm) 100%);
+  background-size: 200% 100%;
+  color: var(--obsidian);
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-decoration: none;
+  border: none;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s var(--ease-out);
+  box-shadow: 0 4px 20px rgba(226,175,21,0.2), inset 0 1px 0 rgba(255,255,255,0.2);
+}
+
+.btn-cta::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.15) 50%, transparent 100%);
+  transform: translateX(-100%);
+  transition: transform 0.5s ease;
+}
+
+.btn-cta:hover { 
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 8px 30px rgba(226,175,21,0.35), 0 0 0 1px rgba(226,175,21,0.3);
+  background-position: 100% 0;
+}
+.btn-cta:hover::before { transform: translateX(100%); }
+.btn-cta:active { transform: translateY(0) scale(0.99); }
+
+.btn-cta svg { width: 15px; height: 15px; }
+.btn-cta .btn-icon-plus {
+  width: 18px; height: 18px;
+  background: rgba(0,0,0,0.15);
+  border-radius: 5px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px; font-weight: 800; line-height: 1;
+}
+
+/* ═══════════════════════════════════════
+   TOOLBAR
+   ═══════════════════════════════════════ */
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: 0.875rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+  animation: headerReveal 0.7s var(--ease-out) 0.1s both;
+}
+
+.search-wrapper {
+  flex: 1;
+  min-width: 240px;
+  max-width: 420px;
+  position: relative;
+}
+
+.search-icon {
+  position: absolute; left: 1rem; top: 50%; transform: translateY(-50%);
+  width: 16px; height: 16px;
+  color: var(--ink-muted);
+  pointer-events: none;
+  transition: color 0.2s ease;
+}
+
+.search-input {
+  width: 100%;
+  padding: 0.7rem 1rem 0.7rem 2.8rem;
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-md);
+  font-family: var(--font-body);
+  font-size: 0.875rem;
+  color: var(--ink);
+  outline: none;
+  transition: all 0.3s var(--ease-out);
+  backdrop-filter: blur(8px);
+}
+
+.search-input::placeholder { color: var(--ink-ghost); }
+.search-input:focus {
+  border-color: var(--border-hi);
+  background: rgba(226,175,21,0.04);
+  box-shadow: 0 0 0 3px rgba(226,175,21,0.08), var(--shadow-gold);
+}
+.search-wrapper:focus-within .search-icon { color: var(--gold-true); }
+
+/* Keyboard shortcut hint */
+.search-kbd {
+  position: absolute; right: 0.75rem; top: 50%; transform: translateY(-50%);
+  font-size: 0.65rem; color: var(--ink-ghost);
+  background: var(--slate);
+  padding: 0.15rem 0.4rem;
+  border-radius: 4px;
+  border: 1px solid var(--border);
+  font-family: monospace;
+  letter-spacing: 0.02em;
+  pointer-events: none;
+}
+
+/* Filter tabs */
+.filter-tabs {
+  display: flex;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 3px;
+  gap: 2px;
+}
+
+.filter-tab {
+  padding: 0.45rem 1rem;
+  border-radius: 9px;
+  background: transparent;
+  border: none;
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--ink-muted);
+  cursor: pointer;
+  transition: all 0.25s var(--ease-out);
+  position: relative;
+  letter-spacing: 0.02em;
+  display: flex; align-items: center; gap: 0.4rem;
+}
+
+.filter-tab .tab-count {
+  font-size: 0.68rem;
+  padding: 1px 6px;
+  border-radius: 10px;
+  background: rgba(255,255,255,0.06);
+  color: var(--ink-ghost);
+  font-weight: 700;
+  transition: all 0.25s ease;
+  line-height: 1.4;
+}
+
+.filter-tab:hover { color: var(--gold-bright); }
+
+.filter-tab.active {
+  background: linear-gradient(135deg, rgba(226,175,21,0.18), rgba(166,124,0,0.15));
+  color: var(--gold-bright);
+  box-shadow: inset 0 1px 0 rgba(226,175,21,0.15), 0 1px 4px rgba(0,0,0,0.25);
+}
+
+.filter-tab.active .tab-count {
+  background: rgba(226,175,21,0.2);
+  color: var(--gold-true);
+}
+
+/* View toggle */
+.view-toggle {
+  display: flex;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 3px;
+  gap: 2px;
+  margin-left: auto;
+}
+
+.view-btn {
+  width: 34px; height: 34px;
+  border-radius: 9px;
+  background: transparent;
+  border: none;
+  color: var(--ink-ghost);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  transition: all 0.25s var(--ease-out);
+}
+
+.view-btn svg { width: 14px; height: 14px; }
+.view-btn:hover { color: var(--gold-bright); }
+.view-btn.active {
+  background: rgba(226,175,21,0.15);
+  color: var(--gold-bright);
+  box-shadow: inset 0 1px 0 rgba(226,175,21,0.1);
+}
+
+/* Export button */
+.btn-ghost {
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  padding: 0.6rem 1rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  font-family: var(--font-body);
+  font-size: 0.8rem; font-weight: 600;
+  color: var(--ink-muted);
+  cursor: pointer;
+  transition: all 0.25s ease;
+  white-space: nowrap;
+}
+.btn-ghost:hover {
+  border-color: var(--border-md);
+  color: var(--ink);
+  background: var(--surface-hi);
+}
+.btn-ghost svg { width: 14px; height: 14px; }
+
+/* ═══════════════════════════════════════
+   TABLE CONTAINER
+   ═══════════════════════════════════════ */
+.table-wrap {
+  position: relative;
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-deep), var(--shadow-gold);
+  animation: tableReveal 0.6s var(--ease-out) 0.2s both;
+}
+
+@keyframes tableReveal {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Gold line accent top */
+.table-accent {
+  position: absolute; top: 0; left: 0; right: 0;
+  height: 2px; z-index: 10;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    var(--gold-forge) 20%,
+    var(--gold-bright) 50%,
+    var(--gold-forge) 80%,
+    transparent 100%
+  );
+  background-size: 200% 100%;
+  animation: accentShimmer 4s ease-in-out infinite;
+}
+
+@keyframes accentShimmer {
+  0%, 100% { background-position: -100% 0; opacity: 0.6; }
+  50%       { background-position: 100% 0; opacity: 1; }
+}
+
+/* Table itself */
+.users-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: rgba(13,13,18,0.95);
+  backdrop-filter: blur(20px);
+}
+
+/* Head */
+.users-table thead tr {
+  background: linear-gradient(90deg, rgba(226,175,21,0.06), rgba(122,88,0,0.05), rgba(226,175,21,0.04));
+  border-bottom: 1px solid var(--border);
+}
+
+.users-table th {
+  padding: 1.05rem 1.25rem;
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--ink-muted);
+  text-align: left;
+  white-space: nowrap;
+  user-select: none;
+}
+
+th.sortable {
+  cursor: pointer;
+  transition: color 0.2s ease;
+  position: relative;
+}
+th.sortable::after {
+  content: '⇅';
+  margin-left: 0.35rem;
+  opacity: 0.3;
+  font-size: 0.75em;
+  transition: opacity 0.2s ease;
+}
+th.sortable:hover { color: var(--gold-bright); }
+th.sortable:hover::after { opacity: 0.8; }
+th.sortable[data-order="asc"]::after  { content: '↑'; opacity: 0.8; color: var(--gold-bright); }
+th.sortable[data-order="desc"]::after { content: '↓'; opacity: 0.8; color: var(--gold-bright); }
+
+.th-check { width: 52px; padding-left: 1.5rem; }
+.th-actions { text-align: right; padding-right: 1.5rem; }
+
+/* Custom checkbox */
+.custom-check {
+  width: 17px; height: 17px;
+  border-radius: 5px;
+  border: 1.5px solid var(--border-md);
+  background: transparent;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  transition: all 0.2s var(--ease-spring);
+  position: relative;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.custom-check:checked {
+  background: var(--gold-true);
+  border-color: var(--gold-true);
+  box-shadow: 0 0 0 3px rgba(226,175,21,0.15);
+}
+.custom-check:checked::after {
+  content: '';
+  position: absolute;
+  width: 5px; height: 8px;
+  border: 2px solid var(--obsidian);
+  border-top: none; border-left: none;
+  transform: rotate(45deg) translate(-1px, -1px);
+}
+.custom-check:hover:not(:checked) { border-color: var(--border-hi); }
+
+/* Rows */
+.user-row {
+  border-bottom: 1px solid rgba(226,175,21,0.055);
+  transition: background 0.2s ease, transform 0.2s ease;
+  animation: rowSlide 0.4s var(--ease-out) backwards;
+}
+
+@keyframes rowSlide {
+  from { opacity: 0; transform: translateX(-8px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+.user-row:last-child { border-bottom: none; }
+
+.user-row:hover {
+  background: linear-gradient(90deg,
+    rgba(226,175,21,0.04) 0%,
+    rgba(226,175,21,0.025) 50%,
+    transparent 100%
+  );
+}
+
+.user-row.selected {
+  background: rgba(226,175,21,0.07);
+}
+
+.user-row td { padding: 0.95rem 1.25rem; vertical-align: middle; }
+.user-row .td-check { padding-left: 1.5rem; }
+.user-row .td-actions { padding-right: 1.5rem; }
+
+/* ── User cell ── */
+.user-cell { display: flex; align-items: center; gap: 0.875rem; }
+
+.avatar {
+  width: 40px; height: 40px;
+  border-radius: 11px;
+  flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: #FFF8E0;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.25s var(--ease-spring);
+}
+
+.avatar::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: rgba(255,255,255,0.08);
+  border-radius: inherit;
+}
+
+.user-row:hover .avatar { transform: scale(1.08) rotate(-2deg); }
+
+.user-info { display: flex; flex-direction: column; gap: 0.15rem; }
+.user-email { font-size: 0.9rem; font-weight: 500; color: var(--ink); letter-spacing: -0.01em; }
+.user-meta  { display: flex; gap: 0.5rem; align-items: center; }
+.user-id    { font-size: 0.7rem; color: var(--ink-ghost); font-family: monospace; letter-spacing: 0.04em; }
+
+/* ── Role badge ── */
+.role-badge {
+  display: inline-flex; align-items: center; gap: 0.3rem;
+  padding: 0.28rem 0.7rem;
+  border-radius: var(--radius-pill);
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  transition: all 0.25s ease;
+}
+.role-badge svg { width: 10px; height: 10px; }
+
+.role-admin {
+  background: linear-gradient(135deg, rgba(226,175,21,0.18), rgba(122,88,0,0.2));
+  color: var(--gold-bright);
+  border: 1px solid rgba(226,175,21,0.3);
+  box-shadow: inset 0 1px 0 rgba(226,175,21,0.1);
+}
+
+.role-user {
+  background: rgba(255,255,255,0.05);
+  color: var(--ink-dim);
+  border: 1px solid rgba(255,255,255,0.08);
+}
+
+.user-row:hover .role-admin {
+  box-shadow: 0 0 12px rgba(226,175,21,0.2), inset 0 1px 0 rgba(226,175,21,0.15);
+}
+
+/* ── Date ── */
+.date-wrap { display: flex; flex-direction: column; gap: 0.15rem; }
+.date-text { font-size: 0.875rem; color: var(--ink-dim); font-weight: 400; }
+.date-rel  { font-size: 0.7rem; color: var(--ink-ghost); }
+
+/* ── Status dot ── */
+.status-dot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: var(--jade);
+  box-shadow: 0 0 6px rgba(16,185,129,0.5);
+  flex-shrink: 0;
+  animation: dotPulse 2.5s ease-in-out infinite;
+}
+
+@keyframes dotPulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%       { opacity: 0.6; transform: scale(0.85); }
+}
+
+/* ── Actions ── */
+.actions-group { display: flex; align-items: center; justify-content: flex-end; gap: 0.3rem; }
+
+.action-btn {
+  width: 33px; height: 33px;
+  border-radius: var(--radius-sm);
+  display: flex; align-items: center; justify-content: center;
+  text-decoration: none;
+  border: 1px solid transparent;
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.2s var(--ease-out);
+  position: relative;
+  overflow: hidden;
+}
+.action-btn svg { width: 14px; height: 14px; transition: transform 0.2s var(--ease-spring); }
+
+.action-btn::before {
+  content: '';
+  position: absolute; inset: 0;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  border-radius: inherit;
+}
+
+.action-btn:hover svg { transform: scale(1.15); }
+
+.action-view {
+  color: rgba(226,175,21,0.6);
+  border-color: rgba(226,175,21,0.12);
+}
+.action-view::before { background: rgba(226,175,21,0.08); }
+.action-view:hover {
+  color: var(--gold-bright);
+  border-color: rgba(226,175,21,0.35);
+  box-shadow: 0 0 12px rgba(226,175,21,0.15);
+}
+.action-view:hover::before { opacity: 1; }
+
+.action-edit {
+  color: rgba(100,160,240,0.6);
+  border-color: rgba(100,160,240,0.12);
+}
+.action-edit::before { background: rgba(100,160,240,0.08); }
+.action-edit:hover {
+  color: #7EC8FF;
+  border-color: rgba(100,160,240,0.35);
+  box-shadow: 0 0 12px rgba(100,160,240,0.15);
+}
+.action-edit:hover::before { opacity: 1; }
+
+.action-delete {
+  color: rgba(239,68,68,0.55);
+  border-color: rgba(239,68,68,0.1);
+}
+.action-delete::before { background: rgba(239,68,68,0.08); }
+.action-delete:hover {
+  color: #FC8181;
+  border-color: rgba(239,68,68,0.35);
+  box-shadow: 0 0 12px rgba(239,68,68,0.15);
+}
+.action-delete:hover::before { opacity: 1; }
+
+/* ── Tooltip ── */
+[title] { position: relative; }
+.action-btn[title]::after {
+  content: attr(title);
+  position: absolute;
+  bottom: calc(100% + 6px);
+  left: 50%; transform: translateX(-50%) translateY(4px);
+  background: var(--slate);
+  color: var(--ink-dim);
+  font-size: 0.68rem;
+  font-weight: 600;
+  padding: 0.25rem 0.6rem;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transition: all 0.2s ease;
+  z-index: 20;
+}
+.action-btn[title]:hover::after {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* ═══════════════════════════════════════
+   CARDS VIEW
+   ═══════════════════════════════════════ */
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 1.25rem;
+  animation: tableReveal 0.5s var(--ease-out) both;
+}
+
+.user-card {
+  background: rgba(13,13,18,0.9);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  transition: all 0.3s var(--ease-out);
+  animation: cardPop 0.5s var(--ease-spring) backwards;
+  position: relative;
+}
+
+@keyframes cardPop {
+  from { opacity: 0; transform: scale(0.94) translateY(10px); }
+  to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.user-card::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(226,175,21,0.3), transparent);
+  opacity: 0; transition: opacity 0.3s ease;
+}
+
+.user-card:hover {
+  border-color: var(--border-md);
+  transform: translateY(-4px);
+  box-shadow: 0 16px 40px rgba(0,0,0,0.4), 0 0 20px rgba(226,175,21,0.08);
+}
+.user-card:hover::before { opacity: 1; }
+
+.card-top {
+  display: flex; align-items: flex-start; justify-content: space-between;
+  padding: 1.25rem 1.25rem 0.75rem;
+}
+
+.avatar-lg {
+  width: 52px; height: 52px;
+  border-radius: 14px;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-display);
+  font-size: 1.3rem; font-weight: 600;
+  color: #FFF8E0;
+  flex-shrink: 0;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+  position: relative;
+}
+.avatar-lg::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: rgba(255,255,255,0.08);
+  border-radius: inherit;
+}
+
+.card-body { padding: 0.25rem 1.25rem 0.875rem; }
+.card-email { font-size: 0.875rem; color: var(--ink); font-weight: 500; word-break: break-all; }
+.card-date  { font-size: 0.72rem; color: var(--ink-ghost); margin-top: 0.3rem; }
+
+.card-actions {
+  display: flex; gap: 0.35rem;
+  padding: 0.875rem 1.25rem;
+  border-top: 1px solid rgba(226,175,21,0.06);
+  background: rgba(0,0,0,0.15);
+}
+
+/* ═══════════════════════════════════════
+   EMPTY STATE
+   ═══════════════════════════════════════ */
+.empty-state {
+  text-align: center;
+  padding: 5rem 2rem;
+  background: rgba(13,13,18,0.9);
+}
+
+.empty-icon-ring {
+  width: 80px; height: 80px;
+  margin: 0 auto 1.5rem;
+  border-radius: 50%;
+  background: rgba(226,175,21,0.06);
+  border: 1.5px solid var(--border-md);
+  display: flex; align-items: center; justify-content: center;
+  animation: ringPulse 3s ease-in-out infinite;
+}
+.empty-icon-ring svg { width: 36px; height: 36px; color: rgba(226,175,21,0.4); }
+
+.empty-title {
+  font-family: var(--font-display);
+  font-size: 1.5rem; font-weight: 600;
+  color: var(--ink-dim);
+  margin-bottom: 0.5rem;
+}
+.empty-sub { font-size: 0.875rem; color: var(--ink-ghost); margin-bottom: 1.5rem; }
+
+/* ═══════════════════════════════════════
+   NO RESULTS
+   ═══════════════════════════════════════ */
+.no-results-row td {
+  text-align: center;
+  padding: 3rem !important;
+  color: var(--ink-ghost);
+  font-size: 0.875rem;
+  border: none !important;
+}
+
+/* ═══════════════════════════════════════
+   BULK ACTION BAR
+   ═══════════════════════════════════════ */
+.bulk-bar {
+  position: fixed;
+  bottom: 2rem; left: 50%;
+  transform: translateX(-50%) translateY(120px);
+  background: linear-gradient(135deg, var(--carbon), var(--slate));
+  border: 1px solid var(--border-md);
+  border-radius: var(--radius-pill);
+  padding: 0.875rem 1.5rem;
+  display: flex; align-items: center; gap: 1.25rem;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.7), 0 0 0 1px rgba(226,175,21,0.1);
+  transition: transform 0.45s var(--ease-spring), box-shadow 0.3s ease;
+  z-index: 100;
+  backdrop-filter: blur(20px);
+}
+
+.bulk-bar.visible {
+  transform: translateX(-50%) translateY(0);
+  box-shadow: 0 20px 50px rgba(0,0,0,0.7), 0 0 30px rgba(226,175,21,0.1), 0 0 0 1px rgba(226,175,21,0.15);
+}
+
+.bulk-info {
+  display: flex; align-items: center; gap: 0.6rem;
+  font-size: 0.85rem; font-weight: 600; color: var(--ink-dim);
+}
+
+.bulk-badge {
+  background: rgba(226,175,21,0.15);
+  border: 1px solid rgba(226,175,21,0.25);
+  color: var(--gold-bright);
+  font-size: 0.75rem; font-weight: 800;
+  padding: 0.15rem 0.55rem;
+  border-radius: var(--radius-pill);
+  font-family: monospace;
+}
+
+.bulk-sep {
+  width: 1px; height: 20px;
+  background: var(--border);
+}
+
+.bulk-actions { display: flex; gap: 0.5rem; }
+
+.bulk-btn {
+  display: inline-flex; align-items: center; gap: 0.4rem;
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius-pill);
+  font-family: var(--font-body);
+  font-size: 0.78rem; font-weight: 700;
+  border: none; cursor: pointer;
+  transition: all 0.2s ease;
+}
+.bulk-btn svg { width: 13px; height: 13px; }
+.bulk-danger {
+  background: rgba(239,68,68,0.12);
+  color: #FC8181;
+  border: 1px solid rgba(239,68,68,0.25);
+}
+.bulk-danger:hover {
+  background: rgba(239,68,68,0.2);
+  box-shadow: 0 0 15px rgba(239,68,68,0.2);
+}
+
+/* ═══════════════════════════════════════
+   PAGINATION
+   ═══════════════════════════════════════ */
+.pagination {
+  display: flex; align-items: center; justify-content: center;
+  gap: 0.35rem;
+  margin-top: 1.75rem;
+  animation: headerReveal 0.5s var(--ease-out) 0.4s both;
+}
+
+.page-btn {
+  width: 36px; height: 36px;
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--ink-muted);
+  font-size: 0.82rem; font-weight: 600;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; text-decoration: none;
+  transition: all 0.2s var(--ease-out);
+  font-family: var(--font-body);
+}
+.page-btn:hover {
+  border-color: var(--border-md);
+  color: var(--gold-bright);
+  background: rgba(226,175,21,0.06);
+}
+.page-btn.active {
+  background: rgba(226,175,21,0.15);
+  border-color: rgba(226,175,21,0.35);
+  color: var(--gold-bright);
+  box-shadow: 0 0 12px rgba(226,175,21,0.1);
+}
+.page-btn.prev, .page-btn.next { font-size: 1rem; }
+
+/* ═══════════════════════════════════════
+   RESPONSIVE
+   ═══════════════════════════════════════ */
+@media (max-width: 900px) {
+  .canvas { padding: 1.5rem 1.25rem 5rem; }
+  .page-header { flex-direction: column; align-items: flex-start; gap: 1rem; }
+  .header-right { width: 100%; justify-content: space-between; }
+  .col-date { display: none; }
+  .th-date  { display: none; }
+}
+
+@media (max-width: 640px) {
+  .toolbar { gap: 0.6rem; }
+  .search-wrapper { max-width: 100%; flex: 1 1 100%; }
+  .filter-tabs { display: none; }
+  .cards-grid { grid-template-columns: 1fr 1fr; }
+  .search-kbd { display: none; }
+}
+
+@media (max-width: 440px) {
+  .cards-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<div class="canvas">
+  <div class="grid-overlay"></div>
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+
+  <!-- ═══ HEADER ═══ -->
+  <header class="page-header">
+    <div class="header-left">
+      <div class="header-medallion">
+        <div class="medallion-ring"></div>
+        <div class="medallion-bg">
+          <svg viewBox="0 0 24 24" fill="none">
+            <path d="M17 21V19C17 17.93 16.58 16.92 15.83 16.17C15.08 15.42 14.06 15 13 15H5C3.93 15 2.92 15.42 2.17 16.17C1.42 16.92 1 17.93 1 19V21" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            <circle cx="9" cy="7" r="4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M23 21V19C23 18.11 22.7 17.25 22.16 16.55C21.62 15.85 20.86 15.35 20 15.13" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M16 3.13C16.86 3.35 17.62 3.85 18.17 4.55C18.71 5.25 19.01 6.12 19.01 7C19.01 7.88 18.71 8.75 18.17 9.45C17.62 10.16 16.86 10.66 16 10.88" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+      </div>
+      <div class="header-text">
+        <h1 class="header-title">Gestion des <span>Utilisateurs</span></h1>
+        <p class="header-sub">Administration des membres de la plateforme</p>
+      </div>
+    </div>
+
+    <div class="header-right">
+      <div class="stat-pill">
+        <span class="stat-count" id="total-count">12</span>
+        <span class="stat-label">membres</span>
+      </div>
+
+      <button class="btn-ghost">
+        <svg viewBox="0 0 24 24" fill="none">
+          <path d="M21 15V19C21 19.53 20.79 20.04 20.41 20.41C20.04 20.79 19.53 21 19 21H5C4.47 21 3.96 20.79 3.59 20.41C3.21 20.04 3 19.53 3 19V15M7 10L12 15L17 10M12 15V3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        Exporter
+      </button>
+
+      <button class="btn-cta">
+        <div class="btn-icon-plus">+</div>
+        Nouvel utilisateur
+      </button>
+    </div>
+  </header>
+
+  <!-- ═══ TOOLBAR ═══ -->
+  <div class="toolbar">
+    <div class="search-wrapper">
+      <svg class="search-icon" viewBox="0 0 24 24" fill="none">
+        <circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        <path d="M21 21L16.65 16.65" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+      <input class="search-input" id="searchInput" type="text" placeholder="Rechercher un utilisateur…">
+      <span class="search-kbd">⌘K</span>
+    </div>
+
+    <div class="filter-tabs" role="tablist">
+      <button class="filter-tab active" data-filter="all" role="tab">
+        Tous <span class="tab-count" id="count-all">12</span>
+      </button>
+      <button class="filter-tab" data-filter="admin" role="tab">
+        Admin <span class="tab-count" id="count-admin">3</span>
+      </button>
+      <button class="filter-tab" data-filter="user" role="tab">
+        Membres <span class="tab-count" id="count-user">9</span>
+      </button>
+    </div>
+
+    <div class="view-toggle" style="margin-left:auto">
+      <button class="view-btn active" id="viewTable" title="Vue tableau">
+        <svg viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="1.8"/><rect x="14" y="3" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="1.8"/><rect x="3" y="14" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="1.8"/><rect x="14" y="14" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="1.8"/></svg>
+      </button>
+      <button class="view-btn" id="viewCards" title="Vue grille">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M8 6H21M8 12H21M8 18H21M3 6H3.01M3 12H3.01M3 18H3.01" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- ═══ TABLE VIEW ═══ -->
+  <div id="tableView">
+    <div class="table-wrap">
+      <div class="table-accent"></div>
+      <table class="users-table">
+        <thead>
+          <tr>
+            <th class="th-check">
+              <input type="checkbox" class="custom-check" id="selectAll">
+            </th>
+            <th class="sortable" data-col="email">Email</th>
+            <th class="sortable" data-col="role">Rôle</th>
+            <th class="sortable th-date col-date" data-col="created_at">Inscrit le</th>
+            <th class="th-actions">Actions</th>
+          </tr>
+        </thead>
+        <tbody id="usersTableBody">
+          <!-- Demo rows -->
+          <tr class="user-row" data-email="ibrahim.mahamane@sarki.ne" data-role="admin" style="animation-delay:.04s">
+            <td class="td-check"><input type="checkbox" class="custom-check row-check"></td>
+            <td>
+              <div class="user-cell">
+                <div class="avatar" style="background: linear-gradient(135deg, #7A4500, #B87333)">I</div>
+                <div class="user-info">
+                  <span class="user-email">ibrahim.mahamane@sarki.ne</span>
+                  <div class="user-meta"><span class="user-id">#001</span><div class="status-dot"></div></div>
+                </div>
+              </div>
+            </td>
+            <td>
+              <span class="role-badge role-admin">
+                <svg viewBox="0 0 24 24"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" fill="currentColor"/></svg>
+                Admin
+              </span>
+            </td>
+            <td class="col-date"><div class="date-wrap"><span class="date-text">12 Jan 2024</span><span class="date-rel">il y a 5 mois</span></div></td>
+            <td>
+              <div class="actions-group">
+                <button class="action-btn action-view" title="Voir"><svg viewBox="0 0 24 24" fill="none"><path d="M1 12C1 12 5 4 12 4C19 4 23 12 23 12C23 12 19 20 12 20C5 20 1 12 1 12Z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+                <button class="action-btn action-edit" title="Modifier"><svg viewBox="0 0 24 24" fill="none"><path d="M11 4H4C3.47 4 2.96 4.21 2.59 4.59C2.21 4.96 2 5.47 2 6V20C2 20.53 2.21 21.04 2.59 21.41C2.96 21.79 3.47 22 4 22H18C18.53 22 19.04 21.79 19.41 21.41C19.79 21.04 20 20.53 20 20V13" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M18.5 2.5C18.9 2.1 19.44 1.88 20 1.88C20.56 1.88 21.1 2.1 21.5 2.5C21.9 2.9 22.12 3.44 22.12 4C22.12 4.56 21.9 5.1 21.5 5.5L12 15L8 16L9 12L18.5 2.5Z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+                <button class="action-btn action-delete" title="Supprimer"><svg viewBox="0 0 24 24" fill="none"><polyline points="3 6 5 6 21 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M19 6L18.1 20.1C18.07 20.61 17.85 21.09 17.48 21.44C17.1 21.8 16.61 22 16.1 22H7.9C7.39 22 6.9 21.8 6.52 21.44C6.15 21.09 5.93 20.61 5.9 20.1L5 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M9 6V4C9 3.73 9.11 3.48 9.29 3.29C9.48 3.11 9.73 3 10 3H14C14.27 3 14.52 3.11 14.71 3.29C14.89 3.48 15 3.73 15 4V6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+              </div>
+            </td>
+          </tr>
+          <tr class="user-row" data-email="amina.oumarou@gmail.com" data-role="user" style="animation-delay:.08s">
+            <td class="td-check"><input type="checkbox" class="custom-check row-check"></td>
+            <td>
+              <div class="user-cell">
+                <div class="avatar" style="background: linear-gradient(135deg, #1A4A2E, #2D7A4F)">A</div>
+                <div class="user-info">
+                  <span class="user-email">amina.oumarou@gmail.com</span>
+                  <div class="user-meta"><span class="user-id">#002</span></div>
+                </div>
+              </div>
+            </td>
+            <td><span class="role-badge role-user"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" stroke="currentColor" stroke-width="1.8"/><path d="M4 20C4 17.79 7.58 16 12 16C16.42 16 20 17.79 20 20" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>Membre</span></td>
+            <td class="col-date"><div class="date-wrap"><span class="date-text">03 Mar 2024</span><span class="date-rel">il y a 3 mois</span></div></td>
+            <td><div class="actions-group">
+              <button class="action-btn action-view" title="Voir"><svg viewBox="0 0 24 24" fill="none"><path d="M1 12C1 12 5 4 12 4C19 4 23 12 23 12C23 12 19 20 12 20C5 20 1 12 1 12Z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+              <button class="action-btn action-edit" title="Modifier"><svg viewBox="0 0 24 24" fill="none"><path d="M11 4H4C3.47 4 2.96 4.21 2.59 4.59C2.21 4.96 2 5.47 2 6V20C2 20.53 2.21 21.04 2.59 21.41C2.96 21.79 3.47 22 4 22H18C18.53 22 19.04 21.79 19.41 21.41C19.79 21.04 20 20.53 20 20V13" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M18.5 2.5C19.33 1.67 20.67 1.67 21.5 2.5C22.33 3.33 22.33 4.67 21.5 5.5L12 15L8 16L9 12L18.5 2.5Z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+              <button class="action-btn action-delete" title="Supprimer"><svg viewBox="0 0 24 24" fill="none"><polyline points="3 6 5 6 21 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M19 6L18.1 20.1A2 2 0 0116.1 22H7.9A2 2 0 015.9 20.1L5 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+            </div></td>
+          </tr>
+          <tr class="user-row" data-email="moussa.abdoulaye@sarki.ne" data-role="admin" style="animation-delay:.12s">
+            <td class="td-check"><input type="checkbox" class="custom-check row-check"></td>
+            <td>
+              <div class="user-cell">
+                <div class="avatar" style="background: linear-gradient(135deg, #4A1A50, #8B2FC9)">M</div>
+                <div class="user-info">
+                  <span class="user-email">moussa.abdoulaye@sarki.ne</span>
+                  <div class="user-meta"><span class="user-id">#003</span><div class="status-dot"></div></div>
+                </div>
+              </div>
+            </td>
+            <td><span class="role-badge role-admin"><svg viewBox="0 0 24 24"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" fill="currentColor"/></svg>Admin</span></td>
+            <td class="col-date"><div class="date-wrap"><span class="date-text">18 Fév 2024</span><span class="date-rel">il y a 4 mois</span></div></td>
+            <td><div class="actions-group">
+              <button class="action-btn action-view" title="Voir"><svg viewBox="0 0 24 24" fill="none"><path d="M1 12C1 12 5 4 12 4C19 4 23 12 23 12C23 12 19 20 12 20C5 20 1 12 1 12Z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+              <button class="action-btn action-edit" title="Modifier"><svg viewBox="0 0 24 24" fill="none"><path d="M11 4H4C3.47 4 2.96 4.21 2.59 4.59C2.21 4.96 2 5.47 2 6V20C2 20.53 2.21 21.04 2.59 21.41C2.96 21.79 3.47 22 4 22H18C18.53 22 19.04 21.79 19.41 21.41C19.79 21.04 20 20.53 20 20V13" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M18.5 2.5C19.33 1.67 20.67 1.67 21.5 2.5C22.33 3.33 22.33 4.67 21.5 5.5L12 15L8 16L9 12L18.5 2.5Z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+              <button class="action-btn action-delete" title="Supprimer"><svg viewBox="0 0 24 24" fill="none"><polyline points="3 6 5 6 21 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M19 6L18.1 20.1A2 2 0 0116.1 22H7.9A2 2 0 015.9 20.1L5 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+            </div></td>
+          </tr>
+          <tr class="user-row" data-email="hadiza.ali@gmail.com" data-role="user" style="animation-delay:.16s">
+            <td class="td-check"><input type="checkbox" class="custom-check row-check"></td>
+            <td>
+              <div class="user-cell">
+                <div class="avatar" style="background: linear-gradient(135deg, #1A3A5C, #2563EB)">H</div>
+                <div class="user-info">
+                  <span class="user-email">hadiza.ali@gmail.com</span>
+                  <div class="user-meta"><span class="user-id">#004</span></div>
+                </div>
+              </div>
+            </td>
+            <td><span class="role-badge role-user"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" stroke="currentColor" stroke-width="1.8"/><path d="M4 20C4 17.79 7.58 16 12 16C16.42 16 20 17.79 20 20" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>Membre</span></td>
+            <td class="col-date"><div class="date-wrap"><span class="date-text">27 Avr 2024</span><span class="date-rel">il y a 1 mois</span></div></td>
+            <td><div class="actions-group">
+              <button class="action-btn action-view" title="Voir"><svg viewBox="0 0 24 24" fill="none"><path d="M1 12C1 12 5 4 12 4C19 4 23 12 23 12C23 12 19 20 12 20C5 20 1 12 1 12Z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+              <button class="action-btn action-edit" title="Modifier"><svg viewBox="0 0 24 24" fill="none"><path d="M11 4H4C3.47 4 2.96 4.21 2.59 4.59C2.21 4.96 2 5.47 2 6V20C2 20.53 2.21 21.04 2.59 21.41C2.96 21.79 3.47 22 4 22H18C18.53 22 19.04 21.79 19.41 21.41C19.79 21.04 20 20.53 20 20V13" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M18.5 2.5C19.33 1.67 20.67 1.67 21.5 2.5C22.33 3.33 22.33 4.67 21.5 5.5L12 15L8 16L9 12L18.5 2.5Z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+              <button class="action-btn action-delete" title="Supprimer"><svg viewBox="0 0 24 24" fill="none"><polyline points="3 6 5 6 21 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M19 6L18.1 20.1A2 2 0 0116.1 22H7.9A2 2 0 015.9 20.1L5 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+            </div></td>
+          </tr>
+          <tr class="user-row" data-email="sani.issoufou@orange.ne" data-role="user" style="animation-delay:.20s">
+            <td class="td-check"><input type="checkbox" class="custom-check row-check"></td>
+            <td>
+              <div class="user-cell">
+                <div class="avatar" style="background: linear-gradient(135deg, #4A3000, #C47A00)">S</div>
+                <div class="user-info">
+                  <span class="user-email">sani.issoufou@orange.ne</span>
+                  <div class="user-meta"><span class="user-id">#005</span><div class="status-dot"></div></div>
+                </div>
+              </div>
+            </td>
+            <td><span class="role-badge role-user"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" stroke="currentColor" stroke-width="1.8"/><path d="M4 20C4 17.79 7.58 16 12 16C16.42 16 20 17.79 20 20" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>Membre</span></td>
+            <td class="col-date"><div class="date-wrap"><span class="date-text">08 Mai 2024</span><span class="date-rel">il y a 18 jours</span></div></td>
+            <td><div class="actions-group">
+              <button class="action-btn action-view" title="Voir"><svg viewBox="0 0 24 24" fill="none"><path d="M1 12C1 12 5 4 12 4C19 4 23 12 23 12C23 12 19 20 12 20C5 20 1 12 1 12Z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+              <button class="action-btn action-edit" title="Modifier"><svg viewBox="0 0 24 24" fill="none"><path d="M11 4H4C3.47 4 2.96 4.21 2.59 4.59C2.21 4.96 2 5.47 2 6V20C2 20.53 2.21 21.04 2.59 21.41C2.96 21.79 3.47 22 4 22H18C18.53 22 19.04 21.79 19.41 21.41C19.79 21.04 20 20.53 20 20V13" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M18.5 2.5C19.33 1.67 20.67 1.67 21.5 2.5C22.33 3.33 22.33 4.67 21.5 5.5L12 15L8 16L9 12L18.5 2.5Z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+              <button class="action-btn action-delete" title="Supprimer"><svg viewBox="0 0 24 24" fill="none"><polyline points="3 6 5 6 21 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M19 6L18.1 20.1A2 2 0 0116.1 22H7.9A2 2 0 015.9 20.1L5 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+            </div></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ═══ CARDS VIEW (hidden by default) ═══ -->
+  <div id="cardsView" class="cards-grid" style="display:none">
+    <!-- Cards generated dynamically from table data by JS -->
+  </div>
+
+  <!-- ═══ PAGINATION ═══ -->
+  <nav class="pagination" aria-label="Pagination">
+    <button class="page-btn prev">‹</button>
+    <button class="page-btn active">1</button>
+    <button class="page-btn">2</button>
+    <button class="page-btn">3</button>
+    <button class="page-btn next">›</button>
+  </nav>
+
+  <!-- ═══ BULK BAR ═══ -->
+  <div class="bulk-bar" id="bulkBar">
+    <div class="bulk-info">
+      <span class="bulk-badge" id="bulkCount">0</span>
+      utilisateur(s) sélectionné(s)
+    </div>
+    <div class="bulk-sep"></div>
+    <div class="bulk-actions">
+      <button class="bulk-btn bulk-danger" id="bulkDelete">
+        <svg viewBox="0 0 24 24" fill="none"><polyline points="3 6 5 6 21 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M19 6L18.1 20.1A2 2 0 0116.1 22H7.9A2 2 0 015.9 20.1L5 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Supprimer
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+
+  // ── Count display ──
+  function updateCounts() {
+    const rows = document.querySelectorAll('.user-row');
+    const admins = document.querySelectorAll('.user-row[data-role="admin"]');
+    const users  = document.querySelectorAll('.user-row[data-role="user"]');
+    
+    const el = id => document.getElementById(id);
+    if (el('total-count'))  el('total-count').textContent  = rows.length;
+    if (el('count-all'))    el('count-all').textContent    = rows.length;
+    if (el('count-admin'))  el('count-admin').textContent  = admins.length;
+    if (el('count-user'))   el('count-user').textContent   = users.length;
+  }
+  updateCounts();
+
+  // ── Search + filter logic ──
+  let activeFilter = 'all';
+  
+  function filterAll() {
+    const q = (document.getElementById('searchInput')?.value || '').toLowerCase().trim();
+    let visibleCount = 0;
+
+    document.querySelectorAll('.user-row').forEach(row => {
+      const email = (row.dataset.email || '').toLowerCase();
+      const role  = (row.dataset.role  || '').toLowerCase();
+      const matchQ = !q || email.includes(q) || role.includes(q);
+      const matchF = activeFilter === 'all' || role === activeFilter;
+      row.style.display = (matchQ && matchF) ? '' : 'none';
+      if (matchQ && matchF) visibleCount++;
+    });
+
+    // No results row
+    const tbody = document.getElementById('usersTableBody');
+    let noRow = tbody.querySelector('.no-results-row');
+    if (!visibleCount) {
+      if (!noRow) {
+        noRow = document.createElement('tr');
+        noRow.className = 'no-results-row';
+        noRow.innerHTML = '<td colspan="5">Aucun résultat pour cette recherche.</td>';
+        tbody.appendChild(noRow);
+      }
+      noRow.style.display = '';
+    } else if (noRow) {
+      noRow.style.display = 'none';
+    }
+
+    if (document.getElementById('total-count'))
+      document.getElementById('total-count').textContent = visibleCount;
+  }
+
+  const searchInput = document.getElementById('searchInput');
+  if (searchInput) {
+    searchInput.addEventListener('input', filterAll);
+
+    // ⌘K / Ctrl+K shortcut
+    document.addEventListener('keydown', e => {
+      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+        e.preventDefault();
+        searchInput.focus();
+        searchInput.select();
+      }
+      if (e.key === 'Escape' && document.activeElement === searchInput) {
+        searchInput.blur();
+        searchInput.value = '';
+        filterAll();
+      }
+    });
+  }
+
+  document.querySelectorAll('.filter-tab').forEach(btn => {
+    btn.addEventListener('click', function () {
+      document.querySelectorAll('.filter-tab').forEach(b => b.classList.remove('active'));
+      this.classList.add('active');
+      activeFilter = this.dataset.filter || 'all';
+      filterAll();
+    });
+  });
+
+  // ── View toggle ──
+  const tableView = document.getElementById('tableView');
+  const cardsView = document.getElementById('cardsView');
+  const viewTable = document.getElementById('viewTable');
+  const viewCards = document.getElementById('viewCards');
+
+  function buildCards() {
+    cardsView.innerHTML = '';
+    document.querySelectorAll('.user-row').forEach((row, i) => {
+      const email   = row.dataset.email || '';
+      const role    = row.dataset.role  || 'user';
+      const initial = email[0]?.toUpperCase() || '?';
+      const avatar  = row.querySelector('.avatar');
+      const bgStyle = avatar ? avatar.style.background : 'linear-gradient(135deg, #7A5800, #D4A017)';
+      const dateEl  = row.querySelector('.date-text');
+      const dateStr = dateEl ? dateEl.textContent : '';
+
+      const card = document.createElement('div');
+      card.className = 'user-card';
+      card.dataset.email = email;
+      card.dataset.role  = role;
+      card.style.animationDelay = (i * 0.06) + 's';
+      card.innerHTML = `
+        <div class="card-top">
+          <div class="avatar-lg" style="background:${bgStyle}">${initial}</div>
+          <span class="role-badge role-${role}">${role === 'admin' ? '★ Admin' : 'Membre'}</span>
+        </div>
+        <div class="card-body">
+          <p class="card-email">${email}</p>
+          <p class="card-date">Inscrit le ${dateStr}</p>
+        </div>
+        <div class="card-actions">
+          <button class="action-btn action-view" title="Voir"><svg viewBox="0 0 24 24" fill="none"><path d="M1 12C1 12 5 4 12 4C19 4 23 12 23 12C23 12 19 20 12 20C5 20 1 12 1 12Z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+          <button class="action-btn action-edit" title="Modifier"><svg viewBox="0 0 24 24" fill="none"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M18.5 2.5a2.12 2.12 0 013 3L12 15l-4 1 1-4 9.5-9.5z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+          <button class="action-btn action-delete" title="Supprimer"><svg viewBox="0 0 24 24" fill="none"><polyline points="3 6 5 6 21 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M19 6L18.1 20.1A2 2 0 0116.1 22H7.9A2 2 0 015.9 20.1L5 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        </div>`;
+      cardsView.appendChild(card);
+    });
+  }
+
+  if (viewTable && viewCards) {
+    viewTable.addEventListener('click', () => {
+      tableView.style.display = ''; cardsView.style.display = 'none';
+      viewTable.classList.add('active'); viewCards.classList.remove('active');
+    });
+    viewCards.addEventListener('click', () => {
+      buildCards();
+      tableView.style.display = 'none'; cardsView.style.display = 'grid';
+      viewCards.classList.add('active'); viewTable.classList.remove('active');
+    });
+  }
+
+  // ── Select all / Bulk bar ──
+  const selectAll = document.getElementById('selectAll');
+  const bulkBar   = document.getElementById('bulkBar');
+  const bulkCount = document.getElementById('bulkCount');
+
+  function refreshBulk() {
+    const checked = document.querySelectorAll('.row-check:checked').length;
+    if (bulkCount) bulkCount.textContent = checked;
+    if (bulkBar)   bulkBar.classList.toggle('visible', checked > 0);
+    document.querySelectorAll('.user-row').forEach(row => {
+      const cb = row.querySelector('.row-check');
+      row.classList.toggle('selected', !!(cb && cb.checked));
+    });
+  }
+
+  if (selectAll) {
+    selectAll.addEventListener('change', function () {
+      document.querySelectorAll('.row-check').forEach(cb => cb.checked = this.checked);
+      refreshBulk();
+    });
+  }
+
+  document.addEventListener('change', e => {
+    if (e.target.classList.contains('row-check')) refreshBulk();
+  });
+
+  // ── Column sorting ──
+  document.querySelectorAll('th.sortable').forEach(th => {
+    th.addEventListener('click', function () {
+      const col = this.dataset.col;
+      const tbody = document.getElementById('usersTableBody');
+      if (!tbody) return;
+
+      const asc = this.dataset.order !== 'asc';
+      document.querySelectorAll('th.sortable').forEach(t => delete t.dataset.order);
+      this.dataset.order = asc ? 'asc' : 'desc';
+
+      const rows = Array.from(tbody.querySelectorAll('.user-row'));
+      rows.sort((a, b) => {
+        let va = '', vb = '';
+        if (col === 'email') { va = a.dataset.email || ''; vb = b.dataset.email || ''; }
+        else if (col === 'role') { va = a.dataset.role || ''; vb = b.dataset.role || ''; }
+        else if (col === 'created_at') {
+          va = a.querySelector('.date-text')?.textContent || '';
+          vb = b.querySelector('.date-text')?.textContent || '';
+        }
+        return asc ? va.localeCompare(vb) : vb.localeCompare(va);
+      });
+      rows.forEach(r => tbody.appendChild(r));
+    });
+  });
+
+  // ── Row animation stagger ──
+  document.querySelectorAll('.user-row').forEach((row, i) => {
+    if (!row.style.animationDelay) row.style.animationDelay = (i * 0.05) + 's';
+  });
+});
+</script>
+</body>
+</html>

@@ -1,5 +1,5 @@
 class Video < ApplicationRecord
-  belongs_to :candidate, optional: true
+  belongs_to :candidate
      include PgSearch::Model 
 
 
@@ -12,7 +12,4 @@ class Video < ApplicationRecord
   
   # Optional uploaded thumbnail for better previews (admins can upload)
   has_one_attached :thumbnail
-
-  scope :emission, -> { where(category: "emission") }
-  scope :candidate_video, -> { where(category: "candidate") }
 end

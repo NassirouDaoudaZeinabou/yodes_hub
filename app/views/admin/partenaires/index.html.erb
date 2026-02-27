@@ -1,0 +1,52 @@
+<div class="admin-header">
+  <h1>Gestion des partenaires</h1>
+  <div class="actions">
+    <%= link_to 'Nouveau partenaire', new_admin_partenaire_path, class: 'button primary' %>
+  </div>
+</div>
+
+<table class="admin-table" style="width:100%;border-collapse:collapse;margin-top:12px">
+  <thead>
+    <tr>
+      <th>Logo</th>
+      <th>Nom</th>
+      <th>Email</th>
+      <th>Téléphone</th>
+      <th>Actif</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @partenaires.each do |p| %>
+      <tr>
+        <td style="padding:8px 6px;vertical-align:middle">
+          <% if p.image.attached? %>
+            <%= image_tag url_for(p.image), alt: p.name, style: 'border-radius:6px;max-width:120px;max-height:90px' %>
+          <% else %>
+            <div style="width:120px;height:90px;background:#f5f5f5;border-radius:6px;display:flex;align-items:center;justify-content:center;color:#999">
+              Aucun
+            </div>
+          <% end %>
+        </td>
+        <td style="padding:8px 6px;vertical-align:middle"><strong><%= p.name %></strong></td>
+        <td style="padding:8px 6px;vertical-align:middle"><%= p.email %></td>
+        <td style="padding:8px 6px;vertical-align:middle"><%= p.phone %></td>
+        <td style="padding:8px 6px;vertical-align:middle">
+         
+        </td>
+        <td style="padding:8px 6px;vertical-align:middle;text-align:right">
+          <%= link_to '👁', admin_partenaire_path(p), class: 'action-link', title: 'Voir' %>
+          <%= link_to '✏️', edit_admin_partenaire_path(p), class: 'action-link', title: 'Modifier' %>
+          <%= button_to '🗑️', admin_partenaire_path(p), method: :delete, data: { confirm: 'Êtes-vous sûr ?' }, class: 'button danger' %>
+
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<% if @partenaires.empty? %>
+  <div style="padding:20px;text-align:center;color:#999">
+    Aucun partenaire enregistré.
+  </div>
+<% end %>

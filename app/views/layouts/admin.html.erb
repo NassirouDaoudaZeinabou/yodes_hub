@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="fr">
   <head>
-    <title><%= content_for(:title) || "Yodes Hub Admin" %></title>
+    <title><%= content_for(:title) || "Sarki-Excelence Admin" %></title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <%= csrf_meta_tags %>
@@ -9,7 +9,11 @@
 
     <%= yield :head %>
 
-    <link rel="icon" href="/icon.png" type="image/png">
+    <%= favicon_link_tag asset_path("logo.png"),
+    rel: "icon",
+    type: "image/png",
+    sizes: "32x32" %>
+
     <link rel="apple-touch-icon" href="/icon.png">
 
     <%# On sépare les styles admin pour ne pas charger le CSS du site public ici %>

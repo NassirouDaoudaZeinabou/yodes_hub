@@ -891,6 +891,7 @@
             margin-top: 18px;
         }
 
+
         /* ============================================
            CANDIDATES SECTION
            ============================================ */
@@ -1121,54 +1122,34 @@
         }
 
         /* ============================================
-           VOTE COUNT BADGE - IMPROVED VERSION
+           VOTE COUNT BADGE - VERSION AMÉLIORÉE
            ============================================ */
 
         .vote-count-badge {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            background: linear-gradient(135deg, var(--gold) 0%, var(--yellow) 100%);
-            color: var(--gray-900);
-            padding: 12px 22px;
-            border-radius: 50px;
-            font-size: 14px;
-            font-weight: 800;
-            margin-top: 14px;
-            margin-bottom: 18px;
-            box-shadow: 
-                0 8px 24px rgba(212, 175, 55, 0.4),
-                inset 0 2px 4px rgba(255, 255, 255, 0.5),
-                inset 0 -2px 4px rgba(0, 0, 0, 0.1);
-            position: relative;
-            overflow: hidden;
-            transition: var(--transition);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
+              display: inline-flex;
+              align-items: center;
+              justify-content: center;
+              gap: 8px;
+              /* transparent dark background similar to school badge */
+              background: linear-gradient(90deg, rgba(0,0,0,0.6), rgba(0,0,0,0.32));
+              color: white;
+              padding: 6px 10px;
+              border-radius: 20px;
+              font-size: 12px;
+              font-weight: 800;
+              margin-bottom: 8px;
+              box-shadow: 0 6px 16px rgba(0,0,0,0.22);
+              position: relative;
+              overflow: hidden;
+              transition: var(--transition);
+              text-transform: uppercase;
+              letter-spacing: 0.4px;
+              cursor: pointer; /* show pointer to indicate interactable badge */
         }
 
-        .vote-count-badge::before {
-            content: '🗳️';
-            font-size: 18px;
-            filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.15));
-        }
-
-        .vote-count-badge::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(
-                90deg,
-                transparent,
-                rgba(255, 255, 255, 0.5),
-                transparent
-            );
-            animation: badgeShine 3s ease-in-out infinite;
-        }
+        /* Remove decorative emoji and shine so the badge only contains the number and the word 'votes' */
+        .vote-count-badge::before { content: none; }
+        .vote-count-badge::after { display: none; }
 
         @keyframes badgeShine {
             0% { left: -100%; }
@@ -1176,10 +1157,8 @@
         }
 
         .candidate-card:hover .vote-count-badge {
-            transform: scale(1.08);
-            box-shadow: 
-                0 12px 32px rgba(212, 175, 55, 0.5),
-                var(--glow-gold),
+              transform: scale(1.03);
+              box-shadow: 0 8px 20px rgba(0,0,0,0.28);
                 inset 0 2px 4px rgba(255, 255, 255, 0.6);
         }
 
@@ -1195,6 +1174,41 @@
             font-size: 12px;
             font-weight: 700;
             opacity: 0.9;
+        }
+
+        /* ============================================
+           BADGE ÉCOLE - VERSION AMÉLIORÉE
+           ============================================ */
+
+        .candidate-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: linear-gradient(135deg, var(--gold) 0%, var(--yellow) 100%);
+            color: var(--gray-900);
+            padding: 8px 16px;
+            border-radius: 50px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            box-shadow: 
+                0 4px 12px rgba(212, 175, 55, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.4);
+            transition: var(--transition);
+            margin-bottom: 10px;
+        }
+
+        .candidate-badge::before {
+            content: '🏫';
+            font-size: 13px;
+        }
+
+        .candidate-card:hover .candidate-badge {
+            transform: scale(1.05);
+            box-shadow: 
+                0 6px 18px rgba(212, 175, 55, 0.4),
+                inset 0 2px 4px rgba(255, 255, 255, 0.5);
         }
 
         /* ============================================
@@ -1309,34 +1323,6 @@
             opacity: 0.65;
         }
 
-        .candidate-badge {
-            position: absolute;
-            top: 18px;
-            right: 18px;
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            color: var(--gray-900);
-            padding: 7px 16px;
-            border-radius: 50px;
-            font-size: 11px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            box-shadow: 
-                0 6px 16px rgba(0, 0, 0, 0.08),
-                inset 0 1px 0 rgba(255, 255, 255, 0.8);
-            z-index: 3;
-            transition: var(--transition);
-        }
-
-        .candidate-card:hover .candidate-badge {
-            background: linear-gradient(135deg, var(--gold) 0%, var(--yellow) 100%);
-            transform: translateY(-2px);
-            box-shadow: 
-                0 10px 24px rgba(212, 175, 55, 0.25),
-                inset 0 2px 4px rgba(255, 255, 255, 0.4);
-        }
-
         .candidate-content {
             padding: 28px;
             position: relative;
@@ -1345,7 +1331,7 @@
 
         .candidate-name {
             font-family: 'Playfair Display', serif;
-            font-size: 22px;
+            font-size: 18px;
             font-weight: 700;
             color: var(--gray-900);
             margin-bottom: 14px;
@@ -1611,6 +1597,7 @@
             z-index: 1000;
             opacity: 0;
             visibility: hidden;
+            pointer-events: none;
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             padding: 20px;
         }
@@ -1618,6 +1605,7 @@
         .modal-overlay.active {
             opacity: 1;
             visibility: visible;
+             pointer-events: auto;
         }
 
         .modal-container {
@@ -2054,6 +2042,8 @@
                 font-size: 26px;
             }
         }
+
+       
     </style>
 </head>
 <body>
@@ -2076,17 +2066,17 @@
         <div class="hero-container">
             <div class="hero-content">
                 <div class="hero-badge">
-                    Initiative pour le leadership
+                  Allons décrocher Les Etoiles
                 </div>
                 <h1>
                     Faites <span class="highlight">briller</span> le talent !
                 </h1>
                 <p class="hero-description">
                    Une émission télévisée éducative qui
-valorise les meilleurs élèves de la ville de Niamey à travers des
-épreuves de culture générale. Elle vise à stimuler l'excellence
-académique chez les jeunes, encourager l’esprit de compétition et
-promouvoir les valeurs de mérite et de persévérance.
+                        valorise les meilleurs élèves de la ville de Niamey à travers des
+                        épreuves de culture générale. Elle vise à stimuler l'excellence
+                        académique chez les jeunes, encourager l'esprit de compétition et
+                        promouvoir les valeurs de mérite et de persévérance.
                 </p>
                 <div class="hero-actions">
                     <%= link_to "#about", class: "btn btn-primary" do %>
@@ -2122,11 +2112,11 @@ promouvoir les valeurs de mérite et de persévérance.
                 <div class="stat-label">Leaders Soutenus</div>
             </div>
             <div class="stat-item">
-                <div class="stat-number">15+</div>
+                <div class="stat-number">7+</div>
                 <div class="stat-label">Etablissements</div>
             </div>
             <div class="stat-item">
-                <div class="stat-number">20+</div>
+                <div class="stat-number">10+</div>
                 <div class="stat-label">Partenaires Actifs</div>
             </div>
         </div>
@@ -2148,9 +2138,9 @@ promouvoir les valeurs de mérite et de persévérance.
                 </div>
             </div>
             <div class="about-content slide-in-right">
-                <h2> Mission : <span>Bâtir une nation forte en investissant</span> dans l’excellence de la jeunesse </h2>
+                <h2> Mission : <span>Bâtir une nation forte en investissant</span> dans l'excellence de la jeunesse </h2>
                 <p>
-                    Depuis sa création, l’émission s’est imposée comme un rendez-vous
+                    Depuis sa création, l'émission s'est imposée comme un rendez-vous
                     incontournable pour les établissements scolaires, les familles et les
                     acteurs engagés dans le développement éducatif au Niger.                </p>
                 <p>
@@ -2159,9 +2149,9 @@ promouvoir les valeurs de mérite et de persévérance.
                 <p>
                     Notre vision est claire : Valoriser les meilleurs élèves de Niamey à travers une
                     émission de qualité,
-                    Renforcer la crédibilité et l’attractivité de SARKI
+                    Renforcer la crédibilité et l'attractivité de SARKI
                     EXCELLENCE,
-                    Motiver les jeunes à viser l’excellence académique.
+                    Motiver les jeunes à viser l'excellence académique.
                 </p>
                 <%= link_to "#", class: "btn btn-primary" do %>
                     <span>En savoir plus sur nous</span>
@@ -2170,6 +2160,9 @@ promouvoir les valeurs de mérite et de persévérance.
             </div>
         </div>
     </section>
+
+    <!-- Public Questions Section -->
+    <%= render "shared/questions_public" %>
 
     <!-- Candidates Section -->
     <section class="candidates-section" id="candidates">
@@ -2181,38 +2174,46 @@ promouvoir les valeurs de mérite et de persévérance.
                 <span class="star-decoration">✦</span>
                 <div class="section-content">
                     <div class="section-tag">⭐ VOTEZ POUR L'EXCELLENCE ⭐</div>
-                    <h2 class="section-title">Votre voix façonne l'avenir</h2>
+                    <h2 class="section-title">Votre voix encourage l'excellence academique</h2>
                     <p class="section-subtitle">
-                        Exprimez votre choix en toute transparence et soutenez les jeunes porteurs de vision.
-                        Votre participation renforce une culture de mérite et de responsabilité citoyenne.
+                        Exprimez votre choix en toute transparence et encouragez l'excellence académique au Niger.
                     </p>
                 </div>
             </div>
             
+            
             <% if @candidates.present? %>
-                <div class="candidates-grid">
-                    <% @candidates.each do |candidate| %>
-                        <article class="candidate-card fade-in">
+                                <div class="carousel" role="region" aria-label="Carrousel des candidats" tabindex="0" data-controller="carousel" data-carousel-autoplay-value="true" data-carousel-interval-value="1500">
+                  <button class="carousel-prev" data-action="click->carousel#prev" data-carousel-target="prev" aria-label="Précédent">‹</button>
+
+                  <div class="carousel-viewport">
+                                        <div class="carousel-track" data-carousel-target="track" aria-live="polite">
+                      <% @candidates.each do |candidate| %>
+                                                <article class="candidate-card carousel-item fade-in" data-carousel-target="item" tabindex="0">
                             <div class="candidate-image-wrapper">
                                 <%= image_tag candidate.image, 
                                               alt: candidate.name, 
                                               class: "candidate-image" %>
-                                <span class="candidate-badge">Leadership</span>
+
+                                <% if candidate.ecole.present? %>
+                                  <div class="candidate-badge"><%= candidate.ecole.nom %></div>
+                                <% end %>
+
+                                <% if candidate.respond_to?(:votes) %>
+                                  <% vote_count = candidate.votes.where(status: 'paid').count %>
+                                                                    <div class="vote-count-badge image-vote-badge" aria-hidden="false">
+                                                                        <span class="vote-count-number"><%= vote_count %></span>
+                                                                        <span class="vote-count-label">votes</span>
+                                                                    </div>
+                                <% end %>
                             </div>
+
                             <div class="candidate-content">
-                                <h3 class="candidate-name"><%= candidate.name %></h3>
+                                <h4 class="candidate-name"><%= candidate.name %></h4>
                                 <p class="candidate-description">
                                     <%= truncate(candidate.bio, length: 120) %>
                                 </p>
-                                
-                                <% if candidate.respond_to?(:votes) %>
-                                    <% vote_count = candidate.votes.where(status: 'paid').count %>
-                                    <div class="vote-count-badge">
-                                        <span class="vote-count-number"><%= vote_count %></span>
-                                        <span class="vote-count-label"><%= vote_count > 1 ? 'votes' : 'vote' %></span>
-                                    </div>
-                                <% end %>
-                                
+
                                 <div class="candidate-actions">
                                     <%= link_to candidate_path(candidate), class: "btn btn-secondary btn-sm" do %>
                                         <span>Voir profil</span>
@@ -2226,10 +2227,15 @@ promouvoir les valeurs de mérite et de persévérance.
                                 </div>
                             </div>
                         </article>
-                    <% end %>
+                      <% end %>
+                    </div>
                 </div>
 
-                <div class="see-more">
+                <button class="carousel-next" data-action="click->carousel#next" data-carousel-target="next" aria-label="Suivant">›</button>
+
+            </div>
+
+                <div class="see-more" style="margin-top:20px; text-align:center;">
                     <%= link_to candidates_path, class: "btn btn-primary" do %>
                         <span>Voir tous les candidats</span>
                         <span class="arrow">→</span>
@@ -2311,8 +2317,17 @@ promouvoir les valeurs de mérite et de persévérance.
                     <% end %>
                 </div>
             </div>
+            <div class="see-more" style="margin-top:20px; text-align:center;">
+                    <%= link_to videos_path, class: "btn btn-primary" do %>
+                        <span>Voir toutes les Vidéos</span>
+                        <span class="arrow">→</span>
+                    <% end %>
+                </div>
         </section>
     <% end %>
+
+   
+
 
     <!-- Vote Modal -->
     <div class="modal-overlay" id="voteModal">
@@ -2445,68 +2460,75 @@ promouvoir les valeurs de mérite et de persévérance.
         }
 
         // ============================================
-        // VOTE MODAL FUNCTIONALITY
+        // VOTE MODAL FUNCTIONALITY 
         // ============================================
-        const modal = document.getElementById('voteModal');
-        const modalClose = document.getElementById('modalClose');
-        const cancelBtn = document.getElementById('cancelBtn');
-        const closeSuccessBtn = document.getElementById('closeSuccessBtn');
-        const voteForm = document.getElementById('voteForm');
-        const successState = document.getElementById('successState');
-        const modalCandidateName = document.getElementById('modalCandidateName');
-        const votingForm = document.getElementById('votingForm');
-        const candidateIdField = document.getElementById('candidateIdField');
 
-        let currentCandidate = '';
-        let currentCandidateId = '';
+        function initVoteModal() {
+            const modal = document.getElementById('voteModal');
+            if (!modal) return; // nothing to do
 
-        document.querySelectorAll('.vote-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
-                currentCandidate = this.getAttribute('data-candidate');
-                currentCandidateId = this.getAttribute('data-candidate-id');
-                modalCandidateName.textContent = currentCandidate;
-                candidateIdField.value = currentCandidateId;
+            const modalClose = document.getElementById('modalClose');
+            const cancelBtn = document.getElementById('cancelBtn');
+            const closeSuccessBtn = document.getElementById('closeSuccessBtn');
+            const voteForm = document.getElementById('voteForm');
+            const successState = document.getElementById('successState');
+            const modalCandidateName = document.getElementById('modalCandidateName');
+            const votingForm = document.getElementById('votingForm');
+            const candidateIdField = document.getElementById('candidateIdField');
+
+            let currentCandidate = '';
+            let currentCandidateId = '';
+
+            // Event delegation: handle clicks on any .vote-btn, even if added later
+            document.addEventListener('click', function(e) {
+                const btn = e.target.closest('.vote-btn');
+                if (!btn) return;
+
+                currentCandidate = btn.getAttribute('data-candidate') || '';
+                currentCandidateId = btn.getAttribute('data-candidate-id') || '';
+                if (modalCandidateName) modalCandidateName.textContent = currentCandidate;
+                if (candidateIdField) candidateIdField.value = currentCandidateId;
                 openModal();
             });
-        });
 
-        function openModal() {
-            modal.classList.add('active');
-            document.body.classList.add('modal-open');
-        }
-
-        function closeModal() {
-            modal.classList.remove('active');
-            document.body.classList.remove('modal-open');
-            
-            setTimeout(() => {
-                resetModal();
-            }, 400);
-        }
-
-        function resetModal() {
-            voteForm.style.display = 'block';
-            successState.style.display = 'none';
-            if (votingForm) votingForm.reset();
-        }
-
-        modalClose.addEventListener('click', closeModal);
-        cancelBtn.addEventListener('click', closeModal);
-        if (closeSuccessBtn) {
-            closeSuccessBtn.addEventListener('click', closeModal);
-        }
-
-        modal.addEventListener('click', function(e) {
-            if (e.target === modal) {
-                closeModal();
+            function openModal() {
+                modal.classList.add('active');
+                document.body.classList.add('modal-open');
             }
-        });
 
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape' && modal.classList.contains('active')) {
-                closeModal();
+            function closeModal() {
+                modal.classList.remove('active');
+                document.body.classList.remove('modal-open');
+                setTimeout(() => resetModal(), 400);
             }
-        });
+
+            function resetModal() {
+                if (voteForm) voteForm.style.display = 'block';
+                if (successState) successState.style.display = 'none';
+                if (votingForm && typeof votingForm.reset === 'function') votingForm.reset();
+            }
+
+            if (modalClose) modalClose.addEventListener('click', closeModal);
+            if (cancelBtn) cancelBtn.addEventListener('click', closeModal);
+            if (closeSuccessBtn) closeSuccessBtn.addEventListener('click', closeModal);
+
+            modal.addEventListener('click', function(e) {
+                if (e.target === modal) closeModal();
+            });
+
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape' && modal.classList.contains('active')) closeModal();
+            });
+        }
+
+        // Initialize on first load and on Turbo page loads (Rails 7+)
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initVoteModal);
+        } else {
+            // Document already ready — init immediately
+            initVoteModal();
+        }
+        document.addEventListener('turbo:load', initVoteModal);
 
         // ============================================
         // VIDEO CARD CLICK HANDLERS

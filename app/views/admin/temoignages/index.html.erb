@@ -1,0 +1,33 @@
+<h1>Témoignages</h1>
+
+<div class="mb-3">
+  <%= link_to "Nouveau Témoignage", new_admin_temoignage_path, class: "btn btn-primary" %>
+</div>
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Nom</th>
+      <th>Texte</th>
+      <th>Profil</th>
+      <th>Créé le</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @temoignages.each do |temoignage| %>
+      <tr>
+        <td><%= temoignage.name %></td>
+        <td><%= truncate(temoignage.texte, length: 100) %></td>
+        <td><%= temoignage.profil %></td>
+        <td><%= l(temoignage.created_at, format: :short) %></td>
+        <td>
+          <%= link_to "Voir", admin_temoignage_path(temoignage), class: "btn btn-sm btn-info" %>
+          <%= link_to "Modifier", edit_admin_temoignage_path(temoignage), class: "btn btn-sm btn-warning" %>
+            <%= button_to "suprimer", admin_temoignage_path(temoignage), method: :delete, data: { confirm: "Supprimer ?" }, class: "btn btn-sm btn-danger" %>
+
+         </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
