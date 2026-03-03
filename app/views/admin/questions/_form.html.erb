@@ -1,0 +1,144 @@
+<%= form_with model: [:admin, @question], local: true, html: { class: 'f-admin-form' } do |f| %>
+
+  <% if @question.errors.any? %>
+    <div class="f-admin-errors">
+      <div class="f-error-header">
+        <strong>⚠️ <%= pluralize(@question.errors.count, "erreur") %> détectée(s)</strong>
+      </div>
+      <ul>
+        <% @question.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="f-admin-field">
+    <%= f.label :content, 'Contenu de la question' %>
+    <%= f.text_area :content, rows: 6, class: 'f-admin-input textarea', placeholder: 'Entrez la question...', required: true %>
+    <small class="f-help-text">La question doit être claire et constructive.</small>
+  </div>
+
+  <div class="f-admin-field">
+    <%= f.label :user_id, 'Auteur (Utilisateur)' %>
+    <%= f.select :user_id, 
+        options_for_select(User.pluck(:email, :id), @question.user_id),
+        { include_blank: '-- Sélectionner un utilisateur --' },
+        { class: 'f-admin-input' } %>
+  </div>
+
+  <div class="f-admin-actions">
+    <%= link_to 'Annuler', admin_questions_path, class: 'f-admin-btn-secondary' %>
+    <%= f.submit (@question.new_record? ? 'Créer la question' : 'Mettre à jour'), class: 'f-admin-btn-submit' %>
+  </div>
+
+<% end %>
+
+<style>
+  .f-admin-form { margin: 0; }
+  
+  .f-admin-field { margin-bottom: 20px; }
+  
+  .f-admin-field label { 
+    display: block; 
+    font-weight: 700; 
+    font-size: 0.85rem; 
+    color: #475569; 
+    text-transform: uppercase; 
+    letter-spacing: 0.025em; 
+    margin-bottom: 8px; 
+  }
+
+  .f-admin-input { 
+    width: 100%; 
+    padding: 12px 16px; 
+    border-radius: 10px; 
+    border: 1px solid #e2e8f0; 
+    font-size: 0.95rem; 
+    transition: all 0.2s; 
+    box-sizing: border-box; 
+    background: #fcfcfc;
+  }
+  
+  .f-admin-input:focus { 
+    outline: none; 
+    border-color: #d97706; 
+    box-shadow: 0 0 0 4px rgba(217, 119, 6, 0.1); 
+    background: white; 
+  }
+  
+  .textarea { 
+    resize: vertical; 
+    min-height: 150px;
+    font-family: 'Inter', sans-serif;
+  }
+
+  .f-help-text {
+    display: block;
+    margin-top: 6px;
+    font-size: 0.8rem;
+    color: #64748b;
+    font-style: italic;
+  }
+
+  .f-admin-errors { 
+    background: #fff1f2; 
+    border-left: 4px solid #ef4444; 
+    padding: 20px; 
+    border-radius: 12px; 
+    margin-bottom: 30px; 
+  }
+
+  .f-error-header { 
+    color: #991b1b; 
+    margin-bottom: 10px; 
+  }
+
+  .f-admin-errors ul { 
+    margin: 0; 
+    padding-left: 20px; 
+    color: #b91c1c; 
+    font-size: 0.9rem; 
+  }
+
+  .f-admin-actions { 
+    display: flex; 
+    justify-content: flex-end; 
+    gap: 15px; 
+    margin-top: 40px; 
+    padding-top: 25px; 
+    border-top: 1px solid #f1f5f9; 
+  }
+
+  .f-admin-btn-submit { 
+    background: #d97706; 
+    color: white; 
+    padding: 14px 30px; 
+    border-radius: 10px; 
+    border: none; 
+    font-weight: 700; 
+    cursor: pointer; 
+    transition: all 0.2s; 
+  }
+
+  .f-admin-btn-submit:hover { 
+    background: #b45309; 
+    transform: translateY(-2px); 
+    box-shadow: 0 4px 12px rgba(217,119,6,0.2); 
+  }
+
+  .f-admin-btn-secondary { 
+    background: #f1f5f9; 
+    color: #475569; 
+    padding: 14px 25px; 
+    border-radius: 10px; 
+    text-decoration: none; 
+    font-weight: 600; 
+    transition: all 0.2s; 
+  }
+
+  .f-admin-btn-secondary:hover { 
+    background: #e2e8f0; 
+    color: #1e293b; 
+  }
+</style>
