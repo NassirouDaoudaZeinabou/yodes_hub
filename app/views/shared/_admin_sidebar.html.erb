@@ -282,6 +282,11 @@
             <span class="icon">🎥</span> <span class="text">Vidéos</span>
           <% end %>
         </li>
+         <li class="<%= 'active' if current_page?(admin_questions_path) %>">
+          <%= link_to admin_questions_path do %>
+            <span class="icon">❓</span> <span class="text">Questions</span>
+          <% end %>
+        </li>
          <li class="<%= 'active' if current_page?(admin_partenaires_path) %>">
           <%= link_to admin_partenaires_path do %>
             <span class="icon">🤝</span> <span class="text">Partenaires</span>

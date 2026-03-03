@@ -35,6 +35,10 @@
       <%= f.label :content, "Votre question" %><br>
       <%= f.text_area :content, rows: 5, class: "question-textarea" %>
     </div>
+    <div class="field">
+      <%= f.label :source, "Source de la question" %><br>
+      <%= f.text_field :source, class: "question-textarea" %>
+    </div>
 
     <div class="actions">
       <%= f.submit "Envoyer", class: "btn btn-primary" %>

@@ -1,0 +1,66 @@
+<div class="f-admin-container">
+  <div class="f-admin-card">
+    <div class="f-admin-header">
+      <div class="f-admin-icon">❓</div>
+      <div class="f-admin-title-group">
+        <h2>Nouvelle Question</h2>
+        <p>Créez une nouvelle question pour la plateforme.</p>
+      </div>
+    </div>
+
+    <%= render 'form', question: @question %>
+  </div>
+</div>
+
+<style>
+  .f-admin-container { 
+    padding: 40px 20px; 
+    background: #f8fafc; 
+    min-height: 100vh; 
+    font-family: 'Inter', sans-serif; 
+  }
+  
+  .f-admin-card { 
+    max-width: 900px; 
+    margin: 0 auto; 
+    background: white; 
+    border-radius: 20px; 
+    box-shadow: 0 10px 25px rgba(0,0,0,0.05); 
+    border: 1px solid #e2e8f0; 
+    padding: 40px; 
+  }
+  
+  .f-admin-header { 
+    display: flex; 
+    align-items: center; 
+    gap: 20px; 
+    margin-bottom: 35px; 
+    border-bottom: 1px solid #f1f5f9; 
+    padding-bottom: 25px; 
+  }
+  
+  .f-admin-icon { 
+    font-size: 2rem; 
+    background: #fffbeb; 
+    width: 60px; 
+    height: 60px; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    border-radius: 15px; 
+    border: 1px solid #fef3c7; 
+  }
+  
+  .f-admin-title-group h2 { 
+    margin: 0; 
+    font-size: 1.5rem; 
+    font-weight: 800; 
+    color: #1e293b; 
+  }
+  
+  .f-admin-title-group p { 
+    margin: 5px 0 0 0; 
+    color: #64748b; 
+    font-size: 0.9rem; 
+  }
+</style>
