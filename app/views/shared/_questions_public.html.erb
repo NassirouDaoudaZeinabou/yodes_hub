@@ -1,418 +1,362 @@
-<div class="qps-section">
-  <!-- Floating decorative mics -->
-  <div class="qps-bg-deco">
-    <svg class="deco-mic deco-mic--1" viewBox="0 0 60 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <rect x="18" y="4" width="24" height="52" rx="12" fill="currentColor"/>
-      <path d="M8 48c0 12.15 9.85 22 22 22s22-9.85 22-22" stroke="currentColor" stroke-width="5" stroke-linecap="round" fill="none"/>
-      <line x1="30" y1="70" x2="30" y2="90" stroke="currentColor" stroke-width="5" stroke-linecap="round"/>
-      <line x1="18" y1="90" x2="42" y2="90" stroke="currentColor" stroke-width="5" stroke-linecap="round"/>
-    </svg>
-    <svg class="deco-mic deco-mic--2" viewBox="0 0 60 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <rect x="18" y="4" width="24" height="52" rx="12" fill="currentColor"/>
-      <path d="M8 48c0 12.15 9.85 22 22 22s22-9.85 22-22" stroke="currentColor" stroke-width="5" stroke-linecap="round" fill="none"/>
-      <line x1="30" y1="70" x2="30" y2="90" stroke="currentColor" stroke-width="5" stroke-linecap="round"/>
-      <line x1="18" y1="90" x2="42" y2="90" stroke="currentColor" stroke-width="5" stroke-linecap="round"/>
-    </svg>
-    <svg class="deco-mic deco-mic--3" viewBox="0 0 60 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <rect x="18" y="4" width="24" height="52" rx="12" fill="currentColor"/>
-      <path d="M8 48c0 12.15 9.85 22 22 22s22-9.85 22-22" stroke="currentColor" stroke-width="5" stroke-linecap="round" fill="none"/>
-      <line x1="30" y1="70" x2="30" y2="90" stroke="currentColor" stroke-width="5" stroke-linecap="round"/>
-      <line x1="18" y1="90" x2="42" y2="90" stroke="currentColor" stroke-width="5" stroke-linecap="round"/>
-    </svg>
-  </div>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Aperçu — Section Communauté</title>
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet" />
 
-  <div class="container py-5">
-    <div class="row">
-      <div class="col-md-10 mx-auto">
-        <div class="qps-card">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { font-size: 16px; }
+    body { background: #ece9e1; font-family: 'Outfit', sans-serif; color: #1a1a1a; }
 
-          <!-- Top ribbon -->
-          <div class="qps-ribbon">
-            <span>VOTRE VOIX COMPTE</span>
+    /* ── fake page context ── */
+    .fake-nav {
+      height: 64px;
+      background: #faf8f3;
+      border-bottom: 1px solid rgba(0,0,0,.07);
+      display: flex; align-items: center;
+      padding: 0 48px; gap: 32px;
+    }
+    .fake-nav-logo { width: 110px; height: 10px; background: #d4c9a8; border-radius: 6px; }
+    .fake-nav-links { display: flex; gap: 20px; }
+    .fake-nav-link  { width: 56px; height: 8px; background: #e2ddd3; border-radius: 4px; }
+    .fake-content-above { height: 72px; }
+
+    /* ══ TOKENS ══════════════════════════════════ */
+    .community-section {
+      --cs-gold:       #b8952a;
+      --cs-gold-mid:   #d4aa40;
+      --cs-gold-light: #e8c96a;
+      --cs-gold-pale:  #f5e09a;
+      --cs-dark:       #0e1118;
+      --cs-cream:      #faf8f2;
+      --cs-muted:      rgba(250,248,242,.52);
+    }
+
+    /* ══ SECTION ════════════════════════════════ */
+    .community-section {
+      width: 100%;
+      padding: 72px 48px 80px;
+      background: #ece9e1;
+      position: relative;
+    }
+
+    /* ══ CARD ════════════════════════════════════ */
+    .cs-card {
+      position: relative;
+      max-width: 1120px;
+      margin: 0 auto;
+      background: var(--cs-dark);
+      border-radius: 36px;
+      overflow: hidden;
+      isolation: isolate;
+      box-shadow:
+        0 2px 0 rgba(255,255,255,.05) inset,
+        0 40px 100px rgba(0,0,0,.22),
+        0 0 0 1px rgba(184,149,42,.14);
+    }
+
+    /* animated top border */
+    .cs-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg,
+        transparent 0%, var(--cs-gold) 25%,
+        var(--cs-gold-pale) 50%, var(--cs-gold) 75%, transparent 100%);
+      background-size: 200% 100%;
+      animation: cs-border 5s linear infinite;
+      z-index: 10;
+    }
+    @keyframes cs-border {
+      0%   { background-position:  100% 0; }
+      100% { background-position: -100% 0; }
+    }
+
+    /* grain */
+    .cs-card::after {
+      content: '';
+      position: absolute; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+      opacity: .025;
+      pointer-events: none; z-index: 1;
+    }
+
+    /* bg glow */
+    .cs-glow {
+      position: absolute;
+      top: -160px; right: -100px;
+      width: 560px; height: 560px;
+      background: radial-gradient(circle, rgba(184,149,42,.18) 0%, transparent 68%);
+      animation: cs-glow-pulse 7s ease-in-out infinite;
+      pointer-events: none; z-index: 0;
+    }
+    @keyframes cs-glow-pulse {
+      0%,100% { opacity:.7; transform:scale(1); }
+      50%     { opacity:1;  transform:scale(1.1); }
+    }
+
+    /* ══ GRID ════════════════════════════════════ */
+    .cs-inner {
+      position: relative; z-index: 2;
+      display: grid;
+      grid-template-columns: 1fr 1px 1fr;
+      align-items: center;
+    }
+
+    .cs-rule {
+      width: 1px; align-self: stretch;
+      margin: 48px 0;
+      background: linear-gradient(to bottom,
+        transparent, rgba(184,149,42,.3) 25%,
+        rgba(232,201,106,.45) 50%, rgba(184,149,42,.3) 75%, transparent);
+    }
+
+    /* ══ LEFT ════════════════════════════════════ */
+    .cs-left { padding: 72px 60px 72px 64px; }
+
+    .cs-badge {
+      display: inline-flex; align-items: center;
+      gap: 9px; margin-bottom: 30px;
+    }
+    .cs-badge-dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--cs-gold-mid);
+      box-shadow: 0 0 8px var(--cs-gold-mid);
+      animation: cs-blink 2.5s ease-in-out infinite;
+    }
+    @keyframes cs-blink {
+      0%,100% { opacity:1; }
+      50%      { opacity:.25; }
+    }
+    .cs-badge-label {
+      font-size: 10px; font-weight: 600;
+      letter-spacing: 2.8px; text-transform: uppercase;
+      color: var(--cs-gold-mid);
+    }
+
+    .cs-h1 {
+      font-family: 'Libre Baskerville', serif;
+      font-size: 46px; font-weight: 700;
+      line-height: 1.1; letter-spacing: -.5px;
+      color: var(--cs-cream);
+      margin-bottom: 6px;
+    }
+    .cs-h1 em {
+      font-style: italic; font-weight: 400;
+      color: var(--cs-gold-light);
+    }
+    .cs-h2 {
+      font-family: 'Libre Baskerville', serif;
+      font-size: 46px; font-weight: 700;
+      line-height: 1.1; letter-spacing: -.5px;
+      color: var(--cs-cream);
+      margin-bottom: 28px;
+    }
+    .cs-body {
+      font-size: 15px; line-height: 1.82;
+      color: var(--cs-muted); font-weight: 300;
+      max-width: 370px; letter-spacing: .1px;
+    }
+
+    /* ══ RIGHT ═══════════════════════════════════ */
+    .cs-right {
+      padding: 72px 64px 72px 60px;
+      display: flex; flex-direction: column; gap: 40px;
+    }
+
+    /* icon */
+    .cs-icon {
+      width: 68px; height: 68px; border-radius: 18px;
+      background: linear-gradient(135deg,
+        rgba(184,149,42,.22) 0%, rgba(212,170,64,.12) 100%);
+      border: 1px solid rgba(184,149,42,.28);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 30px; flex-shrink: 0;
+      box-shadow: 0 8px 28px rgba(0,0,0,.25),
+                  inset 0 1px 0 rgba(255,255,255,.07);
+      animation: cs-float 5s ease-in-out infinite;
+    }
+    @keyframes cs-float {
+      0%,100% { transform:translateY(0); }
+      50%      { transform:translateY(-6px); }
+    }
+
+    /* stats */
+    .cs-stats { display: flex; align-items: center; }
+    .cs-stat  { flex:1; padding: 0 18px; text-align: center; }
+    .cs-stat:first-child { padding-left:0; }
+    .cs-stat:last-child  { padding-right:0; }
+    .cs-stat + .cs-stat  { border-left: 1px solid rgba(184,149,42,.18); }
+    .cs-stat-num {
+      font-family: 'Libre Baskerville', serif;
+      font-size: 30px; font-weight: 700;
+      color: var(--cs-gold-light); line-height: 1;
+      margin-bottom: 6px; letter-spacing: -.5px;
+    }
+    .cs-stat-label {
+      font-size: 10px; font-weight: 500;
+      letter-spacing: 2px; text-transform: uppercase;
+      color: rgba(250,248,242,.35);
+    }
+
+    /* buttons */
+    .cs-actions { display: flex; flex-direction: column; gap: 10px; }
+
+    .cs-btn {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 15px 22px; border-radius: 14px;
+      font-family: 'Outfit', sans-serif;
+      font-size: 14px; font-weight: 500;
+      text-decoration: none; cursor: pointer; border: none;
+      letter-spacing: .2px;
+      transition: transform .22s cubic-bezier(.34,1.56,.64,1),
+                  box-shadow .22s ease, background .22s ease;
+      position: relative; overflow: hidden;
+    }
+    .cs-btn::after {
+      content: ''; position: absolute;
+      top: 0; left: -100%; width: 60%; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,.16), transparent);
+      transition: left .42s ease;
+    }
+    .cs-btn:hover::after { left: 150%; }
+    .cs-btn:hover { transform: translateY(-2px); }
+
+    .cs-btn-label { display: flex; align-items: center; gap: 10px; }
+    .cs-btn-emoji { font-size: 15px; line-height: 1; }
+    .cs-btn-arrow {
+      font-size: 16px; opacity: .55;
+      transition: transform .22s ease, opacity .22s ease;
+    }
+    .cs-btn:hover .cs-btn-arrow { transform: translateX(4px); opacity: 1; }
+
+    .cs-btn--primary {
+      background: linear-gradient(135deg,
+        var(--cs-gold) 0%, var(--cs-gold-light) 55%, var(--cs-gold) 100%);
+      background-size: 200% 100%;
+      color: #0e1118; font-weight: 600;
+      box-shadow: 0 6px 24px rgba(184,149,42,.4), 0 2px 8px rgba(0,0,0,.2);
+    }
+    .cs-btn--primary:hover {
+      background-position: 100% 0;
+      box-shadow: 0 12px 36px rgba(184,149,42,.55), 0 4px 12px rgba(0,0,0,.25);
+    }
+
+    .cs-btn--ghost {
+      background: rgba(184,149,42,.07);
+      color: var(--cs-gold-light);
+      border: 1px solid rgba(184,149,42,.22);
+      box-shadow: 0 4px 16px rgba(0,0,0,.12);
+    }
+    .cs-btn--ghost:hover {
+      background: rgba(184,149,42,.13);
+      border-color: rgba(184,149,42,.38);
+      box-shadow: 0 10px 28px rgba(184,149,42,.22), 0 4px 12px rgba(0,0,0,.2);
+    }
+
+    /* decorative dots */
+    .cs-dots {
+      position: absolute; bottom: 28px; left: 64px;
+      display: grid; grid-template-columns: repeat(6,1fr); gap: 8px;
+      z-index: 2; pointer-events: none;
+    }
+    .cs-dot { width: 3px; height: 3px; border-radius: 50%; background: rgba(184,149,42,.28); }
+
+    /* ══ RESPONSIVE ══════════════════════════════ */
+    @media (max-width: 860px) {
+      .community-section { padding: 48px 20px 56px; }
+      .cs-inner { grid-template-columns: 1fr; }
+      .cs-rule  { display: none; }
+      .cs-left  { padding: 56px 36px 32px; }
+      .cs-h1, .cs-h2 { font-size: 36px; }
+      .cs-right { padding: 0 36px 56px; gap: 32px; }
+      .cs-stat-num { font-size: 26px; }
+    }
+  </style>
+</head>
+<body>
+
+
+
+<section class="community-section">
+  <div class="cs-card">
+
+    <div class="cs-glow"></div>
+
+    <div class="cs-dots">
+      <div class="cs-dot"></div><div class="cs-dot"></div><div class="cs-dot"></div>
+      <div class="cs-dot"></div><div class="cs-dot"></div><div class="cs-dot"></div>
+      <div class="cs-dot"></div><div class="cs-dot"></div><div class="cs-dot"></div>
+      <div class="cs-dot"></div><div class="cs-dot"></div><div class="cs-dot"></div>
+    </div>
+
+    <div class="cs-inner">
+
+      <!-- LEFT -->
+      <div class="cs-left">
+        <div class="cs-badge">
+          <span class="cs-badge-dot"></span>
+          <span class="cs-badge-label">Communauté active</span>
+        </div>
+        <h2 class="cs-h1">Proposez vos <em>questions,</em></h2>
+        <p class="cs-h2">obtenez l'excellence..</p>
+        <p class="cs-body">
+         Rejoignez une élite académique. Posez vos questions à nos excellents experts et participez à l'essor du savoir au Niger.
+
+        </p>
+      </div>
+
+
+   
+      <div class="cs-rule"></div>
+
+      <!-- RIGHT -->
+      <div class="cs-right">
+
+        <div class="cs-icon">💡</div>
+
+        <div class="cs-stats">
+          <div class="cs-stat">
+            <div class="cs-stat-num">2.4k</div>
+            <div class="cs-stat-label">Questions</div>
           </div>
-
-          <div class="qps-card-inner">
-
-            <!-- Central mic hero -->
-            <div class="qps-mic-hero">
-              <div class="qps-mic-ring qps-mic-ring--outer"></div>
-              <div class="qps-mic-ring qps-mic-ring--mid"></div>
-              <div class="qps-mic-ring qps-mic-ring--inner"></div>
-              <div class="qps-mic-icon">
-                <svg viewBox="0 0 60 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <rect x="14" y="3" width="32" height="58" rx="16" fill="#3d1f0a"/>
-                  <rect x="20" y="10" width="8" height="6" rx="3" fill="#f5c842" opacity="0.7"/>
-                  <rect x="20" y="22" width="8" height="6" rx="3" fill="#f5c842" opacity="0.5"/>
-                  <path d="M6 50c0 13.25 10.75 24 24 24s24-10.75 24-24" stroke="#3d1f0a" stroke-width="6" stroke-linecap="round" fill="none"/>
-                  <line x1="30" y1="74" x2="30" y2="92" stroke="#3d1f0a" stroke-width="6" stroke-linecap="round"/>
-                  <line x1="16" y1="92" x2="44" y2="92" stroke="#3d1f0a" stroke-width="6" stroke-linecap="round"/>
-                </svg>
-              </div>
-            </div>
-
-            <!-- Title -->
-            <h2 class="qps-title">PROPOSEZ<br><em>VOTRE QUESTION</em></h2>
-
-            <div class="qps-divider">
-              <span class="qps-divider-dot"></span>
-              <span class="qps-divider-dot"></span>
-              <span class="qps-divider-dot"></span>
-            </div>
-
-            <p class="qps-subtitle">Posez vos questions, partagez vos préoccupations et faites entendre votre voix au sein de notre communauté</p>
-
-            <% if user_signed_in? %>
-              <!-- Utilisateur connecté -->
-              <div class="qps-actions mt-4">
-                <p class="qps-status qps-status--ok">
-                  <span class="qps-status-dot"></span>
-                  Vous êtes connecté
-                </p>
-                <%= link_to new_question_path, class: "qps-btn qps-btn--primary" do %>
-                  <span class="qps-btn-icon">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
-                  </span>
-                  Poser ma question maintenant
-                <% end %>
-              </div>
-            <% else %>
-              <!-- Utilisateur non connecté -->
-              <div class="qps-actions mt-4">
-                <p class="qps-status qps-status--lock">
-                  <span class="qps-lock-icon">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 018 0v4"/></svg>
-                  </span>
-                  Connectez-vous pour proposer une question
-                </p>
-                <div class="qps-btn-group">
-                  <%= link_to new_user_session_path, class: "qps-btn qps-btn--primary" do %>
-                    <span class="qps-btn-icon">
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 3h4a2 2 0 012 2v14a2 2 0 01-2 2h-4M10 17l5-5-5-5M15 12H3"/></svg>
-                    </span>
-                    Se connecter
-                  <% end %>
-                  <%= link_to new_user_registration_path, class: "qps-btn qps-btn--ghost" do %>
-                    <span class="qps-btn-icon">
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2M9 11a4 4 0 100-8 4 4 0 000 8zM19 8v6M22 11h-6"/></svg>
-                    </span>
-                    Créer un compte
-                  <% end %>
-                </div>
-                <p class="qps-security-note">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-                  Compte sécurisé · Données protégées
-                </p>
-              </div>
-            <% end %>
-
+          <div class="cs-stat">
+            <div class="cs-stat-num">840</div>
+            <div class="cs-stat-label">Experts</div>
+          </div>
+          <div class="cs-stat">
+            <div class="cs-stat-num">98%</div>
+            <div class="cs-stat-label">Satisfaits</div>
           </div>
         </div>
+
+        <div class="cs-actions">
+          <% if user_signed_in? %>
+            <%= link_to new_question_path, class: "cs-btn cs-btn--primary" do %>
+              <span class="cs-btn-label"><span class="cs-btn-emoji">✏️</span> Poser une question</span>
+              <span class="cs-btn-arrow">→</span>
+            <% end %>
+          <% else %>
+            <%= link_to user_session_path, method: :get, class: "cs-btn cs-btn--primary" do %>
+              <span class="cs-btn-label"><span class="cs-btn-emoji">🔐</span> Se connecter</span>
+              <span class="cs-btn-arrow">→</span>
+            <% end %>
+            <%= link_to new_user_registration_path, class: "cs-btn cs-btn--ghost" do %>
+              <span class="cs-btn-label"><span class="cs-btn-emoji">📝</span> Créer un compte</span>
+              <span class="cs-btn-arrow">→</span>
+            <% end %>
+          <% end %>
+        </div>
       </div>
+
     </div>
   </div>
-</div>
+</section>
+<!-- ═══════════════════════════════════════════════════ -->
 
-<style>
-  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@400;500;600&display=swap');
-
-  :root {
-    --qps-yellow:      #f5c842;
-    --qps-yellow-deep: #e0a800;
-    --qps-brown:       #3d1f0a;
-    --qps-brown-mid:   #6b3a1f;
-    --qps-brown-light: #a0622d;
-    --qps-cream:       #fdf6e3;
-    --qps-cream-dark:  #f5e6c8;
-  }
-
-  /* ── Section wrapper ── */
-  .qps-section {
-    position: relative;
-    overflow: hidden;
-    background: var(--qps-cream);
-    font-family: 'DM Sans', sans-serif;
-    padding: 2rem 0;
-  }
-
-  /* ── Background floating mics ── */
-  .qps-bg-deco {
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    overflow: hidden;
-  }
-
-  .deco-mic {
-    position: absolute;
-    color: var(--qps-yellow-deep);
-    opacity: 0.08;
-  }
-
-  .deco-mic--1 { width: 140px; top: -20px; left: -30px; transform: rotate(-20deg); animation: floatMic 8s ease-in-out infinite; }
-  .deco-mic--2 { width: 100px; top: 50%; right: -10px; transform: translateY(-50%) rotate(15deg); animation: floatMic 10s ease-in-out infinite reverse; }
-  .deco-mic--3 { width: 80px; bottom: -10px; left: 40%; transform: rotate(5deg); animation: floatMic 12s ease-in-out infinite 2s; }
-
-  @keyframes floatMic {
-    0%, 100% { transform: translateY(0) rotate(var(--r, -20deg)); }
-    50%       { transform: translateY(-18px) rotate(var(--r, -20deg)); }
-  }
-
-  .deco-mic--1 { --r: -20deg; }
-  .deco-mic--2 { --r: 15deg; }
-  .deco-mic--3 { --r: 5deg; }
-
-  /* ── Card ── */
-  .qps-card {
-    position: relative;
-    background: var(--qps-brown);
-    border-radius: 24px;
-    overflow: hidden;
-    box-shadow:
-      0 2px 0 var(--qps-yellow-deep),
-      0 8px 40px rgba(61, 31, 10, 0.35),
-      0 0 0 1px rgba(245, 200, 66, 0.25);
-    transition: transform 0.4s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.4s ease;
-  }
-
-  .qps-card::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background:
-      radial-gradient(ellipse at 20% 0%, rgba(245,200,66,0.18) 0%, transparent 60%),
-      radial-gradient(ellipse at 80% 100%, rgba(160,98,45,0.25) 0%, transparent 55%);
-    pointer-events: none;
-  }
-
-  .qps-card:hover {
-    transform: translateY(-6px);
-    box-shadow:
-      0 2px 0 var(--qps-yellow),
-      0 20px 60px rgba(61, 31, 10, 0.5),
-      0 0 0 1px rgba(245, 200, 66, 0.4);
-  }
-
-  /* ── Ribbon ── */
-  .qps-ribbon {
-    background: var(--qps-yellow);
-    color: var(--qps-brown);
-    text-align: center;
-    padding: 7px 0;
-    font-size: 0.72rem;
-    font-weight: 700;
-    letter-spacing: 0.22em;
-    text-transform: uppercase;
-  }
-
-  /* ── Card inner ── */
-  .qps-card-inner {
-    padding: 2.5rem 2rem 3rem;
-    text-align: center;
-    position: relative;
-    z-index: 1;
-  }
-
-  /* ── Mic hero ── */
-  .qps-mic-hero {
-    position: relative;
-    width: 110px;
-    height: 110px;
-    margin: 0 auto 1.8rem;
-  }
-
-  .qps-mic-ring {
-    position: absolute;
-    border-radius: 50%;
-    border: 2px solid var(--qps-yellow);
-    top: 50%; left: 50%;
-    transform: translate(-50%, -50%);
-    animation: pulse-ring 3s ease-in-out infinite;
-  }
-
-  .qps-mic-ring--outer { width: 110px; height: 110px; opacity: 0.15; animation-delay: 0s; }
-  .qps-mic-ring--mid   { width: 88px;  height: 88px;  opacity: 0.25; animation-delay: 0.5s; }
-  .qps-mic-ring--inner { width: 68px;  height: 68px;  opacity: 0.4;  animation-delay: 1s; }
-
-  @keyframes pulse-ring {
-    0%, 100% { transform: translate(-50%, -50%) scale(1);    opacity: var(--op, 0.25); }
-    50%       { transform: translate(-50%, -50%) scale(1.08); opacity: calc(var(--op, 0.25) * 1.6); }
-  }
-
-  .qps-mic-ring--outer { --op: 0.15; }
-  .qps-mic-ring--mid   { --op: 0.25; }
-  .qps-mic-ring--inner { --op: 0.4; }
-
-  .qps-mic-icon {
-    position: absolute;
-    top: 50%; left: 50%;
-    transform: translate(-50%, -50%);
-    width: 50px;
-    background: var(--qps-yellow);
-    border-radius: 50%;
-    padding: 8px;
-    box-shadow: 0 4px 20px rgba(245, 200, 66, 0.6);
-  }
-
-  .qps-mic-icon svg { width: 100%; display: block; }
-
-  /* ── Title ── */
-  .qps-title {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(1.8rem, 5vw, 2.6rem);
-    font-weight: 900;
-    color: var(--qps-cream);
-    line-height: 1.1;
-    margin-bottom: 0.8rem;
-    letter-spacing: -0.01em;
-  }
-
-  .qps-title em {
-    font-style: italic;
-    color: var(--qps-yellow);
-  }
-
-  /* ── Divider dots ── */
-  .qps-divider {
-    display: flex;
-    justify-content: center;
-    gap: 8px;
-    margin: 1rem 0 1.2rem;
-  }
-
-  .qps-divider-dot {
-    width: 7px; height: 7px;
-    border-radius: 50%;
-    background: var(--qps-yellow);
-    opacity: 0.6;
-  }
-
-  .qps-divider-dot:nth-child(2) { opacity: 1; transform: scale(1.3); }
-
-  /* ── Subtitle ── */
-  .qps-subtitle {
-    color: rgba(253, 246, 227, 0.72);
-    font-size: 0.93rem;
-    max-width: 420px;
-    margin: 0 auto 0.5rem;
-    line-height: 1.65;
-  }
-
-  /* ── Status ── */
-  .qps-status {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 0.88rem;
-    margin-bottom: 1.2rem;
-    padding: 6px 14px;
-    border-radius: 100px;
-  }
-
-  .qps-status--ok {
-    background: rgba(74, 222, 128, 0.12);
-    color: #86efac;
-    border: 1px solid rgba(74, 222, 128, 0.25);
-  }
-
-  .qps-status-dot {
-    width: 8px; height: 8px;
-    border-radius: 50%;
-    background: #4ade80;
-    box-shadow: 0 0 0 3px rgba(74,222,128,0.25);
-    animation: blink 2s ease-in-out infinite;
-  }
-
-  @keyframes blink {
-    0%, 100% { opacity: 1; }
-    50%       { opacity: 0.4; }
-  }
-
-  .qps-status--lock {
-    background: rgba(245, 200, 66, 0.1);
-    color: var(--qps-yellow);
-    border: 1px solid rgba(245, 200, 66, 0.25);
-  }
-
-  .qps-lock-icon svg { width: 16px; height: 16px; vertical-align: middle; }
-
-  /* ── Buttons ── */
-  .qps-btn-group {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 12px;
-    justify-content: center;
-    margin-bottom: 1rem;
-  }
-
-  .qps-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 0.75rem 1.6rem;
-    border-radius: 10px;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 0.95rem;
-    font-weight: 600;
-    text-decoration: none;
-    cursor: pointer;
-    transition: all 0.25s cubic-bezier(0.34,1.56,0.64,1);
-    white-space: nowrap;
-  }
-
-  .qps-btn--primary {
-    background: var(--qps-yellow);
-    color: var(--qps-brown);
-    box-shadow: 0 4px 16px rgba(245, 200, 66, 0.4);
-  }
-
-  .qps-btn--primary:hover {
-    background: #ffe066;
-    transform: translateY(-3px) scale(1.04);
-    box-shadow: 0 8px 28px rgba(245, 200, 66, 0.55);
-    color: var(--qps-brown);
-    text-decoration: none;
-  }
-
-  .qps-btn--ghost {
-    background: transparent;
-    color: var(--qps-cream);
-    border: 2px solid rgba(253, 246, 227, 0.35);
-  }
-
-  .qps-btn--ghost:hover {
-    background: rgba(253, 246, 227, 0.1);
-    border-color: rgba(253, 246, 227, 0.7);
-    transform: translateY(-3px) scale(1.04);
-    color: var(--qps-cream);
-    text-decoration: none;
-  }
-
-  .qps-btn-icon {
-    display: flex;
-    align-items: center;
-  }
-
-  .qps-btn-icon svg {
-    width: 16px;
-    height: 16px;
-  }
-
-  /* ── Security note ── */
-  .qps-security-note {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    color: rgba(253, 246, 227, 0.4);
-    font-size: 0.78rem;
-    margin-top: 0.5rem;
-  }
-
-  .qps-security-note svg { width: 13px; height: 13px; }
-
-  /* ── Responsive ── */
-  @media (max-width: 576px) {
-    .qps-card-inner { padding: 2rem 1.2rem 2.5rem; }
-    .qps-btn-group  { flex-direction: column; align-items: center; }
-    .qps-btn        { width: 100%; justify-content: center; }
-  }
-</style>
+</body>
+</html>
